@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MoviesHUB</title>
+    <link rel="stylesheet" href="CSS/style.css">
+    <link rel="shortcut icon" href="Images/favicon.png" type="image/x-icon">
+</head>
+
+<body>
+    <div class="form" id="add-movieForm">
+        <form>
+            <h3>Add Movie or Series</h3>
+            <label for="add-movie-category">Category</label>
+            <select id="add-movie-category" required>
+                <option value="movie">Movie</option>
+                <option value="show">Series</option>
+            </select>
+            <label for="name">Title</label>
+            <input type="text" id="name" required placeholder="Enter Title">
+            <span id="error-message"></span>
+            <div id="suggestions"></div>
+            <label for="add-movie-rating">Rating</label>
+            <div class="slider-container">
+                <input type="range" id="add-movie-rating" min="0" max="5" step="0.5" value="0">
+                <span id="add-movie-ratingValue">0</span>
+            </div>
+            <div class="buttons">
+                <input type="submit" id="add-movie-submitBtn">
+                <button type="button" id="add-movie-cancelBtn">Cancel</button>
+            </div>
+        </form>
+    </div>
+    <div class="container" id="container">
+        <div class="header">
+            <h3>MoviesHUB</h3>
+            <button id="addMovieBtn"><ion-icon name="add"></ion-icon></button>
+        </div>
+        <div class="filter">
+            <select id="filter-category">
+                <option value="All">Category</option>
+                <option value="Movie">Movies</option>
+                <option value="Series">Series</option>
+            </select>
+            <select title="filter-year" id="filter-year">
+                <option id="Year" value="Year">Year</option>
+            </select>
+            <select id="filter-month">
+                <option value="All">Month</option>
+                <option value="0">January</option>
+                <option value="1">Feburary</option>
+                <option value="2">March</option>
+                <option value="3">April</option>
+                <option value="4">May</option>
+                <option value="5">June</option>
+                <option value="6">July</option>
+                <option value="7">August</option>
+                <option value="8">September</option>
+                <option value="9">October</option>
+                <option value="10">November</option>
+                <option value="11">December</option>
+            </select>
+            <select id="filter-rating">
+                <option value="All">Rating</option>
+                <option value="5">★★★★★</option>
+                <option value="4.5">★★★★⯨</option>
+                <option value="4">★★★★☆</option>
+                <option value="3.5">★★★⯨☆</option>
+                <option value="3">★★★☆☆</option>
+                <option value="2.5">★★⯨☆☆</option>
+                <option value="2">★★☆☆☆</option>
+                <option value="1.5">★⯨☆☆☆</option>
+                <option value="1">★☆☆☆☆</option>
+                <option value="0.5">⯨☆☆☆☆</option>
+                <option value="0">☆☆☆☆☆</option>
+            </select>
+        </div>
+        <div id="movie-container"></div>
+    </div>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script src="JS/script.js"></script>
+</body>
+
+</html>
