@@ -268,13 +268,12 @@ addDataSubmit.addEventListener("click", function (event) {
         dataId++;
         localStorage.setItem("dataId", dataId);
         localStorage.setItem("data", JSON.stringify(dataArray));
-        console.log(localStorage);
-        console.log(dataArray);
         addDataTitle.value = "";
         addDataRating.value = 0;
         addDataRatingValue.innerHTML = "0";
         addDataMessage.innerHTML = "Movie Added Successfully";
         dataFetched = 0;
+        changeYearValues();
         displayData();
     }
     else {
