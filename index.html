@@ -10,74 +10,75 @@
 </head>
 
 <body>
-    <div class="form" id="add-movieForm">
+    <div class="form" id="addDataForm">
         <form>
             <h3>Add Movie or Series</h3>
-            <label for="add-movie-category">Category</label>
-            <select id="add-movie-category" required>
+            <label for="add-data-category">Category</label>
+            <select id="addDataCategory">
                 <option value="movie">Movie</option>
                 <option value="show">Series</option>
             </select>
-            <label for="name">Title</label>
-            <input type="text" id="name" required placeholder="Enter Title">
-            <span id="error-message"></span>
-            <div id="suggestions"></div>
-            <label for="add-movie-rating">Rating</label>
+            <label for="addDataTitle">Title</label>
+            <input type="text" id="addDataTitle" required placeholder="Enter Title">
+            <span id="addDataMessage"></span>
+            <div id="addDataSuggestion"></div>
+            <label for="addDataRating">Rating</label>
             <div class="slider-container">
-                <input type="range" id="add-movie-rating" min="0" max="5" step="0.5" value="0">
-                <span id="add-movie-ratingValue">0</span>
+                <input type="range" id="addDataRating" min="0" max="5" step="0.5" value="0">
+                <span id="addDataRatingValue">0</span>
             </div>
             <div class="buttons">
-                <input type="submit" id="add-movie-submitBtn">
-                <button type="button" id="add-movie-cancelBtn">Cancel</button>
+                <input type="submit" id="addDataSubmit">
+                <button type="button" id="addDataCancel">Cancel</button>
             </div>
         </form>
     </div>
-    <div class="container" id="container">
+    <div class="container">
         <div class="header">
             <h3>MoviesHUB</h3>
-            <button id="addMovieBtn"><ion-icon name="add"></ion-icon></button>
+            <button id="addDataBtn"><ion-icon name="add"></ion-icon></button>
         </div>
         <div class="filter">
-            <select id="filter-category">
-                <option value="All">Category</option>
-                <option value="Movie">Movies</option>
-                <option value="Series">Series</option>
+            <select id="filterCategory">
+                <option id="filterCategoryAll" value="All">Category</option>
+                <option id="filterMovie" value="Movie">Movies</option>
+                <option id="filterSeries" value="Series">Series</option>
             </select>
-            <select title="filter-year" id="filter-year">
-                <option id="Year" value="Year">Year</option>
+            <select title="filterYear" id="filterYear">
+                <option id="filterYearAll" value="All">Year</option>
             </select>
-            <select id="filter-month">
-                <option value="All">Month</option>
-                <option value="0">January</option>
-                <option value="1">Feburary</option>
-                <option value="2">March</option>
-                <option value="3">April</option>
-                <option value="4">May</option>
-                <option value="5">June</option>
-                <option value="6">July</option>
-                <option value="7">August</option>
-                <option value="8">September</option>
-                <option value="9">October</option>
-                <option value="10">November</option>
-                <option value="11">December</option>
+            <select id="filterMonth">
+                <option id="filterMonthAll" value="All">Month</option>
+                <option id="00" value="0">January</option>
+                <option id="11" value="1">Feburary</option>
+                <option id="22" value="2">March</option>
+                <option id="33" value="3">April</option>
+                <option id="44" value="4">May</option>
+                <option id="55" value="5">June</option>
+                <option id="66" value="6">July</option>
+                <option id="77" value="7">August</option>
+                <option id="88" value="8">September</option>
+                <option id="99" value="9">October</option>
+                <option id="1010" value="10">November</option>
+                <option id="1111" value="11">December</option>
             </select>
-            <select id="filter-rating">
-                <option value="All">Rating</option>
-                <option value="5">★★★★★</option>
-                <option value="4.5">★★★★⯨</option>
-                <option value="4">★★★★☆</option>
-                <option value="3.5">★★★⯨☆</option>
-                <option value="3">★★★☆☆</option>
-                <option value="2.5">★★⯨☆☆</option>
-                <option value="2">★★☆☆☆</option>
-                <option value="1.5">★⯨☆☆☆</option>
-                <option value="1">★☆☆☆☆</option>
-                <option value="0.5">⯨☆☆☆☆</option>
-                <option value="0">☆☆☆☆☆</option>
+            <select id="filterRating">
+                <option id="filterRatingAll" value="All">Rating</option>
+                <option id="5" value="5">★★★★★</option>
+                <option id="4.5" value="4.5">★★★★⯨</option>
+                <option id="4" value="4">★★★★☆</option>
+                <option id="3.5" value="3.5">★★★⯨☆</option>
+                <option id="3" value="3">★★★☆☆</option>
+                <option id="2.5" value="2.5">★★⯨☆☆</option>
+                <option id="2" value="2">★★☆☆☆</option>
+                <option id="1.5" value="1.5">★⯨☆☆☆</option>
+                <option id="1" value="1">★☆☆☆☆</option>
+                <option id="0.5" value="0.5">⯨☆☆☆☆</option>
+                <option id="0" value="0">☆☆☆☆☆</option>
             </select>
+            <button id="filterReset">Reset</button>
         </div>
-        <div id="movie-container"></div>
+        <div id="dataContainer"></div>
     </div>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>

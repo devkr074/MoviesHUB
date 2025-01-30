@@ -1,5 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Playwrite+VN:wght@100..400&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Playwrite+VN:wght@100..400&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 
 * {
     margin: 0;
@@ -23,7 +23,7 @@ body {
     height: 100%;
     right: -100%;
     transition: all 0.4s ease;
-    font-family: 'Poppins';
+    font-family: "Poppins";
 }
 
 .form.active {
@@ -56,7 +56,7 @@ body {
     border-radius: 4px;
 }
 
-#suggestions {
+#addDataSuggestion {
     max-height: 55%;
     overflow-y: auto;
     background-color: #fff;
@@ -68,7 +68,7 @@ body {
     scrollbar-width: thin;
 }
 
-#suggestions div {
+#addDataSuggestion div {
     padding: 8px;
     cursor: pointer;
     border-bottom: 1px solid rgba(107, 107, 107, 0.278);
@@ -77,13 +77,13 @@ body {
     gap: 15px;
 }
 
-#suggestions div img {
+#addDataSuggestion div img {
     height: 70px;
     width: 50px;
     border-radius: 5px;
 }
 
-#suggestions div:hover {
+#addDataSuggestionLists div:hover {
     background-color: #f0f0f0;
 }
 
@@ -148,7 +148,7 @@ body {
 }
 
 .form input[type="submit"],
-.form #add-movie-cancelBtn {
+.form #addDataCancel {
     width: calc(100% / 3 - 3px);
     padding: 10px;
     margin-top: 10px;
@@ -159,12 +159,12 @@ body {
     cursor: pointer;
 }
 
-.form #add-movie-cancelBtn {
+.form #addDataCancel {
     background-color: #dc3545;
 }
 
 .form input[type="submit"]:hover,
-.form #add-movie-cancelBtn:hover {
+.form #addDataCancel:hover {
     opacity: 0.9;
 }
 
@@ -179,7 +179,7 @@ body {
 }
 
 .container::before {
-    content: '';
+    content: "";
     height: 100%;
     width: 100%;
     position: fixed;
@@ -208,10 +208,10 @@ body {
         -1px 1px 0 #000,
         1px 1px 0 #000;
     z-index: 200;
-    font-family: 'Playwrite VN';
+    font-family: "Playwrite VN";
 }
 
-.header #addMovieBtn {
+.header #addDataBtn {
     width: 50px;
     height: 50px;
     font-size: 20px;
@@ -254,11 +254,11 @@ body {
     background-color: #fff;
     outline: none;
     cursor: pointer;
-    font-family: 'Poppins';
+    font-family: "Poppins";
     font-weight: 500;
 }
 
-#movie-container {
+#dataContainer {
     height: 74%;
     position: relative;
     width: 100%;
@@ -316,7 +316,7 @@ body {
 }
 
 .content .edit-btn,
-.content .remove-btn {
+.content .dataRemove {
     padding-block: 10px;
     padding-inline: 10px;
     color: #fff;
@@ -331,7 +331,7 @@ body {
     }
 }
 
-.content .remove-btn {
+.content .dataRemove {
     background-color: #dc3545;
 }
 
