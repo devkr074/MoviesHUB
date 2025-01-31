@@ -440,6 +440,10 @@ table,td,tr{
     .square{
         height: 250px;
     }
+    
+    .welcomeBox {
+        width: 90%;
+    }
 }
 
 
@@ -458,6 +462,10 @@ table,td,tr{
     }
     .content{
         font-size: 13px;
+    }
+    
+    .welcomeBox {
+        width: 90%;
     }
 }
 
