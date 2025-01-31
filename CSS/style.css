@@ -386,7 +386,7 @@ table,td,tr{
 
 
 /* Extra small devices (phones, 320px and up) */
-@media (min-width: 320px) {
+@media (min-width: 0px) and (max-width: 374px)  {
     .header{
         padding-inline: 15px;
     }
@@ -425,7 +425,7 @@ table,td,tr{
     }
 
     .welcomeBox {
-        width: 90%;
+        width: 80%;
     }
 }
 
@@ -442,7 +442,7 @@ table,td,tr{
     }
     
     .welcomeBox {
-        width: 90%;
+        width: 80%;
     }
 }
 
@@ -465,7 +465,7 @@ table,td,tr{
     }
     
     .welcomeBox {
-        width: 90%;
+        width: 80%;
     }
 }
 
