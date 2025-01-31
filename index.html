@@ -7,77 +7,116 @@
     <title>MoviesHUB</title>
     <link rel="stylesheet" href="CSS/style.css">
     <link rel="shortcut icon" href="Images/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>
-    <div class="form" id="addDataForm">
-        <form>
-            <h3>Add Movie or Series</h3>
-            <label for="add-data-category">Category</label>
-            <select id="addDataCategory">
-                <option value="movie">Movie</option>
-                <option value="show">Series</option>
-            </select>
-            <label for="addDataTitle">Title</label>
-            <input type="text" id="addDataTitle" required placeholder="Enter Title">
-            <span id="addDataMessage"></span>
-            <div id="addDataSuggestion"></div>
-            <label for="addDataRating">Rating</label>
-            <div class="slider-container">
-                <input type="range" id="addDataRating" min="0" max="5" step="0.5" value="0">
-                <span id="addDataRatingValue">0</span>
-            </div>
-            <div class="buttons">
-                <input type="submit" id="addDataSubmit">
-                <button type="button" id="addDataCancel">Cancel</button>
-            </div>
-        </form>
-    </div>
     <div class="container">
         <div class="header">
             <h3>MoviesHUB</h3>
-            <button id="addDataBtn"><ion-icon name="add"></ion-icon></button>
+            <div class="buttons">
+                <button class="button" id="filterBtn"><ion-icon name="funnel"></ion-icon></button>
+                <button class="button" id="addDataBtn">
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
         </div>
-        <div class="filter">
-            <select id="filterCategory">
-                <option id="filterCategoryAll" value="All">Category</option>
-                <option id="filterMovie" value="Movie">Movies</option>
-                <option id="filterSeries" value="Series">Series</option>
-            </select>
-            <select title="filterYear" id="filterYear">
-                <option id="filterYearAll" value="All">Year</option>
-            </select>
-            <select id="filterMonth">
-                <option id="filterMonthAll" value="All">Month</option>
-                <option id="00" value="0">January</option>
-                <option id="11" value="1">Feburary</option>
-                <option id="22" value="2">March</option>
-                <option id="33" value="3">April</option>
-                <option id="44" value="4">May</option>
-                <option id="55" value="5">June</option>
-                <option id="66" value="6">July</option>
-                <option id="77" value="7">August</option>
-                <option id="88" value="8">September</option>
-                <option id="99" value="9">October</option>
-                <option id="1010" value="10">November</option>
-                <option id="1111" value="11">December</option>
-            </select>
-            <select id="filterRating">
-                <option id="filterRatingAll" value="All">Rating</option>
-                <option id="5" value="5">★★★★★</option>
-                <option id="4.5" value="4.5">★★★★⯨</option>
-                <option id="4" value="4">★★★★☆</option>
-                <option id="3.5" value="3.5">★★★⯨☆</option>
-                <option id="3" value="3">★★★☆☆</option>
-                <option id="2.5" value="2.5">★★⯨☆☆</option>
-                <option id="2" value="2">★★☆☆☆</option>
-                <option id="1.5" value="1.5">★⯨☆☆☆</option>
-                <option id="1" value="1">★☆☆☆☆</option>
-                <option id="0.5" value="0.5">⯨☆☆☆☆</option>
-                <option id="0" value="0">☆☆☆☆☆</option>
-            </select>
-            <button id="filterReset">Reset</button>
+
+        <div class="form" id="addDataForm">
+            <form>
+                <h3>Add Movie or Series</h3>
+                <div class="message" id="addDataMessage"></div>
+                <label for="add-data-category">Category</label>
+                <select id="addDataCategory">
+                    <option value="movie">Movie</option>
+                    <option value="show">Series</option>
+                </select>
+                <label for="addDataTitle">Title</label>
+                <input type="text" id="addDataTitle" required placeholder="Enter Title">
+                <div id="addDataSuggestion"></div>
+                <label for="addDataRating">Rating</label>
+                <div class="slider-container">
+                    <input type="range" id="addDataRating" min="0" max="5" step="0.5" value="0">
+                    <span id="addDataRatingValue">0</span>
+                </div>
+                <div class="buttons">
+                    <input type="submit" id="addDataSubmit" value="Add">
+                </div>
+            </form>
         </div>
+        <div class="form" id="editDataForm">
+            <form>
+                <h3>Edit Movie or Series</h3>
+                <div class="message" id="editMessage"></div>
+                <label for="add-data-category">Category</label>
+                <select id="editDataCategory">
+                    <option value="movie">Movie</option>
+                    <option value="show">Series</option>
+                </select>
+                <label for="">Title</label>
+                <input type="text" id="editDataTitle" disabled>
+                <label for="editDataRating">Rating</label>
+                <div class="slider-container">
+                    <input type="range" id="editDataRating" min="0" max="5" step="0.5" value="0">
+                    <span id="editDataRatingValue">0</span>
+                </div>
+                <div class="buttons">
+                    <input type="submit" id="editDataSubmit">
+                    <button type="button" class="cancel" id="editDataCancel">Cancel</button>
+                </div>
+            </form>
+        </div>
+        <div class="form" id="filterForm">
+            <form>
+                
+                <h3>Filter</h3>
+                <label for="filterCategory">Category</label>
+                <select id="filterCategory">
+                    <option id="filterCategoryAll" value="All">All Category</option>
+                    <option id="filterMovie" value="Movie">Movies</option>
+                    <option id="filterSeries" value="Series">Series</option>
+                </select>
+                <label for="filterYear">Release Year</label>
+                <select title="filterYear" id="filterYear">
+                    <option id="filterYearAll" value="All">All Year</option>
+                </select>
+                <label for="filterMonth">Release Month</label>
+                <select id="filterMonth">
+                    <option id="filterMonthAll" value="All">All Month</option>
+                    <option id="00" value="0">January</option>
+                    <option id="11" value="1">Feburary</option>
+                    <option id="22" value="2">March</option>
+                    <option id="33" value="3">April</option>
+                    <option id="44" value="4">May</option>
+                    <option id="55" value="5">June</option>
+                    <option id="66" value="6">July</option>
+                    <option id="77" value="7">August</option>
+                    <option id="88" value="8">September</option>
+                    <option id="99" value="9">October</option>
+                    <option id="1010" value="10">November</option>
+                    <option id="1111" value="11">December</option>
+                </select>
+                <label for="filterRating">Rating</label>
+                <select id="filterRating">
+                    <option id="filterRatingAll" value="All">All Rating</option>
+                    <option id="5" value="5">★★★★★</option>
+                    <option id="4.5" value="4.5">★★★★⯨</option>
+                    <option id="4" value="4">★★★★☆</option>
+                    <option id="3.5" value="3.5">★★★⯨☆</option>
+                    <option id="3" value="3">★★★☆☆</option>
+                    <option id="2.5" value="2.5">★★⯨☆☆</option>
+                    <option id="2" value="2">★★☆☆☆</option>
+                    <option id="1.5" value="1.5">★⯨☆☆☆</option>
+                    <option id="1" value="1">★☆☆☆☆</option>
+                    <option id="0.5" value="0.5">⯨☆☆☆☆</option>
+                    <option id="0" value="0">☆☆☆☆☆</option>
+                </select>
+                <input type="submit" id="filterReset" value="Reset All">
+            </form>
+        </div>
+
+
         <div id="dataContainer"></div>
     </div>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>

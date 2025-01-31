@@ -24,36 +24,65 @@ let dataFetched;
 let suggestionIndex = -1;
 let addDataSuggestionList;
 let dataFilteredByRating;
-const date=new Date();
-let currentYear=date.getFullYear();
-let currentMonth=date.getMonth();
-let currentDate=date.getDate();
+const date = new Date();
+let currentYear = date.getFullYear();
+let currentMonth = date.getMonth();
+let currentDate = date.getDate();
 window.addEventListener("load", function () {
     dataArray = JSON.parse(localStorage.getItem("data")) || [];
     changeYearValues();
+    let option;
     let filterCategoryValue = localStorage.getItem("filterCategory") || "All";
     if (filterCategoryValue === "All") {
         document.getElementById("filterCategoryAll").selected = true;
     } else {
-        document.getElementById(`filter${filterCategoryValue}`).selected = true;
+        option = document.getElementById(`filter${filterCategoryValue}`);
+        if (option) {
+            option.selected = true;
+        }
+        else {
+            document.getElementById("filterCategoryAll").selected = true;
+            localStorage.setItem('filterCategory', 'All');
+        }
     }
     let filterYearValue = localStorage.getItem("filterYear") || "All";
     if (filterYearValue === "All") {
         document.getElementById("filterYearAll").selected = true;
     } else {
-        document.getElementById(`${filterYearValue}`).selected = true;
+        option = document.getElementById(`${filterYearValue}`);
+        if (option) {
+            option.selected = true;
+        }
+        else {
+            document.getElementById("filterYearAll").selected = true;
+            localStorage.setItem('filterYear', 'All');
+        }
     }
     let filterMonthValue = localStorage.getItem("filterMonth") || "All";
     if (filterMonthValue === "All") {
         document.getElementById("filterMonthAll").selected = true;
     } else {
-        document.getElementById(`${filterMonthValue}${filterMonthValue}`).selected = true;
+        option = document.getElementById(`${filterMonthValue}${filterMonthValue}`);
+        if (option) {
+            option.selected = true;
+        }
+        else {
+            document.getElementById("filterMonthAll").selected = true;
+            localStorage.setItem('filterMonth', 'All');
+        }
     }
     let filterRatingValue = localStorage.getItem("filterRating") || "All";
     if (filterRatingValue === "All") {
         document.getElementById("filterRatingAll").selected = true;
     } else {
-        document.getElementById(`${filterRatingValue}`).selected = true;
+        option = document.getElementById(`${filterRatingValue}`);
+        if (option) {
+            option.selected = true;
+        }
+        else {
+            document.getElementById("filterRatingAll").selected = true;
+            localStorage.setItem('filterRating', 'All');
+        }
     }
     displayData();
 });
@@ -62,7 +91,7 @@ function changeYearValues() {
     distinctYears.sort((a, b) => a - b);
     filterYear.innerHTML = "";
     const yearOption = document.createElement("option");
-    yearOption.innerHTML = "Year";
+    yearOption.innerHTML = "All Year";
     yearOption.value = "All";
     yearOption.id = "filterYearAll";
     filterYear.appendChild(yearOption);
@@ -75,10 +104,22 @@ function changeYearValues() {
     }
 }
 addDataBtn.addEventListener("click", function () {
-    addDataForm.classList.add("active");
-});
-addDataCancel.addEventListener("click", function () {
-    addDataForm.classList.remove("active");
+    if (document.getElementById('editDataForm').classList.contains('active')) {
+        document.getElementById('editDataForm').classList.add('shake');
+        setTimeout(() => {
+            document.getElementById('editDataForm').classList.remove('shake');
+        }, 500);
+        return;
+    }
+    if (addDataForm.classList.contains("active")) {
+        addDataForm.classList.remove("active");
+        addDataBtn.style.transform = 'rotate(0deg)';
+    }
+    else {
+        addDataForm.classList.add("active");
+        addDataBtn.style.transform = 'rotate(-45deg)';
+    }
+
 });
 addDataRating.addEventListener("change", function () {
     addDataRatingValue.innerHTML = addDataRating.value;
@@ -93,7 +134,7 @@ filterYear.addEventListener("change", function () {
     if (filterYear.value == date.getFullYear()) {
         filterMonth.innerHTML = "";
         const monthOption = document.createElement("option");
-        monthOption.innerHTML = "Month";
+        monthOption.innerHTML = "All Month";
         monthOption.value = "All";
         monthOption.id = "filterMonthAll";
         filterMonth.appendChild(monthOption);
@@ -108,7 +149,7 @@ filterYear.addEventListener("change", function () {
     else {
         filterMonth.innerHTML = "";
         const monthOption = document.createElement("option");
-        monthOption.innerHTML = "Month";
+        monthOption.innerHTML = "All Month";
         monthOption.value = "All";
         monthOption.id = "filterMonthAll";
         filterMonth.appendChild(monthOption);
@@ -145,7 +186,8 @@ filterRating.addEventListener("change", function () {
     localStorage.setItem("filterRating", filterRating.value);
     displayData();
 });
-filterReset.addEventListener("click", function () {
+filterReset.addEventListener("click", function (event) {
+    event.preventDefault();
     localStorage.removeItem("filterCategory");
     localStorage.removeItem("filterYear");
     localStorage.removeItem("filterMonth");
@@ -283,6 +325,32 @@ addDataSubmit.addEventListener("click", function (event) {
 });
 function displayData() {
     dataContainer.innerHTML = "";
+    if(dataArray.length==0){
+        const welcomeBox=document.createElement('div');
+        welcomeBox.classList.add('welcomeBox');
+        const welcomeBoxText=document.createElement('p');
+        welcomeBoxText.innerHTML="Your collection is waiting to shine! Start adding your favorite movies and series now.";
+        const welcomeBoxButton=document.createElement('button');
+        welcomeBoxButton.innerHTML="Add";
+        welcomeBoxButton.classList.add('button');
+        welcomeBoxButton.classList.add('button1');
+        welcomeBox.appendChild(welcomeBoxText);
+        welcomeBox.appendChild(welcomeBoxButton);
+        dataContainer.appendChild(welcomeBox);
+        welcomeBoxButton.addEventListener('click',function(){
+            if (document.getElementById('editDataForm').classList.contains('active')) {
+                document.getElementById('editDataForm').classList.add('shake');
+                setTimeout(() => {
+                    document.getElementById('editDataForm').classList.remove('shake');
+                }, 500);
+                return;
+            }
+            else {
+                addDataForm.classList.add("active");
+                addDataBtn.style.transform = 'rotate(-45deg)';
+            }
+        });
+    }
     let dataFilteredByCategory = [];
     let dataFilteredByYear = [];
     let dataFilteredByMonth = [];
@@ -328,7 +396,7 @@ function displayData() {
         if (filterRating.value == "All") {
             dataFilteredByRating = dataFilteredByMonth;
         }
-        else if (dataFilteredByMonth[i].rating == filterRating.value) {
+        else if (dataFilteredByMonth[i].dataRating == filterRating.value) {
             dataFilteredByRating.push(dataFilteredByMonth[i]);
         }
     }
@@ -347,53 +415,88 @@ function displayData() {
         square.appendChild(imgElement);
         const content = document.createElement("div");
         content.classList.add("content");
+        const table=document.createElement('table');
+        const tr1=document.createElement('tr');
+        const td1=document.createElement('td');
         const title = document.createElement("p");
-        title.innerHTML = `Title: ${dataFilteredByRating[i].dataContent.title}`;
-        content.appendChild(title);
-        const category = document.createElement("p");
+        title.innerHTML = `${dataFilteredByRating[i].dataContent.title}`;
+        td1.innerHTML='Title';
+        tr1.appendChild(td1);
+        const td2=document.createElement('td');
+        td2.innerHTML=title.innerHTML;
+        tr1.appendChild(td2);
+        table.appendChild(tr1);
+        const tr2=document.createElement('tr');
+        const td3=document.createElement('td');
+        td3.innerHTML='Type';
+        tr2.appendChild(td3);
+        const td4=document.createElement('td');
+        let category;
         if (dataFilteredByRating[i].dataType == "movie") {
-            category.innerHTML = `Type: Movie`;
+            category = `Movie`;
         }
         else if (dataFilteredByRating[i].dataType == "show") {
-            category.innerHTML = `Type: Series`;
+            category = `Series`;
         }
-        content.appendChild(category);
-        const rating = document.createElement("p");
+        td4.innerHTML=category;
+        tr2.appendChild(td4);
+        table.appendChild(tr2);
+        const tr3=document.createElement('tr');
+        const td5=document.createElement('td');
+        td5.innerHTML='Rating';
+        tr3.appendChild(td5);
+        const td6=document.createElement('td');
+        let rating;
         switch (dataFilteredByRating[i].dataRating) {
-            case "0": rating.innerHTML = "Rating: </ion-icon><ion-icon name='star-outline'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon>";
+            case "0": rating = "</ion-icon><ion-icon name='star-outline'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon>";
                 break;
-            case "0.5": rating.innerHTML = "Rating: </ion-icon><ion-icon name='star-half'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon>";
+            case "0.5": rating = "</ion-icon><ion-icon name='star-half'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon>";
                 break;
-            case "0.5": rating.innerHTML = "Rating: </ion-icon><ion-icon name='star-half'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon>";
+            case "0.5": rating = "</ion-icon><ion-icon name='star-half'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon>";
                 break;
-            case "1": rating.innerHTML = "Rating: </ion-icon><ion-icon name='star'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon>";
+            case "1": rating = "</ion-icon><ion-icon name='star'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon>";
                 break;
-            case "1.5": rating.innerHTML = "Rating: </ion-icon><ion-icon name='star'></ion-icon></ion-icon><ion-icon name='star-half'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon>";
+            case "1.5": rating = "</ion-icon><ion-icon name='star'></ion-icon></ion-icon><ion-icon name='star-half'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon>";
                 break;
-            case "2": rating.innerHTML = "Rating: </ion-icon><ion-icon name='star'></ion-icon></ion-icon><ion-icon name='star'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon>";
+            case "2": rating = "</ion-icon><ion-icon name='star'></ion-icon></ion-icon><ion-icon name='star'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon>";
                 break;
-            case "2.5": rating.innerHTML = "Rating: </ion-icon><ion-icon name='star'></ion-icon></ion-icon><ion-icon name='star'></ion-icon></ion-icon><ion-icon name='star-half'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon>";
+            case "2.5": rating = "</ion-icon><ion-icon name='star'></ion-icon></ion-icon><ion-icon name='star'></ion-icon></ion-icon><ion-icon name='star-half'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon>";
                 break;
-            case "3": rating.innerHTML = "Rating: </ion-icon><ion-icon name='star'></ion-icon></ion-icon><ion-icon name='star'></ion-icon></ion-icon><ion-icon name='star'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon>";
+            case "3": rating = "</ion-icon><ion-icon name='star'></ion-icon></ion-icon><ion-icon name='star'></ion-icon></ion-icon><ion-icon name='star'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon>";
                 break;
-            case "3.5": rating.innerHTML = "Rating: </ion-icon><ion-icon name='star'></ion-icon></ion-icon><ion-icon name='star'></ion-icon></ion-icon><ion-icon name='star'></ion-icon></ion-icon><ion-icon name='star-half'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon>";
+            case "3.5": rating = "</ion-icon><ion-icon name='star'></ion-icon></ion-icon><ion-icon name='star'></ion-icon></ion-icon><ion-icon name='star'></ion-icon></ion-icon><ion-icon name='star-half'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon>";
                 break;
-            case "4": rating.innerHTML = "Rating: </ion-icon><ion-icon name='star'></ion-icon></ion-icon><ion-icon name='star'></ion-icon></ion-icon><ion-icon name='star'></ion-icon></ion-icon><ion-icon name='star'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon>";
+            case "4": rating = "</ion-icon><ion-icon name='star'></ion-icon></ion-icon><ion-icon name='star'></ion-icon></ion-icon><ion-icon name='star'></ion-icon></ion-icon><ion-icon name='star'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon>";
                 break;
-            case "4.5": rating.innerHTML = "Rating: </ion-icon><ion-icon name='star'></ion-icon></ion-icon><ion-icon name='star'></ion-icon></ion-icon><ion-icon name='star'></ion-icon></ion-icon><ion-icon name='star'></ion-icon></ion-icon><ion-icon name='star-half'></ion-icon>";
+            case "4.5": rating = "</ion-icon><ion-icon name='star'></ion-icon></ion-icon><ion-icon name='star'></ion-icon></ion-icon><ion-icon name='star'></ion-icon></ion-icon><ion-icon name='star'></ion-icon></ion-icon><ion-icon name='star-half'></ion-icon>";
                 break;
-            case "5": rating.innerHTML = "Rating: </ion-icon><ion-icon name='star'></ion-icon></ion-icon><ion-icon name='star'></ion-icon></ion-icon><ion-icon name='star'></ion-icon></ion-icon><ion-icon name='star'></ion-icon></ion-icon><ion-icon name='star'></ion-icon>";
+            case "5": rating = "</ion-icon><ion-icon name='star'></ion-icon></ion-icon><ion-icon name='star'></ion-icon></ion-icon><ion-icon name='star'></ion-icon></ion-icon><ion-icon name='star'></ion-icon></ion-icon><ion-icon name='star'></ion-icon>";
                 break;
         }
-        content.appendChild(rating);
+        td6.innerHTML=rating;
+        tr3.appendChild(td6);
+        table.appendChild(tr3);
+        const tr4=document.createElement('tr');
+        const td7=document.createElement('td');
+        td7.innerHTML='Release';
+        tr4.appendChild(td7);
+        const td8=document.createElement('td');
+
+        
         let dateToDisplay = new Date(dataFilteredByRating[i].dataContent.released || dataFilteredByRating[i].dataContent.first_aired);
-        const release = document.createElement("p");
-        release.innerHTML = `Release: ${dateToDisplay.getDate()} ${monthsName[dateToDisplay.getMonth()]} ${dateToDisplay.getFullYear()}`;
-        content.appendChild(release);
+        let release;
+        release = `${dateToDisplay.getDate()} ${monthsName[dateToDisplay.getMonth()]} ${dateToDisplay.getFullYear()}`;
+        td8.innerHTML=release;
+        tr4.appendChild(td8);
+        table.appendChild(tr4);
+        content.appendChild(table);
+
+
+
         const buttons = document.createElement("div");
         buttons.classList.add("buttons");
         const button1 = document.createElement("button");
-        button1.classList.add("edit-btn");
+        button1.classList.add("dataEdit");
         button1.innerHTML = "Edit";
         buttons.appendChild(button1);
         const button2 = document.createElement("button");
@@ -411,6 +514,101 @@ dataContainer.addEventListener("click", function (event) {
         const contentIdToRemove = dataFilteredByRating[movieIndex].dataId;
         dataArray = dataArray.filter(data => data.dataId !== contentIdToRemove);
         localStorage.setItem("data", JSON.stringify(dataArray));
+        changeYearValues();
         displayData();
     }
 });
+let contentIdToEdit;
+let initialDataType;
+let initialRating;
+dataContainer.addEventListener("click", function (event) {
+    if (addDataForm.classList.contains('active')) {
+        addDataForm.classList.add('shake');
+        setTimeout(() => {
+            addDataForm.classList.remove('shake');
+        }, 500);
+        return;
+    }
+    if (event.target.classList.contains("dataEdit")) {
+        const movieIndex = Array.from(document.getElementsByClassName("dataEdit")).indexOf(event.target);
+        contentIdToEdit = dataFilteredByRating[movieIndex].dataId;
+        const movieData = dataArray.find(data => data.dataId === contentIdToEdit);
+
+        if (movieData) {
+            // Populate the form with the movie data
+            editDataForm.classList.add('active');
+
+            document.getElementById('editDataTitle').value = movieData.dataContent.title;
+            document.getElementById('editDataCategory').value = movieData.dataType;
+            initialDataType = document.getElementById('editDataCategory').value;
+            document.getElementById('editDataRating').value = movieData.dataRating;
+            initialRating = document.getElementById('editDataRating').value;
+            document.getElementById('editDataRatingValue').innerHTML =
+            document.getElementById('editDataRating').value;
+        }
+    }
+});
+let timeoutId;
+document.getElementById('editDataSubmit').addEventListener('click', function (event) {
+    event.preventDefault();
+    if (contentIdToEdit !== null) {
+        const movieData = dataArray.find(data => data.dataId === contentIdToEdit);
+
+        if (movieData) {
+            // Update the movie data with the form values
+            movieData.dataType = document.getElementById('editDataCategory').value;
+            movieData.dataRating = document.getElementById('editDataRating').value;
+            // Update other form fields as needed
+
+            // Store the updated data array in localStorage
+            localStorage.setItem("data", JSON.stringify(dataArray));
+            if (movieData.dataType == initialDataType && movieData.dataRating == initialRating) {
+                document.getElementById('editMessage').innerHTML='No Changes made';
+                document.getElementById('editMessage').style.backgroundColor='#dc3545';
+            }
+            else{
+                initialDataType=movieData.dataType;
+                initialRating=movieData.dataRating;
+                document.getElementById('editMessage').innerHTML='Changes Saved';
+                document.getElementById('editMessage').style.backgroundColor='#28a745';
+            }
+            if (timeoutId) {
+                clearTimeout(timeoutId);
+            }
+            document.getElementById('editMessage').classList.add('active');
+            timeoutId=setTimeout(() => {
+                document.getElementById('editMessage').classList.remove('active');
+            }, 3000);
+            displayData();
+        } else {
+            if (timeoutId) {
+                clearTimeout(timeoutId);
+            }
+            document.getElementById('editMessage').innerHTML=`${initialDataType} has been Deleted`;
+                document.getElementById('editMessage').style.backgroundColor='red';
+            document.getElementById('editMessage').classList.add('active');
+            timeoutId=setTimeout(() => {
+                document.getElementById('editMessage').classList.remove('active');
+            }, 3000);
+        }
+    }
+});
+
+document.getElementById('filterBtn').addEventListener('click',function(){
+    document.getElementById('filterForm').classList.toggle('active');
+})
+
+document.getElementById('editDataCancel').addEventListener('click', function () {
+
+    editDataForm.classList.remove('active');
+})
+
+document.getElementById('editDataRating').addEventListener('change', function () {
+    document.getElementById('editDataRatingValue').innerHTML = document.getElementById('editDataRating').value;
+})
+
+
+
+
+
+
