@@ -11,11 +11,30 @@ body{
 
 .main-container{
     height: 100vh;
-    background-color: red;
     overflow: auto;
 }
-a{
+
+.nav{
+    background-color: beige;
+}
+
+.add-btn{
+    position: absolute;
+    top: -15px;
+    right: -15px;
+}
+.search-result-container{
+    padding-top: 90px;
+}
+.box{
+    height: 250px;
+    width: 100%;
+    border: 2px solid;
+    margin-bottom: 30px;
+}
+
+.grid{
+    display: flex;
     align-items: center;
     justify-content: center;
 }
-
