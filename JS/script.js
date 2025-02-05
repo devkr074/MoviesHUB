@@ -117,7 +117,7 @@ addDataBtn.addEventListener("click", function () {
     }
     else {
         addDataForm.classList.add("active");
-        addDataBtn.style.transform = 'rotate(-45deg)';
+        addDataBtn.style.transform = 'rotate(-135deg)';
     }
 
 });
@@ -215,7 +215,13 @@ filterReset.addEventListener("click", function (event) {
                     }
                 });
                 if (!response.ok) {
-                    console.log("Some Error Occured");
+                    addDataMessage.innerHTML = 'Some Error Occured';
+                    addDataMessage.classList.add('active');
+                    addDataMessage.style.background = '#dc3545';
+                    setTimeout(() => {
+
+                        addDataMessage.classList.remove('active');
+                    }, 3000);
                     dataFetched = 0;
                 }
                 const data = await response.json();
@@ -235,15 +241,26 @@ filterReset.addEventListener("click", function (event) {
                         dataFetched = 1;
                         dataContent = data[addDataCategoryValue];
                         addDataSuggestion.innerHTML = "";
+                        console.log(data[addDataCategoryValue]);
                     });
                     addDataSuggestion.appendChild(addDataSuggestionList);
                 });
+                /*🤨*/
             } catch (error) {
-                console.log("Some Error Occured");
+
+                addDataMessage.innerHTML = 'Some Error Occured';
+                addDataMessage.classList.add('active');
+                addDataMessage.style.background = '#dc3545';
+                setTimeout(() => {
+
+                    addDataMessage.classList.remove('active');
+                }, 3000);
             }
         }
     })
 );
+
+
 addDataTitle.addEventListener("keydown", (event) => {
     const addDataSuggestionValue = document.querySelectorAll(".addDataSuggestionList");
     if (addDataSuggestionValue.length > 0) {
@@ -292,16 +309,39 @@ addDataSubmit.addEventListener("click", function (event) {
     if (dataFetched) {
         for (let i = 0; i < dataArray.length; i++) {
             if (dataArray[i].dataContent.title == dataContent.title && dataArray[i].dataContent.tagline == dataContent.tagline && dataArray[i].dataContent.released == dataContent.released) {
-                addDataMessage.innerHTML = "Movie Already Exists";
+                if (addDataCategory.value == 'movie') {
+                    addDataMessage.innerHTML = `Movie Already Exists`;
+                }
+                else {
+        
+                    addDataMessage.innerHTML = `Series Already Exists`;
+                }
+                addDataMessage.classList.add('active');
+                addDataMessage.style.background = '#dc3545';
+                setTimeout(() => {
+                    addDataMessage.classList.remove('active');
+                }, 3000);
                 dataFetched = 0;
                 return;
             }
         }
-        const releaseDate = new Date(dataContent.released);
+        const releaseDate = new Date(dataContent.released || dataContent.first_aired);
+        const releaseDay=releaseDate.getDate();
         const releaseYear = releaseDate.getFullYear();
         const releaseMonth = releaseDate.getMonth();
-        if (releaseYear > currentYear || (releaseYear === currentYear && releaseMonth > currentMonth)) {
-            addDataMessage.innerHTML = "Release date cannot be in the future";
+        if ((releaseYear > currentYear) || (releaseYear === currentYear && releaseMonth > currentMonth) || (releaseYear === currentYear && releaseMonth === currentMonth && releaseDay>currentDate) || ((dataContent.released || dataContent.first_aired) == null)) {
+            if (addDataCategory.value == 'movie') {
+                addDataMessage.innerHTML = `Movie not Released Yet`;
+            }
+            else {
+    
+                addDataMessage.innerHTML = `Series not Released Yet`;
+            }
+            addDataMessage.classList.add('active');
+            addDataMessage.style.background = '#dc3545';
+            setTimeout(() => {
+                addDataMessage.classList.remove('active');
+            }, 3000);
             dataFetched = 0;
             return;
         }
@@ -313,31 +353,38 @@ addDataSubmit.addEventListener("click", function (event) {
         addDataTitle.value = "";
         addDataRating.value = 0;
         addDataRatingValue.innerHTML = "0";
-        addDataMessage.innerHTML = "Movie Added Successfully";
+        if (addDataCategory.value == 'movie') {
+            addDataMessage.innerHTML = `Movie Added Successfully`;
+        }
+        else {
+
+            addDataMessage.innerHTML = `Series Added Successfully`;
+        }
+        addDataMessage.classList.add('active');
+        addDataMessage.style.background = '#28a745';
+        setTimeout(() => {
+            addDataMessage.classList.remove('active');
+        }, 3000);
         dataFetched = 0;
         changeYearValues();
         displayData();
     }
-    else {
-        addDataMessage.innerHTML = "Movie Not Found";
-        return;
-    }
 });
 function displayData() {
     dataContainer.innerHTML = "";
-    if(dataArray.length==0){
-        const welcomeBox=document.createElement('div');
+    if (dataArray.length == 0) {
+        const welcomeBox = document.createElement('div');
         welcomeBox.classList.add('welcomeBox');
-        const welcomeBoxText=document.createElement('p');
-        welcomeBoxText.innerHTML="Your collection is waiting to shine! Start adding your favorite movies and series now.";
-        const welcomeBoxButton=document.createElement('button');
-        welcomeBoxButton.innerHTML="Add";
+        const welcomeBoxText = document.createElement('p');
+        welcomeBoxText.innerHTML = "Your collection is waiting to shine! Start adding your favorite movies and series now.";
+        const welcomeBoxButton = document.createElement('button');
+        welcomeBoxButton.innerHTML = "Add";
         welcomeBoxButton.classList.add('button');
         welcomeBoxButton.classList.add('button1');
         welcomeBox.appendChild(welcomeBoxText);
         welcomeBox.appendChild(welcomeBoxButton);
         dataContainer.appendChild(welcomeBox);
-        welcomeBoxButton.addEventListener('click',function(){
+        welcomeBoxButton.addEventListener('click', function () {
             if (document.getElementById('editDataForm').classList.contains('active')) {
                 document.getElementById('editDataForm').classList.add('shake');
                 setTimeout(() => {
@@ -415,22 +462,22 @@ function displayData() {
         square.appendChild(imgElement);
         const content = document.createElement("div");
         content.classList.add("content");
-        const table=document.createElement('table');
-        const tr1=document.createElement('tr');
-        const td1=document.createElement('td');
+        const table = document.createElement('table');
+        const tr1 = document.createElement('tr');
+        const td1 = document.createElement('td');
         const title = document.createElement("p");
         title.innerHTML = `${dataFilteredByRating[i].dataContent.title}`;
-        td1.innerHTML='Title';
+        td1.innerHTML = 'Title';
         tr1.appendChild(td1);
-        const td2=document.createElement('td');
-        td2.innerHTML=title.innerHTML;
+        const td2 = document.createElement('td');
+        td2.innerHTML = title.innerHTML;
         tr1.appendChild(td2);
         table.appendChild(tr1);
-        const tr2=document.createElement('tr');
-        const td3=document.createElement('td');
-        td3.innerHTML='Type';
+        const tr2 = document.createElement('tr');
+        const td3 = document.createElement('td');
+        td3.innerHTML = 'Type';
         tr2.appendChild(td3);
-        const td4=document.createElement('td');
+        const td4 = document.createElement('td');
         let category;
         if (dataFilteredByRating[i].dataType == "movie") {
             category = `Movie`;
@@ -438,14 +485,14 @@ function displayData() {
         else if (dataFilteredByRating[i].dataType == "show") {
             category = `Series`;
         }
-        td4.innerHTML=category;
+        td4.innerHTML = category;
         tr2.appendChild(td4);
         table.appendChild(tr2);
-        const tr3=document.createElement('tr');
-        const td5=document.createElement('td');
-        td5.innerHTML='Rating';
+        const tr3 = document.createElement('tr');
+        const td5 = document.createElement('td');
+        td5.innerHTML = 'Rating';
         tr3.appendChild(td5);
-        const td6=document.createElement('td');
+        const td6 = document.createElement('td');
         let rating;
         switch (dataFilteredByRating[i].dataRating) {
             case "0": rating = "</ion-icon><ion-icon name='star-outline'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon></ion-icon><ion-icon name='star-outline'></ion-icon>";
@@ -473,20 +520,20 @@ function displayData() {
             case "5": rating = "</ion-icon><ion-icon name='star'></ion-icon></ion-icon><ion-icon name='star'></ion-icon></ion-icon><ion-icon name='star'></ion-icon></ion-icon><ion-icon name='star'></ion-icon></ion-icon><ion-icon name='star'></ion-icon>";
                 break;
         }
-        td6.innerHTML=rating;
+        td6.innerHTML = rating;
         tr3.appendChild(td6);
         table.appendChild(tr3);
-        const tr4=document.createElement('tr');
-        const td7=document.createElement('td');
-        td7.innerHTML='Release';
+        const tr4 = document.createElement('tr');
+        const td7 = document.createElement('td');
+        td7.innerHTML = 'Release';
         tr4.appendChild(td7);
-        const td8=document.createElement('td');
+        const td8 = document.createElement('td');
 
-        
+
         let dateToDisplay = new Date(dataFilteredByRating[i].dataContent.released || dataFilteredByRating[i].dataContent.first_aired);
         let release;
         release = `${dateToDisplay.getDate()} ${monthsName[dateToDisplay.getMonth()]} ${dateToDisplay.getFullYear()}`;
-        td8.innerHTML=release;
+        td8.innerHTML = release;
         tr4.appendChild(td8);
         table.appendChild(tr4);
         content.appendChild(table);
@@ -510,26 +557,53 @@ function displayData() {
 }
 dataContainer.addEventListener("click", function (event) {
     if (event.target.classList.contains("dataRemove")) {
+        document.getElementById('deleteWarning').classList.add('active');
         movieIndex = Array.from(document.getElementsByClassName("dataRemove")).indexOf(event.target);
         const contentIdToRemove = dataFilteredByRating[movieIndex].dataId;
-        dataArray = dataArray.filter(data => data.dataId !== contentIdToRemove);
-        localStorage.setItem("data", JSON.stringify(dataArray));
-        changeYearValues();
-        displayData();
+        document.getElementById('removeText').innerHTML = `Do you really want to remove '${dataFilteredByRating[movieIndex].dataContent.title}'`;
+        document.getElementById('removeCancel').addEventListener('click', function (event) {
+            event.preventDefault();
+            document.getElementById('deleteWarning').classList.remove('active');
+        })
+        document.getElementById('removeConfirm').addEventListener('click', function (event) {
+            event.preventDefault();
+            document.getElementById('deleteWarning').classList.remove('active');
+            dataArray = dataArray.filter(data => data.dataId !== contentIdToRemove);
+            localStorage.setItem("data", JSON.stringify(dataArray));
+            changeYearValues();
+            displayData();
+        })
     }
 });
 let contentIdToEdit;
 let initialDataType;
 let initialRating;
 dataContainer.addEventListener("click", function (event) {
-    if (addDataForm.classList.contains('active')) {
+    if (addDataForm.classList.contains('active') && !event.target.classList.contains("button1")) {
+        addDataForm.classList.remove('active');
+        addDataBtn.style.transform = 'rotate(0deg)';
+        return;
+    }
+    else if (addDataForm.classList.contains('active') && event.target.classList.contains("button1")) {
         addDataForm.classList.add('shake');
         setTimeout(() => {
             addDataForm.classList.remove('shake');
         }, 500);
         return;
     }
-    if (event.target.classList.contains("dataEdit")) {
+    else if (event.target.classList.contains("button1")) {
+        addDataForm.classList.add('active');
+        addDataBtn.style.transform = 'rotate(-45deg)';
+        return;
+    }
+    else if (event.target.classList.contains("dataEdit")) {
+        if (addDataForm.classList.contains('active')) {
+            addDataForm.classList.add('shake');
+            setTimeout(() => {
+                addDataForm.classList.remove('shake');
+            }, 500);
+            return;
+        }
         const movieIndex = Array.from(document.getElementsByClassName("dataEdit")).indexOf(event.target);
         contentIdToEdit = dataFilteredByRating[movieIndex].dataId;
         const movieData = dataArray.find(data => data.dataId === contentIdToEdit);
@@ -544,7 +618,7 @@ dataContainer.addEventListener("click", function (event) {
             document.getElementById('editDataRating').value = movieData.dataRating;
             initialRating = document.getElementById('editDataRating').value;
             document.getElementById('editDataRatingValue').innerHTML =
-            document.getElementById('editDataRating').value;
+                document.getElementById('editDataRating').value;
         }
     }
 });
@@ -563,20 +637,20 @@ document.getElementById('editDataSubmit').addEventListener('click', function (ev
             // Store the updated data array in localStorage
             localStorage.setItem("data", JSON.stringify(dataArray));
             if (movieData.dataType == initialDataType && movieData.dataRating == initialRating) {
-                document.getElementById('editMessage').innerHTML='No Changes made';
-                document.getElementById('editMessage').style.backgroundColor='#dc3545';
+                document.getElementById('editMessage').innerHTML = 'No Changes made';
+                document.getElementById('editMessage').style.backgroundColor = '#dc3545';
             }
-            else{
-                initialDataType=movieData.dataType;
-                initialRating=movieData.dataRating;
-                document.getElementById('editMessage').innerHTML='Changes Saved';
-                document.getElementById('editMessage').style.backgroundColor='#28a745';
+            else {
+                initialDataType = movieData.dataType;
+                initialRating = movieData.dataRating;
+                document.getElementById('editMessage').innerHTML = 'Changes Saved';
+                document.getElementById('editMessage').style.backgroundColor = '#28a745';
             }
             if (timeoutId) {
                 clearTimeout(timeoutId);
             }
             document.getElementById('editMessage').classList.add('active');
-            timeoutId=setTimeout(() => {
+            timeoutId = setTimeout(() => {
                 document.getElementById('editMessage').classList.remove('active');
             }, 3000);
             displayData();
@@ -584,17 +658,17 @@ document.getElementById('editDataSubmit').addEventListener('click', function (ev
             if (timeoutId) {
                 clearTimeout(timeoutId);
             }
-            document.getElementById('editMessage').innerHTML=`${initialDataType} has been Deleted`;
-                document.getElementById('editMessage').style.backgroundColor='red';
+            document.getElementById('editMessage').innerHTML = `${initialDataType} has been Deleted`;
+            document.getElementById('editMessage').style.backgroundColor = 'red';
             document.getElementById('editMessage').classList.add('active');
-            timeoutId=setTimeout(() => {
+            timeoutId = setTimeout(() => {
                 document.getElementById('editMessage').classList.remove('active');
             }, 3000);
         }
     }
 });
 
-document.getElementById('filterBtn').addEventListener('click',function(){
+document.getElementById('filterBtn').addEventListener('click', function () {
     document.getElementById('filterForm').classList.toggle('active');
 })
 
