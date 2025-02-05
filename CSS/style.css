@@ -19,10 +19,15 @@ body{
 }
 
 input{
+    position: relative;
     width: 100%;
 }
 
-#submit
+#submit-btn{
+    position: absolute;
+    top: 26%;
+    right: 10%;
+}
 
 .add-btn{
     position: absolute;
