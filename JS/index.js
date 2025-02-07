@@ -3,6 +3,7 @@ const submitBtn = document.getElementById("basic-addon1");
 const category=document.getElementById('category');
 const container=document.getElementById('search-result-container');
 
+let data;
 let releaseMon=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
 
@@ -31,11 +32,9 @@ async function fetchData(searchTerm) {
             throw new Error("Network response was not ok");
         }
 
-        const data = await response.json();
+        data = await response.json();
         container.innerHTML = '';
-        for (let i = 0; i < data.length; i++) {
-            createCard(data[i]);
-        }
+            createCard();
         console.log(data);
     } catch (error) {
         console.error(error);
@@ -47,9 +46,12 @@ async function fetchData(searchTerm) {
 
 
 
-function createCard(data) {
+function createCard() {
+    
+    for(let i=0;i<data.length;i++)
+    {
     let cat=category.value;
-    const release=new Date(data[cat].released || data[cat].first_aired);
+    const release=new Date(data[i][cat].released || data[i][cat].first_aired);
     const releaseDate=release.getDate();
     const releaseMonth=release.getMonth();
     const releaseYear=release.getFullYear();
@@ -58,17 +60,23 @@ function createCard(data) {
     const cardDiv = document.createElement('div');
     cardDiv.className = 'card border-0 position-relative';
     const img = document.createElement('img');
+    img.loading='lazy';
     img.className = 'rounded card-img-top';
-    img.src = `https://${data[cat].images.poster}`;
+    img.src = `https://${data[i][cat].images.poster}`;
     img.height = 210;
-    img.alt = '...';
     const cardBody = document.createElement('div');
     cardBody.className = 'card-body p-0';
     const detailDiv = document.createElement('div');
     detailDiv.className = 'detail d-flex justify-content-between p-1 rounded bg-secondary text-white my-1';
-    const likesSmall = document.createElement('small');
-    likesSmall.style.fontSize = '12px';
-    likesSmall.innerHTML =`<i class="fa-solid fa-heart"></i> ${data[cat].rating.toFixed(1)}`;
+    
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'btn btn-primary rounded-circle';
+    button.dataset.bsToggle = 'modal';
+    button.dataset.bsTarget = '#exampleModal';
+    button.textContent = '+';
+    const likesSmall = document.createElement('div');
+likesSmall.appendChild(button);
     const dateSmall = document.createElement('small');
     dateSmall.style.fontSize = '12px';
     dateSmall.textContent = `${releaseDate}, ${releaseMon[releaseMonth]} ${releaseYear}`;
@@ -78,24 +86,61 @@ function createCard(data) {
     h5.className = 'px-1';
     const link = document.createElement('a');
     link.href = 'detail';
-    link.textContent = data[cat].title;
+    link.textContent = data[i][cat].title;
     h5.appendChild(link);
-    const button = document.createElement('button');
-    button.type = 'button';
-    button.className = 'btn btn-primary position-absolute top-0 rounded-circle';
-    button.dataset.bsToggle = 'modal';
-    button.dataset.bsTarget = '#exampleModal';
-    button.textContent = '+';
     cardBody.appendChild(detailDiv);
     cardBody.appendChild(h5);
-    cardBody.appendChild(button);
     cardDiv.appendChild(img);
     cardDiv.appendChild(cardBody);
     colDiv.appendChild(cardDiv);
     container.appendChild(colDiv);
 }
+const addBtns=document.getElementsByClassName('btn');
+    for(let i=0;i<addBtns.length;i++){
+        addBtns[i].addEventListener('click',function(){
+            addDataFun(i);
+        })
+    }
+}
+
+const submitData=document.getElementById('submitData');
+const exampleModalLabel=document.getElementById('exampleModalLabel');
+function addDataFun(index){
+    exampleModalLabel.innerHTML="Rate "+data[index][category.value].title;
+}
+
+let rating;
+
+const stars=document.getElementsByClassName('star');
+for(let i=0;i<stars.length;i++){
+    stars[i].addEventListener('click',function(){
+        for(let k=0;k<stars.length;k++){
+            stars[k].style.fill='#fff';
+        }
+        for(let j=0;j<=i;j++){
+            stars[j].style.fill="yellow";
+        }
+        if(i%2==0){
+            rating=i*0.5+0.5;
+        }
+        else{
+            rating=(i+1)/2;
+        }
+        console.log(rating);
+    })
+}
 
 
+const open=document.getElementById('open-search-cont');
+const searchCont=document.getElementById('search-cont');
+open.addEventListener('click',function(){
+searchCont.classList.add('active');
+})
+
+const close= document.getElementById('close-search-cont');
+close.addEventListener('click',function(){
+    searchCont.classList.remove('active');
+    })
 
 
 function getSearchTerm() {
