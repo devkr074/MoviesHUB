@@ -13,6 +13,7 @@ body {
     height: 100vh;
     position: relative;
     overflow: auto;
+    scroll-behavior: smooth;
 }
 
 .nav {
@@ -25,6 +26,10 @@ body {
     box-shadow: 2px 2px 15px black;
 }
 
+.nav h1{
+    cursor: pointer;
+}
+
 .nav-list {
     display: flex;
     align-items: center;
@@ -35,8 +40,7 @@ body {
 .nav-list ul {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 40px;
+    gap: 30px;
     list-style-type: none;
     border: 2px solid;
     padding: 0;
@@ -59,7 +63,7 @@ body {
     border: 2px solid ;
     overflow: auto;
     top: -100vh;
-    background-color: rgba(0, 0, 0, 0.886);
+    background-color: rgba(0, 0, 0, 0.802);
     z-index: 1;
     transition: all 0.3s ease;
 }
@@ -69,7 +73,9 @@ body {
 }
 
 .search-bar{
-    backdrop-filter: blur(10);
+    z-index: 1000;
+    background-color: #000000a1;
+    backdrop-filter: blur(20px);
 }
 
 @media (max-width: 480px) {
@@ -79,19 +85,19 @@ body {
         left: 0;
         width: 100%;
         justify-content: start;
-        background-color: gray;
+        background-color: rgba(128, 128, 128, 0.61);
         height: 0;
         overflow: hidden;
     }
 
     .nav-list.active {
-        height: 256px;
+        height: 356px;
     }
 
     .nav-list ul {
         flex-direction: column;
         width: 100%;
-        padding: 10px;
+        padding: 5px;
     }
 
     .nav-list ul li {

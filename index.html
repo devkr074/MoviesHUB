@@ -14,32 +14,35 @@
 </head>
 
 <body>
-    <div class="main-container">
+    <div class="main-container" id="main-container">
         <div class="container-fluid search-container" id="search-container">
             <div class="row py-3 position-fixed w-100 search-bar">
                 <div class="col-sm-12 col-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="Username" aria-label="Username"
+                        <input id="title" type="text" class="form-control" placeholder="Username" aria-label="Username"
                             aria-describedby="basic-addon1">
-                        <span class="input-group-text" id="basic-addon1"><i
-                                class="fa-solid fa-magnifying-glass"></i></span>
+                        <span class="input-group-text" id="basic-addon1">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <div class="spinner-grow spinner-grow-sm d-none" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </span>
                     </div>
                 </div>
             </div>
-
             <div class="row" id="search-result-container">
-
             </div>
-
         </div>
         <div class="nav">
-            <h1><a href="">MoviesHUB</a></h1>
+            <h1><a id="tt">MoviesHUB</a></h1>
             <div class="nav-list" id="nav-list">
                 <ul>
-                    <li><a href="">Home</a></li>
-                    <li><a href="">Home</a></li>
-                    <li><a href="">Home</a></li>
-                    <li><a href="">Home</a></li>
+                    <li><a href="index.html" class="active">Home</a></li>
+                    <li><a href="trending.html">Trending</a></li>
+                    <li><a href="upcoming.html">Upcoming</a></li>
+                    <li><a href="popular.html">Popular</a></li>
+                    <li><a href="anticipated.html">Anticipated</a></li>
+                    <li><a href="library.html">Library</a></li>
                 </ul>
             </div>
             <div class="button-group">
@@ -48,17 +51,6 @@
             </div>
         </div>
     </div>
-    <script>
-        document.getElementById('toggle').addEventListener('click', function (event) {
-            event.preventDefault();
-            document.getElementById('nav-list').classList.toggle('active');
-            this.classList.toggle('active');
-        })
-        document.getElementById('search').addEventListener('click', function (event) {
-            event.preventDefault();
-            document.getElementById('search-container').classList.add('active');
-        })
-    </script>
     <script src="JS/index.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"

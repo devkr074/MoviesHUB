@@ -7,11 +7,28 @@ let data;
 let releaseMon=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
 
+document.getElementById('toggle').addEventListener('click', function (event) {
+    event.preventDefault();
+    document.getElementById('nav-list').classList.toggle('active');
+    this.classList.toggle('active');
+})
+document.getElementById('search').addEventListener('click', function (event) {
+    event.preventDefault();
+    document.getElementById('search-container').classList.add('active');
+})
+
+
+
+document.getElementById('tt').addEventListener('click', function (event) {
+    event.preventDefault();
+    document.getElementById('main-container').scrollTop = 0;
+})
 
 async function fetchData(searchTerm) {
-
+let movie='movie';
+let show='show';
     const clientId = "cdcf192406f8361d8a02e82e99c86ffde257a7f55f52f5833804e48f3d252da8";
-    const url = `https://api.trakt.tv/search/${category.value}?query=${searchTerm}&extended=full,images`;
+    const url = `https://api.trakt.tv/search?limit=20&query=${searchTerm}&extended=full,images`;
     const searchLogo=document.querySelector('.fa-solid');
     searchLogo.classList.add('d-none');
     const loaderContainer = document.querySelector('.spinner-grow');
@@ -50,8 +67,7 @@ function createCard() {
     
     for(let i=0;i<data.length;i++)
     {
-    let cat=category.value;
-    const release=new Date(data[i][cat].released || data[i][cat].first_aired);
+    const release=new Date(data[i].type.released || data[i].type.first_aired);
     const releaseDate=release.getDate();
     const releaseMonth=release.getMonth();
     const releaseYear=release.getFullYear();
@@ -62,7 +78,7 @@ function createCard() {
     const img = document.createElement('img');
     img.loading='lazy';
     img.className = 'rounded card-img-top';
-    img.src = `https://${data[i][cat].images.poster}`;
+    img.src = `https://`;
     img.height = 210;
     const cardBody = document.createElement('div');
     cardBody.className = 'card-body p-0';
@@ -86,7 +102,7 @@ likesSmall.appendChild(button);
     h5.className = 'px-1';
     const link = document.createElement('a');
     link.href = 'detail';
-    link.textContent = data[i][cat].title;
+    link.textContent = data[i].type.title;
     h5.appendChild(link);
     cardBody.appendChild(detailDiv);
     cardBody.appendChild(h5);
@@ -131,16 +147,6 @@ for(let i=0;i<stars.length;i++){
 }
 
 
-const open=document.getElementById('open-search-cont');
-const searchCont=document.getElementById('search-cont');
-open.addEventListener('click',function(){
-searchCont.classList.add('active');
-})
-
-const close= document.getElementById('close-search-cont');
-close.addEventListener('click',function(){
-    searchCont.classList.remove('active');
-    })
 
 
 function getSearchTerm() {
