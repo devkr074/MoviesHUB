@@ -1,17 +1,75 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>MoviesHUB - Home</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
     <link rel="stylesheet" href="CSS/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
-<body onload="fetchData()">
+<body>
+    <div class="container">
+        <div class="navbar">
+            <h1>MoviesHUB</h1>
+        </div>
+        <div class="banner">
+            <div class="banner-cover">
+                <h1>Get Trending, Upcoming and Popular Movies and series</h1>
+            </div>
+        </div>
+        <div class="section-cont">
+            <div class="box">
+                <div class="trending-section">
+                </div>
+            </div>
+            <div class="section">
+                <h2>Trending Now</h2>
+                <div class="slider" id="container">
+                </div>
+            </div>
+        </div>
+        <div class="section-cont">
+            <div class="box">
+                <div class="trending-section">
+                </div>
+            </div>
+            <div class="section">
+                <h2>Popular</h2>
+                <div class="slider" id="popular-container"></div>
+            </div>
+        </div>
+        <div class="section-cont">
+            <div class="box">
+                <div class="trending-section">
+                </div>
+            </div>
+            <div class="section">
+                <h2>Anticipated</h2>
+                <div class="slider" id="anticipated"></div>
+            </div>
+        </div>
+        <div class="section-cont">
+            <div class="box">
+                <div class="trending-section">
+                </div>
+            </div>
+            <div class="section">
+                <h2>Upcoming</h2>
+                <div class="slider"></div>
+            </div>
+        </div>
+        <div class="section-cont">
+            <div class="box">
+                <div class="trending-section">
+                </div>
+            </div>
+            <div class="section">
+                <h2>Library</h2>
+                <div class="slider"></div>
+            </div>
+        </div>
+    </div>
     <script src="JS/index.js"></script>
 </body>
 
