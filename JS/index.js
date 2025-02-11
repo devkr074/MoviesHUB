@@ -88,6 +88,17 @@ window.addEventListener('load',function(){
     fetchData3();
 })
 
+const cont=document.getElementById('cont');
+
+cont.addEventListener('scroll',function(){
+    if(this.scrollTop>100){
+        document.getElementById('nav').classList.add('active');
+    }
+    else{
+        document.getElementById('nav').classList.remove('active');
+    }
+})
+
 
 function createCard() {
     for(let i=0;i<data.length;i++){
@@ -164,3 +175,22 @@ function createAnticipatedCard() {
     }
     
 }
+
+const menu=document.getElementById('menu');
+document.getElementById('open-menu').addEventListener('click',function(){
+    menu.classList.add('active');
+})
+
+document.getElementById('close-menu').addEventListener('click',function(){
+    menu.classList.remove('active');
+})
+
+
+const  search=document.getElementById('search-container');
+document.getElementById('open-search').addEventListener('click',function(){
+    search.classList.add('active');
+})
+
+document.getElementById('close-search').addEventListener('click',function(){
+    search.classList.remove('active');
+})

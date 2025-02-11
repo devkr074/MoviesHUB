@@ -2,6 +2,13 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    
+    color: #000;
+    text-shadow:
+        -1px -1px 0 #fff,  /* white shadow at the top left */
+         1px -1px 0 #fff,  /* white shadow at the top right */
+        -1px  1px 0 #fff,  /* white shadow at the bottom left */
+         1px  1px 0 #fff; 
 }
 
 body {
@@ -29,16 +36,121 @@ height: 80px;
 width: 100%;
 padding: 30px 30px;
 position: fixed;
-top: 0;
+display: flex;
+align-items: center;
+justify-content: space-between;
 z-index: 2;
+transition: all 0.3s ease;
 background: linear-gradient(180deg, rgba(0, 0, 0, 0.8000) 0.000%, rgba(0, 0, 0, 0.7889) 8.333%, rgba(0, 0, 0, 0.7556) 16.67%, rgba(0, 0, 0, 0.7000) 25.00%, rgba(0, 0, 0, 0.6222) 33.33%, rgba(0, 0, 0, 0.5222) 41.67%, rgba(0, 0, 0, 0.4000) 50.00%, rgba(0, 0, 0, 0.2778) 58.33%, rgba(0, 0, 0, 0.1778) 66.67%, rgba(0, 0, 0, 0.1000) 75.00%, rgba(0, 0, 0, 0.04444) 83.33%, rgba(0, 0, 0, 0.01111) 91.67%, rgba(0, 0, 0, 0.000) 100.0%);
 }
 
-.navbar h1{
-    color: rgb(229, 9, 20);
+.menu{
+    height: 100%;
+    background-color: #fff;
+    width: 30%;
+    position:  fixed;
+    top: 0;
+    z-index: 4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-top: 40px;
+    left: -50%;
+    transition: all 0.3s ease;
+}
+
+.menu.active{
+    left: 0;
+}
+
+.menu button{
+    position: absolute;
+    top: 30px;
+    left: 20px;
+    background-color: transparent;
+    border:none;
+    font-size: 1.4em;
+}
+
+.menu ul{
+    list-style-type: none;
+    height: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 60px;
+}
+
+.menu ul li a{
+    text-decoration: none;
+    font-size: 1.2em;
+}
+
+.menu ul li.active{
+    font-weight: bolder;
+}
+
+.search-container{
+    height: 100%;
+    width: 100%;
+    left: 0;
+    position: absolute;
+    z-index: 6;
+    background-color: #fff;
+    top: -100%;
+    transition: all 0.3s ease;
+}
+
+.search-container #close-search{
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    background-color: transparent;
+    border:none;
+    font-size: 1.4em;
+
+}
+
+.search-container button{
+    background-color: transparent;
+    border:none;
+    font-size: 1.4em;
+}
+
+.search-container input{
+    width: 80%;
+    margin-top: 50px;
+    margin-inline: 20px;
+    height: 40px;
+    padding-inline: 5px;
+    font-size: 18px;
+    border: 2px solid;
+    border-radius: 5px;
+}
+
+.search-container.active{
+    top: 0;
 }
 
 
+.navbar button{
+    font-size: 1.5em;
+    color: #fff;
+    background-color: transparent;
+    border: none;
+}
+
+.navbar.active{
+    background-color: #000;
+}
+h1,h2{
+    font-family: sans-serif;
+    font-weight: bold;
+}
+h2{
+    font-size: 1.7em;
+}
 .banner-cover {
     position: absolute;
     top: 0;
@@ -54,7 +166,6 @@ background: linear-gradient(180deg, rgba(0, 0, 0, 0.8000) 0.000%, rgba(0, 0, 0, 
 .banner-cover h1{
     width: 50%;
     text-align: center;
-    color: #fff;
     font-family: sans-serif;
     line-height: 1.5;
     font-size: 2.5em;
@@ -63,7 +174,7 @@ background: linear-gradient(180deg, rgba(0, 0, 0, 0.8000) 0.000%, rgba(0, 0, 0, 
 .box{
 
     position: relative;
-    height: 150px;
+    height: 110px;
     overflow: hidden;
 }
 
@@ -89,7 +200,7 @@ background: linear-gradient(180deg, rgba(0, 0, 0, 0.8000) 0.000%, rgba(0, 0, 0, 
 
 
 .slider{
-    height: 250px;
+    height: 270px;
     margin-top: 20px;
     background-color: #000;
     border-radius: 8px;
@@ -111,12 +222,12 @@ background: linear-gradient(180deg, rgba(0, 0, 0, 0.8000) 0.000%, rgba(0, 0, 0, 
     min-width: 175px;
     position: relative;
     border-radius: 10px;
-    transition: all 0.3s ease;
+    transition: all 0.25s ease;
 
 }
 
 .card:hover{
-    transform: scale(1.05);
+    transform: scale(1.04);
 }
 
 .card img{
