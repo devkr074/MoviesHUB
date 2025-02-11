@@ -226,6 +226,24 @@ h2{
 
 }
 
+.card button{
+    height: 30px;
+    width: 30px;
+    font-size: 20px;
+    font-weight: bold;
+    background-color: #fff;
+    border: none;
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: none;
+}
+
+.card:hover button{
+    display: block;
+}
+
 .card:hover{
     transform: scale(1.04);
 }
@@ -248,4 +266,26 @@ h2{
     position: absolute;
     bottom: 10px;
     left: -9%;
+}
+
+.library-container{
+    padding-top: 100px;
+    padding-bottom: 80px;
+    padding-inline: 60px;
+    background-color: #000;
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.library-container .card{
+    height: 250px;
+    width: 200px;
+    border-radius: 5px;
+    background-color: #fff;
+}
+
+.library-container .card img{
+    height: 100%;
+    width: 100%;
 }
