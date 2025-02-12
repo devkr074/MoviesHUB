@@ -8,7 +8,7 @@ window.addEventListener('load', function () {
 async function kar() {
     for (let i = 0; i < localData.length; i++) {
             const clientId = "cdcf192406f8361d8a02e82e99c86ffde257a7f55f52f5833804e48f3d252da8";
-            const url = `https://api.trakt.tv/search/trakt/${localData[i]}?extended=full,images`;
+            const url = `https://api.trakt.tv/search/trakt/${localData[i]}/`;
             try {
                 const response = await fetch(url, {
                     method: "GET",

@@ -118,18 +118,18 @@ function createCard() {
         const span = document.createElement('span');
         span.textContent = `${i + 1}`;
         const button = document.createElement('button');
-        const check = data[i].movie.ids.slug;
+        const check = data[i].movie.ids.trakt;
         if (localData.includes(check)) {
 
             button.innerHTML = 'x';
-            button.id = `${data[i].movie.ids.slug}`;
+            button.id = `${data[i].movie.ids.trakt}`;
             button.classList.add('remove', 'move');
         }
 
         else {
 
             button.innerHTML = '+';
-            button.id = `${data[i].movie.ids.slug}`;
+            button.id = `${data[i].movie.ids.trakt}`;
             button.classList.add('add', 'move');
         }
 
