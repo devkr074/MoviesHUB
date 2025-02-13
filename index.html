@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MoviesHUB - Home</title>
+    <title>Random Movie/Show Poster</title>
+    <link rel="shortcut icon" href="Images/favicon.png" type="image/x-icon">
     <link rel="stylesheet" href="CSS/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
         integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
@@ -12,45 +13,71 @@
 </head>
 
 <body>
-    <div id="mainContainer" class="mainContainer">
-        <div id="menuContainer" class="menuContainer">
-            <button id="closeMenuContainerButton"><i class="fa-solid fa-xmark"></i></button>
+    <div id="mainContainer">
+        <div id="navbarContainer">
+            <a href=""><img src="Images/favicon.png" height="60" alt=""></a>
             <ul>
-                <li class="active"><a href="index.html">Home</a></li>
-                <li><a href="trending.html">Trending</a></li>
-                <li><a href="popular.html">Popular</a></li>
-                <li><a href="upcoming.html.html">Upcoming</a></li>
-                <li><a href="anticipated.html">Anticipated</a></li>
-                <li><a href="library.html">Library</a></li>
+                <li id="navbarMenuContainerButton"><i class="fa-solid fa-bars"></i>
+                <div id="navbarMenuContainer">
+                    <ul>
+                        <li><a href="">Movies</a></li>
+                        <li><a href="">Series</a></li>
+                        <li><a href="">Library</a></li>
+                    </ul>
+                </div>
+                </li>
+                <li><i class="fa-solid fa-magnifying-glass"></i></li>
             </ul>
         </div>
-        <div id="searchContainer" class="searchContainer">
-            <button id="closeSearchContainerButton"><i class="fa-solid fa-xmark"></i></button>
-            <input type="text" placeholder="Enter Your Text Here...">
-            <button id="searchButton"><i class="fa-solid fa-magnifying-glass"></i></button>
+        <div id="bannerContainer">
+            <div id="bannerContentContainer">
+                <div id="bannerLogoContainer">
+                    <img src="Images/favicon.png" height="150" alt="">
+                    <h1>Cine<span>HUB</span></h1>
+                </div>
+                <h2><span>Discover</span> what's hot and where to stream it. <span>Track</span> series and movies you watch. <span>Explore</span> latest, upcoming releases.</h2>
+            </div>
         </div>
-        <div id="navbarContainer" class="navbarContainer">
-            <button id="openMenuContainerButton" class="navbarContainerButton"><i class="fa-solid fa-bars"></i></button>
-            <h1>MoviesHUB</h1>
-            <button id="openSearchContainerButton" class="navbarContainerButton"><i class="fa-solid fa-magnifying-glass"></i></button>
-        </div>
-        <div class="bannerContainer">
-            <h1>Get Trending, Upcoming and Popular Movies and series</h1>
-        </div>
-        <div class="sectionContainer">
-            <h2>Trending Now</h2>
-            <div id="trendingSectionContainer" class="cardSliderContainer"></div>
-        </div>
-        <div class="sectionContainer">
-            <h2>Popular Now</h2>
-            <div id="popularSectionContainer" class="cardSliderContainer"></div>
-        </div>
-        <div class="sectionContainer">
-            <h2>Most Anticipated</h2>
-            <div id="anticipatedSectionContainer" class="cardSliderContainer"></div>
+        <div id="curveContainer">
+            <div id="curve"></div>
         </div>
     </div>
-    <script src="JS/index.js"></script>
+
+    <script>
+        async function getRandomPoster() {
+            const clientId = 'cdcf192406f8361d8a02e82e99c86ffde257a7f55f52f5833804e48f3d252da8';
+            const randomType = Math.random() < 0.5 ? 'movies' : 'shows';
+            const url = `https://api.trakt.tv/${randomType}/trending?extended=full,images`;
+
+            try {
+                const response = await fetch(url, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'trakt-api-version': '2',
+                        'trakt-api-key': clientId
+                    }
+                });
+
+                const data = await response.json();
+                console.log(data);
+                const randomItem = data[Math.floor(Math.random() * 5)];
+                let posterUrl;
+                if (randomType == 'movies') {
+
+                    posterUrl = randomItem.movie.images.fanart[0];
+                }
+                else {
+
+                    posterUrl = randomItem.show.images.fanart[0];
+                }
+                const posterDiv = document.getElementById('bannerContainer');
+                posterDiv.style.backgroundImage = `url("https://${posterUrl}")`;
+            } catch (error) {
+                console.error('Error fetching the poster:', error);
+            }
+        }
+        getRandomPoster();
+    </script>
 </body>
 
 </html>
