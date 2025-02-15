@@ -36,10 +36,15 @@ window.addEventListener("load", async function () {
         console.log("Some Error Occured");
     }
     try {
-        data1 = await getData(`https://api.trakt.tv/calendars/my/movies`);
-        data2 = await getData(`https://api.trakt.tv/calendars/my/shows`);
-        data = combineData(data1, data2);
-        console.log(data);
+        const date=new Date();
+        const year=date.getFullYear();
+        const month=(date.getMonth()+1).toString().padStart(2,"0");
+        const day=(date.getDate()).toString().padStart(2,"0");
+        data1 = await getData(`https://api.trakt.tv/calendars/movies/${year}-${month}-${day}/1?extended=full,images`);
+        data2 = await getData(`https://api.trakt.tv/calendars/shows/${year}-${month}-${day}/1?extended=full,images`);
+        data = combineData(data1[`${year}-${month}-${day}`], data2[`${year}-${month}-${day}`]);
+        data = sortData(data, "upcoming");
+        loadSection(data, "upcomingSection");
     } catch (error) {
         console.log("Some Error Occured");
     }
@@ -55,45 +60,14 @@ window.addEventListener("load", async function () {
     addCardAndButtonsFunctionality();
 });
 
-async function getAccessToken() {
-    const clientId = "25e3ad21fc7b301243ec5538e0db52d1f815cc270d78f24fb77cfa495f447e0d";
-    const clientSecret = "465a91646653709aab4abbc8ed543b350dbf0143e8ce47da64cac70537cf5e5c";
-    const response = await fetch('https://trakt.tv/oauth/token', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            grant_type: 'client_credentials',
-            client_id: clientId,
-            client_secret: clientSecret
-        })
-    });
-    if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const data = await response.json();
-    return data.access_token;
-}
-
-// Usage
-getAccessToken().then(token => {
-    console.log('Access Token:', token);
-}).catch(error => {
-    console.error('Error:', error);
-});
-
-
-
 async function getData(url) {
-    const apiKey = "25e3ad21fc7b301243ec5538e0db52d1f815cc270d78f24fb77cfa495f447e0d";
+    const apiKey = "cdcf192406f8361d8a02e82e99c86ffde257a7f55f52f5833804e48f3d252da8";
     try {
         const response = await fetch(url, {
             headers: {
                 "Content-Type": "application/json",
                 "trakt-api-version": "2",
-                "trakt-api-key": apiKey,
-                "Authorization": "Bearer YOUR_ACCESS_TOKEN"
+                "trakt-api-key": apiKey
             }
         });
         const data = await response.json();
@@ -117,6 +91,13 @@ function sortData(data, type) {
     else if (type == "popular") {
         data.sort((a, b) => b.votes - a.votes);
     }
+    else if (type == "upcoming") {
+        data.sort((a, b) => {
+            const aVotes = a.movie ? a.movie.votes : a.episode.votes;
+            const bVotes = b.movie ? b.movie.votes : b.episode.votes;
+            return bVotes - aVotes;
+        });
+    }
     else if (type == "anticipated") {
         data.sort((a, b) => b.list_count - a.listCount);
     }
@@ -131,18 +112,18 @@ function loadBanner(data) {
 function loadSection(data, id) {
     const section = document.getElementById(id);
     section.innerHTML = "";
-    if (id == "trendingSection" || id == "anticipatedSection") {
+    if (id == "trendingSection" || id == "upcomingSection" || id == "anticipatedSection") {
         for (let i = 0; i < Math.min(10, data.length); i++) {
             section.innerHTML = section.innerHTML +
                 `<div class="sectionCard">
-                    <div class="sectionCardType">${data[i].movie ? "Movie" : "Series"}</div>
+                    <div class="sectionCardType">${data[i].movie ? "Movie" : data[i].episode ? "Episode" : "Series"}</div>
                     <div class="sectionCardButtonContainer">
                         <button id=${data[i][data[i].movie ? "movie" : "show"].ids.imdb} class="sectionCardButton addToLibraryButton" title="Add to Library"><i class="fa-solid fa-check"></i></button>
                         <button id=${data[i][data[i].movie ? "movie" : "show"].ids.imdb} class="sectionCardButton addToFavouriteButton" title="Add to Favourite"><i class="fa-solid fa-heart"></i></button>
                     </div>
                 </div>`;
             const cards = document.getElementsByClassName("sectionCard");
-            cards[cardCounter].id = `${data[i][data[i].movie ? "movie" : "show"].ids.imdb}`;
+            cards[cardCounter].id = `${data[i][data[i].movie ? "movie" : data[i].episode ? "episode" : "show"].ids.imdb}`;
             cards[cardCounter].style.backgroundImage = `url("https://${data[i][data[i].movie ? "movie" : "show"].images.poster[0]}")`;
             cardCounter++;
         }
