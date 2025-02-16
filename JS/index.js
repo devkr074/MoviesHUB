@@ -1,18 +1,16 @@
+const loaderContainer = document.getElementById("loaderContainer");
+const searchContainer = document.getElementById("searchContainer");
+const searchBar = document.getElementById("searchBar");
+const searchBarErrorMessage = document.getElementById("searchBarErrorMessage");
+const clearButton = document.getElementById("clearButton");
+const searchContainerCloseButton = document.getElementById("searchContainerCloseButton");
 const mainContainer = document.getElementById("mainContainer");
 const navbarContainer = document.getElementById("navbarContainer");
+const navbarMenuContainerSearchButton = document.getElementById("navbarMenuContainerSearchButton");
 const bannerContainer = document.getElementById("bannerContainer");
 let cardCounter = 0;
 let sectionCard;
 let sectionCardButton;
-
-mainContainer.addEventListener("scroll", function () {
-    if (mainContainer.scrollTop >= 80) {
-        navbarContainer.classList.add("active");
-    }
-    else {
-        navbarContainer.classList.remove("active");
-    }
-});
 
 window.addEventListener("load", async function () {
     let data1, data2, data;
@@ -36,13 +34,14 @@ window.addEventListener("load", async function () {
         console.log("Some Error Occured");
     }
     try {
-        const date=new Date();
-        const year=date.getFullYear();
-        const month=(date.getMonth()+1).toString().padStart(2,"0");
-        const day=(date.getDate()).toString().padStart(2,"0");
-        data1 = await getData(`https://api.trakt.tv/calendars/movies/${year}-${month}-${day}/1?extended=full,images`);
-        data2 = await getData(`https://api.trakt.tv/calendars/shows/${year}-${month}-${day}/1?extended=full,images`);
+        const date = new Date();
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, "0");
+        const day = (date.getDate()).toString().padStart(2, "0");
+        data1 = await getData(`https://api.cors.lol/?url=https://api.trakt.tv/calendars/movies/${year}-${month}-${day}/1?extended=full,images`);
+        data2 = await getData(`https://api.cors.lol/?url=https://api.trakt.tv/calendars/shows/${year}-${month}-${day}/1?extended=full,images`);
         data = combineData(data1[`${year}-${month}-${day}`], data2[`${year}-${month}-${day}`]);
+        console.log(data);
         data = sortData(data, "upcoming");
         loadSection(data, "upcomingSection");
     } catch (error) {
@@ -58,6 +57,61 @@ window.addEventListener("load", async function () {
         console.log("Some Error Occured");
     }
     addCardAndButtonsFunctionality();
+});
+
+window.addEventListener("keydown", function (event) {
+    if (event.key == "Tab") {
+        event.preventDefault();
+    }
+});
+
+searchBar.addEventListener("keyup", async function (event) {
+    searchBarErrorMessage.style.display = "none"
+    if (searchBar.value == "") {
+        clearButton.style.display = "none";
+    }
+    else {
+        clearButton.style.display = "block";
+    }
+    if (event.key == "Enter") {
+        if (searchBar.value.trim() == "") {
+            searchBarErrorMessage.style.display = "block"
+        }
+        else {
+            searchBar.blur();
+            data1 = await getData(`https://api.trakt.tv/search/movie?query=${searchBar.value.trim()}&extended=full,images`);
+            data2 = await getData(`https://api.trakt.tv/search/show?query=${searchBar.value.trim()}&extended=full,images`);
+            data = combineData(data1, data2);
+            data = sortData(data, "search");
+            loadSection(data, "searchResultContainer");
+            console.log(data);
+        }
+    }
+});
+
+clearButton.addEventListener("click", function () {
+    searchBar.value = "";
+    searchBar.focus();
+    searchBarErrorMessage.style.display = "none"
+    clearButton.style.display = "none";
+});
+
+searchContainerCloseButton.addEventListener("click", function () {
+    searchContainer.classList.remove("active");
+});
+
+mainContainer.addEventListener("scroll", function () {
+    if (mainContainer.scrollTop >= 80) {
+        navbarContainer.classList.add("active");
+    }
+    else {
+        navbarContainer.classList.remove("active");
+    }
+});
+
+navbarMenuContainerSearchButton.addEventListener("click", function () {
+    searchContainer.classList.add("active");
+    searchBar.focus();
 });
 
 async function getData(url) {
@@ -91,10 +145,10 @@ function sortData(data, type) {
     else if (type == "popular") {
         data.sort((a, b) => b.votes - a.votes);
     }
-    else if (type == "upcoming") {
+    else if (type = "upcoming" || type == "search") {
         data.sort((a, b) => {
-            const aVotes = a.movie ? a.movie.votes : a.episode.votes;
-            const bVotes = b.movie ? b.movie.votes : b.episode.votes;
+            const aVotes = a.movie ? a.movie.votes : a.episode ? a.episode.votes : a.show.votes;
+            const bVotes = b.movie ? b.movie.votes : a.episode ? a.episode.votes : a.show.votes;
             return bVotes - aVotes;
         });
     }
@@ -118,13 +172,29 @@ function loadSection(data, id) {
                 `<div class="sectionCard">
                     <div class="sectionCardType">${data[i].movie ? "Movie" : data[i].episode ? "Episode" : "Series"}</div>
                     <div class="sectionCardButtonContainer">
-                        <button id=${data[i][data[i].movie ? "movie" : "show"].ids.imdb} class="sectionCardButton addToLibraryButton" title="Add to Library"><i class="fa-solid fa-check"></i></button>
-                        <button id=${data[i][data[i].movie ? "movie" : "show"].ids.imdb} class="sectionCardButton addToFavouriteButton" title="Add to Favourite"><i class="fa-solid fa-heart"></i></button>
+                        <button id=${data[i][data[i].movie ? "movie" : data[i].episode ? "episode" : "show"].ids.imdb} class="sectionCardButton addToLibraryButton" title="Add to Library"><i class="fa-solid fa-check"></i></button>
+                        <button id=${data[i][data[i].movie ? "movie" : data[i].episode ? "episode" : "show"].ids.imdb} class="sectionCardButton addToFavouriteButton" title="Add to Favourite"><i class="fa-solid fa-heart"></i></button>
                     </div>
                 </div>`;
             const cards = document.getElementsByClassName("sectionCard");
             cards[cardCounter].id = `${data[i][data[i].movie ? "movie" : data[i].episode ? "episode" : "show"].ids.imdb}`;
             cards[cardCounter].style.backgroundImage = `url("https://${data[i][data[i].movie ? "movie" : "show"].images.poster[0]}")`;
+            cardCounter++;
+        }
+    }
+    else if (id == "searchResultContainer") {
+        for (let i = 0; i < Math.min(20, data.length); i++) {
+            section.innerHTML = section.innerHTML +
+                `<div class="sectionCard searchCard">
+                    <p class="sectionCardType">${data[i].movie ? "Movie" : data[i].episode ? "Episode" : "Series"}</p>
+                    <div class="sectionCardButtonContainer">
+                        <button id=${data[i][data[i].movie ? "movie" : data[i].episode ? "episode" : "show"].ids.imdb} class="sectionCardButton addToLibraryButton" title="Add to Library"><i class="fa-solid fa-check"></i></button>
+                        <button id=${data[i][data[i].movie ? "movie" : data[i].episode ? "episode" : "show"].ids.imdb} class="sectionCardButton addToFavouriteButton" title="Add to Favourite"><i class="fa-solid fa-heart"></i></button>
+                    </div>
+                </div>`;
+            const cards = document.getElementsByClassName("searchCard");
+            cards[i].id = `${data[i][data[i].movie ? "movie" : data[i].episode ? "episode" : "show"].ids.imdb}`;
+            cards[i].style.backgroundImage = `url("https://${data[i][data[i].movie ? "movie" : "show"].images.poster[0]}")`;
             cardCounter++;
         }
     }

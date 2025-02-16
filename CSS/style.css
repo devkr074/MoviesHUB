@@ -12,22 +12,151 @@ body {
     overflow: hidden;
 }
 
+#loaderContainer {
+    height: 100px;
+    width: 100px;
+    margin: auto;
+    position: relative;
+    display: none;
+    border: 2px solid red;
+    align-items: center;
+    justify-content: center;
+}
+
+#loaderContainer img {
+    filter: grayscale(100%);
+    animation: anim 3s ease infinite;
+}
+
+@keyframes anim {
+    0% {
+        opacity: 0.2;
+    }
+
+    25% {
+        opacity: 1;
+    }
+
+    75% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0.2;
+    }
+}
+
+#searchContainer {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: -100%;
+    left: 0;
+    z-index: 3;
+    background-color: #000;
+    transition: all 0.3s ease;
+}
+
+#searchContainer.active {
+    top: 0;
+}
+
+#searchBarContainer {
+    height: 20%;
+    width: 100%;
+    padding: 30px 50px;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+#searchBarContainer input {
+    height: 100%;
+    width: 100%;
+    padding-inline-start: 15px;
+    padding-inline-end: 45px;
+    font-size: 17px;
+    background-color: transparent;
+    outline: none;
+    border-radius: 6px;
+    caret-color: aliceblue;
+    border: 2px solid transparent;
+    color: #fff;
+}
+
+#searchBarContainer input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+#searchBarContainer input:focus {
+    border: 2px solid #fff;
+}
+
+#searchBarErrorMessage {
+    position: absolute;
+    left: 60px;
+    bottom: 0px;
+    display: none;
+    color: rgb(229, 9, 20);
+}
+
+#clearButton {
+    position: absolute;
+    height: 30px;
+    width: 30px;
+    border: none;
+    border-radius: 50%;
+    color: #fff;
+    font-size: large;
+    cursor: pointer;
+    background-color: transparent;
+    right: 60px;
+    display: none;
+}
+
+#searchResultContainer {
+    height: 80%;
+    padding: 30px 50px;
+    display: flex;
+    flex-wrap: wrap;
+    overflow: auto;
+    gap: 30px;
+    scrollbar-width: none;
+}
+
+#searchContainerCloseButton {
+    height: 40px;
+    width: 40px;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    font-size: medium;
+    cursor: pointer;
+}
+
 #mainContainer {
     height: 100vh;
     overflow: auto;
     scrollbar-width: none;
+    transition: all 0.5s ease;
     background-color: #000;
+    position: relative;
 }
 
 #navbarContainer {
     position: fixed;
     top: 0;
+    z-index: 2;
     width: 100%;
     padding: 5px 30px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    z-index: 2;
     transition: all 0.3s ease;
 }
 
@@ -151,11 +280,12 @@ body {
 #bannerContentContainer h2 {
     text-align: center;
     font-size: 22px;
+    font-weight: 400;
 }
 
 #bannerContentContainer h2 span {
     font-size: 24px;
-    color: rgb(229, 9, 20);
+    font-weight: bold;
 }
 
 #curveContainer {
@@ -221,6 +351,15 @@ body {
     position: relative;
     background-size: cover;
     background-position: center;
+}
+
+.searchCard {
+    min-width: calc(100% / 5 - 24px);
+    height: 70%;
+}
+
+.searchCard .sectionCardType {
+    color: #fff;
 }
 
 .sectionCardType {
