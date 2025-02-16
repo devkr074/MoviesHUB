@@ -1,19 +1,15 @@
 const loaderContainer = document.getElementById("loaderContainer");
-const searchContainer = document.getElementById("searchContainer");
-const searchBar = document.getElementById("searchBar");
-const searchBarErrorMessage = document.getElementById("searchBarErrorMessage");
-const clearButton = document.getElementById("clearButton");
-const searchContainerCloseButton = document.getElementById("searchContainerCloseButton");
-const mainContainer = document.getElementById("mainContainer");
-const navbarContainer = document.getElementById("navbarContainer");
-const navbarMenuContainerSearchButton = document.getElementById("navbarMenuContainerSearchButton");
 const bannerContainer = document.getElementById("bannerContainer");
 let cardCounter = 0;
 let sectionCard;
 let sectionCardButton;
+let library;
+let favourite;
 
 window.addEventListener("load", async function () {
     let data1, data2, data;
+    library = JSON.parse(localStorage.getItem("library")) || [];
+    favourite = JSON.parse(localStorage.getItem("favourite")) || [];
     try {
         data1 = await getData(`https://api.trakt.tv/movies/trending?extended=full,images`);
         data2 = await getData(`https://api.trakt.tv/shows/trending?extended=full,images`);
@@ -57,65 +53,13 @@ window.addEventListener("load", async function () {
         console.log("Some Error Occured");
     }
     addCardAndButtonsFunctionality();
-});
-
-window.addEventListener("keydown", function (event) {
-    if (event.key == "Tab") {
-        event.preventDefault();
-    }
-});
-
-searchBar.addEventListener("keyup", async function (event) {
-    searchBarErrorMessage.style.display = "none"
-    if (searchBar.value == "") {
-        clearButton.style.display = "none";
-    }
-    else {
-        clearButton.style.display = "block";
-    }
-    if (event.key == "Enter") {
-        if (searchBar.value.trim() == "") {
-            searchBarErrorMessage.style.display = "block"
-        }
-        else {
-            searchBar.blur();
-            data1 = await getData(`https://api.trakt.tv/search/movie?query=${searchBar.value.trim()}&extended=full,images`);
-            data2 = await getData(`https://api.trakt.tv/search/show?query=${searchBar.value.trim()}&extended=full,images`);
-            data = combineData(data1, data2);
-            data = sortData(data, "search");
-            loadSection(data, "searchResultContainer");
-            console.log(data);
-        }
-    }
-});
-
-clearButton.addEventListener("click", function () {
-    searchBar.value = "";
-    searchBar.focus();
-    searchBarErrorMessage.style.display = "none"
-    clearButton.style.display = "none";
-});
-
-searchContainerCloseButton.addEventListener("click", function () {
-    searchContainer.classList.remove("active");
-});
-
-mainContainer.addEventListener("scroll", function () {
-    if (mainContainer.scrollTop >= 80) {
-        navbarContainer.classList.add("active");
-    }
-    else {
-        navbarContainer.classList.remove("active");
-    }
-});
-
-navbarMenuContainerSearchButton.addEventListener("click", function () {
-    searchContainer.classList.add("active");
-    searchBar.focus();
+    changeClasses();
 });
 
 async function getData(url) {
     const apiKey = "cdcf192406f8361d8a02e82e99c86ffde257a7f55f52f5833804e48f3d252da8";
+    mainContainer.style.filter = "blur(20px)";
+    loaderContainer.style.display = "flex";
     try {
         const response = await fetch(url, {
             headers: {
@@ -128,6 +72,10 @@ async function getData(url) {
         return data;
     } catch (error) {
         console.log("Some Error Occured");
+    }
+    finally {
+        mainContainer.style.filter = "none";
+        loaderContainer.style.display = "none";
     }
 }
 
@@ -145,7 +93,7 @@ function sortData(data, type) {
     else if (type == "popular") {
         data.sort((a, b) => b.votes - a.votes);
     }
-    else if (type = "upcoming" || type == "search") {
+    else if (type = "upcoming") {
         data.sort((a, b) => {
             const aVotes = a.movie ? a.movie.votes : a.episode ? a.episode.votes : a.show.votes;
             const bVotes = b.movie ? b.movie.votes : a.episode ? a.episode.votes : a.show.votes;
@@ -170,7 +118,7 @@ function loadSection(data, id) {
         for (let i = 0; i < Math.min(10, data.length); i++) {
             section.innerHTML = section.innerHTML +
                 `<div class="sectionCard">
-                    <div class="sectionCardType">${data[i].movie ? "Movie" : data[i].episode ? "Episode" : "Series"}</div>
+                    <p class="sectionCardType">${data[i].movie ? "Movie" : data[i].episode ? "Episode" : "Series"}</p>
                     <div class="sectionCardButtonContainer">
                         <button id=${data[i][data[i].movie ? "movie" : data[i].episode ? "episode" : "show"].ids.imdb} class="sectionCardButton addToLibraryButton" title="Add to Library"><i class="fa-solid fa-check"></i></button>
                         <button id=${data[i][data[i].movie ? "movie" : data[i].episode ? "episode" : "show"].ids.imdb} class="sectionCardButton addToFavouriteButton" title="Add to Favourite"><i class="fa-solid fa-heart"></i></button>
@@ -182,27 +130,11 @@ function loadSection(data, id) {
             cardCounter++;
         }
     }
-    else if (id == "searchResultContainer") {
-        for (let i = 0; i < Math.min(20, data.length); i++) {
-            section.innerHTML = section.innerHTML +
-                `<div class="sectionCard searchCard">
-                    <p class="sectionCardType">${data[i].movie ? "Movie" : data[i].episode ? "Episode" : "Series"}</p>
-                    <div class="sectionCardButtonContainer">
-                        <button id=${data[i][data[i].movie ? "movie" : data[i].episode ? "episode" : "show"].ids.imdb} class="sectionCardButton addToLibraryButton" title="Add to Library"><i class="fa-solid fa-check"></i></button>
-                        <button id=${data[i][data[i].movie ? "movie" : data[i].episode ? "episode" : "show"].ids.imdb} class="sectionCardButton addToFavouriteButton" title="Add to Favourite"><i class="fa-solid fa-heart"></i></button>
-                    </div>
-                </div>`;
-            const cards = document.getElementsByClassName("searchCard");
-            cards[i].id = `${data[i][data[i].movie ? "movie" : data[i].episode ? "episode" : "show"].ids.imdb}`;
-            cards[i].style.backgroundImage = `url("https://${data[i][data[i].movie ? "movie" : "show"].images.poster[0]}")`;
-            cardCounter++;
-        }
-    }
     else if (id == "popularSection") {
         for (let i = 0; i < Math.min(10, data.length); i++) {
             section.innerHTML = section.innerHTML +
                 `<div class="sectionCard">
-                    <div class="sectionCardType">${data[i].first_aired ? "Series" : "Movie"}</div>
+                    <p class="sectionCardType">${data[i].first_aired ? "Series" : "Movie"}</p>
                     <div class="sectionCardButtonContainer">
                         <button id=${data[i].ids.imdb} class="sectionCardButton addToLibraryButton" title="Add to Library"><i class="fa-solid fa-check"></i></button>
                         <button id=${data[i].ids.imdb} class="sectionCardButton addToFavouriteButton" title="Add to Favourite"><i class="fa-solid fa-heart"></i></button>
@@ -222,7 +154,9 @@ function addCardAndButtonsFunctionality() {
     for (let i = 0; i < sectionCard.length; i++) {
         sectionCard[i].addEventListener("click", function (event) {
             if ((!event.target.classList.contains("sectionCardButton")) && (!event.target.classList.contains("fa-solid"))) {
-                console.log("Hello");
+                localStorage.setItem("redirectId", sectionCard[i].id);
+                console.log(localStorage.getItem("redirectId"));
+                window.open("detail.html", "_blank");
             }
         });
     }
@@ -232,20 +166,43 @@ function addCardAndButtonsFunctionality() {
                 sectionCardButton[i].title = "Remove from Library";
                 sectionCardButton[i].classList.add("removeFromLibraryButton");
                 sectionCardButton[i].classList.remove("addToLibraryButton");
+                library.push(sectionCardButton[i].id);
+                localStorage.setItem("library", JSON.stringify(library));
             } else if (sectionCardButton[i].classList.contains("removeFromLibraryButton")) {
                 sectionCardButton[i].title = "Add to Library";
                 sectionCardButton[i].classList.add("addToLibraryButton");
                 sectionCardButton[i].classList.remove("removeFromLibraryButton");
+                library = library.filter(item => item !== sectionCardButton[i].id);
+                localStorage.setItem("library", JSON.stringify(library));
             }
             else if (sectionCardButton[i].classList.contains("addToFavouriteButton")) {
                 sectionCardButton[i].title = "Remove from Favourite";
                 sectionCardButton[i].classList.add("removeFromFavouriteButton");
                 sectionCardButton[i].classList.remove("addToFavouriteButton");
+                favourite.push(sectionCardButton[i].id);
+                localStorage.setItem("favourite", JSON.stringify(favourite));
             } else if (sectionCardButton[i].classList.contains("removeFromFavouriteButton")) {
                 sectionCardButton[i].title = "Add to Favourite";
                 sectionCardButton[i].classList.add("addToFavouriteButton");
                 sectionCardButton[i].classList.remove("removeFromFavouriteButton");
+                favourite = favourite.filter(item => item !== sectionCardButton[i].id);
+                localStorage.setItem("favourite", JSON.stringify(favourite));
             }
         });
+    }
+}
+
+function changeClasses() {
+    for (let i = 0; i < sectionCardButton.length; i++) {
+        if (library.includes(sectionCardButton[i].id) && sectionCardButton[i].classList.contains("addToLibraryButton")) {
+            sectionCardButton[i].title = "Remove from Library";
+            sectionCardButton[i].classList.add("removeFromLibraryButton");
+            sectionCardButton[i].classList.remove("addToLibraryButton");
+        }
+        else if (favourite.includes(sectionCardButton[i].id) && sectionCardButton[i].classList.contains("addToFavouriteButton")) {
+            sectionCardButton[i].title = "Remove from Favourite";
+            sectionCardButton[i].classList.add("removeFromFavouriteButton");
+            sectionCardButton[i].classList.remove("addToFavouriteButton");
+        }
     }
 }

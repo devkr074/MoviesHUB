@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineHUB</title>
+    <link rel="shortcut icon" href="Images/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="CSS/style.css">
+</head>
+
+<body onload="getData()">
+    <h1>This Section is still constructing</h1>
+    <script>
+        async function getData() {
+            const url = `https://api.trakt.tv/search/imdb/${localStorage.getItem("redirectId")}?extended=full,images`;
+            const apiKey = "cdcf192406f8361d8a02e82e99c86ffde257a7f55f52f5833804e48f3d252da8";
+            try {
+                const response = await fetch(url, {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "trakt-api-version": "2",
+                        "trakt-api-key": apiKey
+                    }
+                });
+                const data = await response.json();
+                document.title = `CineHUB - ${data[0][data[0].movie ? "movie" : "show"].title}`;
+                console.log(data);
+            } catch (error) {
+                console.log("Some Error Occured");
+            }
+        }
+    </script>
+</body>
+
+</html>

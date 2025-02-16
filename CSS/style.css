@@ -5,6 +5,7 @@
     padding: 0;
     box-sizing: border-box;
     font-family: "Poppins";
+    user-select: none;
 }
 
 body {
@@ -13,12 +14,11 @@ body {
 }
 
 #loaderContainer {
-    height: 100px;
-    width: 100px;
-    margin: auto;
-    position: relative;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    z-index: 4;
     display: none;
-    border: 2px solid red;
     align-items: center;
     justify-content: center;
 }
@@ -100,7 +100,7 @@ body {
     color: rgb(229, 9, 20);
 }
 
-#clearButton {
+#searchBarClearButton {
     position: absolute;
     height: 30px;
     width: 30px;
@@ -270,7 +270,7 @@ body {
 }
 
 #bannerLogoContainer h1 {
-    font-size: 4rem;
+    font-size: 3.5em;
 }
 
 #bannerLogoContainer h1 span {
@@ -351,15 +351,7 @@ body {
     position: relative;
     background-size: cover;
     background-position: center;
-}
-
-.searchCard {
-    min-width: calc(100% / 5 - 24px);
-    height: 70%;
-}
-
-.searchCard .sectionCardType {
-    color: #fff;
+    cursor: pointer;
 }
 
 .sectionCardType {
@@ -420,4 +412,19 @@ body {
 .removeFromFavouriteButton {
     color: #fff;
     background-color: rgba(229, 9, 20);
+}
+
+#libraryContainer{
+    width: 100%;
+    padding-inline: 50px;
+    padding-block: 120px 70px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+.libraryCard{
+    height: 270px;
+    min-width: calc(100% / 5 - 24px);
+    color: #fff;
 }
