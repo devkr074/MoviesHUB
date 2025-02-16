@@ -23,13 +23,6 @@
                         "trakt-api-key": apiKey
                     }
                 });
-                const data = await response.json();
-                document.title = `CineHUB - ${data[0][data[0].movie ? "movie" : "show"].title}`;
-                console.log(data);
-            } catch (error) {
-                console.log("Some Error Occured");
-            }
-        }
     </script>
 </body>
 
