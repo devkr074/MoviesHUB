@@ -15,14 +15,7 @@
         async function getData() {
             const url = `https://api.trakt.tv/search/imdb/${localStorage.getItem("redirectId")}?extended=full,images`;
             const apiKey = "cdcf192406f8361d8a02e82e99c86ffde257a7f55f52f5833804e48f3d252da8";
-            try {
-                const response = await fetch(url, {
-                    headers: {
-                        "Content-Type": "application/json",
-                        "trakt-api-version": "2",
-                        "trakt-api-key": apiKey
-                    }
-                });
+            \
     </script>
 </body>
 
