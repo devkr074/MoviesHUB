@@ -11,8 +11,8 @@ window.addEventListener("load", async function () {
     library = JSON.parse(localStorage.getItem("library")) || [];
     favourite = JSON.parse(localStorage.getItem("favourite")) || [];
     try {
-        data1 = await getData(`https://api.trakt.tv/movies/trending?extended=full,images`);
-        data2 = await getData(`https://api.trakt.tv/shows/trending?extended=full,images`);
+        data1 = await getData(`https://api.trakt.tv/movies/trending?countries=in&extended=full,images`);
+        data2 = await getData(`https://api.trakt.tv/shows/trending?countries=in&extended=full,images`);
         data = combineData(data1, data2);
         data = sortData(data, "trending");
         loadBanner(data);
@@ -22,8 +22,8 @@ window.addEventListener("load", async function () {
         console.log("Some Error Occured");
     }
     try {
-        data1 = await getData(`https://api.trakt.tv/movies/popular?extended=full,images`);
-        data2 = await getData(`https://api.trakt.tv/shows/popular?extended=full,images`);
+        data1 = await getData(`https://api.trakt.tv/movies/popular?countries=in&extended=full,images`);
+        data2 = await getData(`https://api.trakt.tv/shows/popular?countries=in&extended=full,images`);
         data = combineData(data1, data2);
         data = sortData(data, "popular");
         console.log(data);
@@ -36,8 +36,10 @@ window.addEventListener("load", async function () {
         const year = date.getFullYear();
         const month = (date.getMonth() + 1).toString().padStart(2, "0");
         const day = (date.getDate()).toString().padStart(2, "0");
-        data1 = await getData(`https://api.trakt.tv/calendars/all/movies/2025-02-17/1?extended=full,images`);
-        data2 = await getData(`https://api.trakt.tv/calendars/all/shows/premieres/2025-02-17/1?extended=full,images`);
+        data1 = await getData(`https://api.trakt.tv/calendars/all/movies/2025-06-27/1?languages=ko&extended=full,images`);
+        console.log(data1);
+        data2 = await getData(`https://api.trakt.tv/calendars/all/shows/premieres/2025-06-27/1?languages=ko&extended=full,images`);
+        console.log(data2);
         data = combineData(data1, data2);
         data = sortData(data, "upcoming");
         console.log(data);
