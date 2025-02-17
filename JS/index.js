@@ -16,6 +16,7 @@ window.addEventListener("load", async function () {
         data = combineData(data1, data2);
         data = sortData(data, "trending");
         loadBanner(data);
+        console.log(data);
         loadSection(data, "trendingSection");
     } catch (error) {
         console.log("Some Error Occured");
@@ -25,6 +26,7 @@ window.addEventListener("load", async function () {
         data2 = await getData(`https://api.trakt.tv/shows/popular?extended=full,images`);
         data = combineData(data1, data2);
         data = sortData(data, "popular");
+        console.log(data);
         loadSection(data, "popularSection");
     } catch (error) {
         console.log("Some Error Occured");
@@ -34,20 +36,21 @@ window.addEventListener("load", async function () {
         const year = date.getFullYear();
         const month = (date.getMonth() + 1).toString().padStart(2, "0");
         const day = (date.getDate()).toString().padStart(2, "0");
-        data1 = await getData(`https://api.cors.lol/?url=https://api.trakt.tv/calendars/movies/${year}-${month}-${day}/1?extended=full,images`);
-        data2 = await getData(`https://api.cors.lol/?url=https://api.trakt.tv/calendars/shows/${year}-${month}-${day}/1?extended=full,images`);
-        data = combineData(data1[`${year}-${month}-${day}`], data2[`${year}-${month}-${day}`]);
-        console.log(data);
+        data1 = await getData(`https://api.trakt.tv/calendars/all/movies/2025-02-17/1?extended=full,images`);
+        data2 = await getData(`https://api.trakt.tv/calendars/all/shows/premieres/2025-02-17/1?extended=full,images`);
+        data = combineData(data1, data2);
         data = sortData(data, "upcoming");
+        console.log(data);
         loadSection(data, "upcomingSection");
     } catch (error) {
-        console.log("Some Error Occured");
+        console.error(error);
     }
     try {
         data1 = await getData(`https://api.trakt.tv/movies/anticipated?extended=full,images`);
         data2 = await getData(`https://api.trakt.tv/shows/anticipated?extended=full,images`);
         data = combineData(data1, data2);
         data = sortData(data, "anticipated");
+        console.log(data);
         loadSection(data, "anticipatedSection");
     } catch (error) {
         console.log("Some Error Occured");
@@ -87,21 +90,15 @@ function combineData(data1, data2) {
 }
 
 function sortData(data, type) {
-    if (type == "trending") {
-        data.sort((a, b) => b.watchers - a.watchers);
+    if (type == "popular") {
+        data.sort((a, b) => b.rating - a.rating);
     }
-    else if (type == "popular") {
-        data.sort((a, b) => b.votes - a.votes);
-    }
-    else if (type = "upcoming") {
+    else {
         data.sort((a, b) => {
-            const aVotes = a.movie ? a.movie.votes : a.episode ? a.episode.votes : a.show.votes;
-            const bVotes = b.movie ? b.movie.votes : a.episode ? a.episode.votes : a.show.votes;
+            const aVotes = a.movie ? a.movie.rating : a.show.rating;
+            const bVotes = b.movie ? b.movie.rating : b.show.rating;
             return bVotes - aVotes;
         });
-    }
-    else if (type == "anticipated") {
-        data.sort((a, b) => b.list_count - a.listCount);
     }
     return data;
 }
