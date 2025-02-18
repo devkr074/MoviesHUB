@@ -11,8 +11,8 @@ window.addEventListener("load", async function () {
     library = JSON.parse(localStorage.getItem("library")) || [];
     favourite = JSON.parse(localStorage.getItem("favourite")) || [];
     try {
-        data1 = await getData(`https://api.trakt.tv/movies/trending?countries=in&extended=full,images`);
-        data2 = await getData(`https://api.trakt.tv/shows/trending?countries=in&extended=full,images`);
+        data1 = await getData(`https://api.trakt.tv/movies/trending?extended=full,images`);
+        data2 = await getData(`https://api.trakt.tv/shows/trending?extended=full,images`);
         data = combineData(data1, data2);
         data = sortData(data, "trending");
         loadBanner(data);
