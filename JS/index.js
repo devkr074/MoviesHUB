@@ -36,9 +36,9 @@ window.addEventListener("load", async function () {
         const year = date.getFullYear();
         const month = (date.getMonth() + 1).toString().padStart(2, "0");
         const day = (date.getDate()).toString().padStart(2, "0");
-        data1 = await getData(`https://api.trakt.tv/calendars/all/movies/2025-06-27/1?extended=full,images`);
+        data1 = await getData(`https://api.trakt.tv/calendars/all/movies/?extended=full,images`);
         console.log(data1);
-        data2 = await getData(`https://api.trakt.tv/calendars/all/shows/premieres/2025-06-27/1?extended=full,images`);
+        data2 = await getData(`https://api.trakt.tv/calendars/all/shows/premieres/?extended=full,images`);
         console.log(data2);
         data = combineData(data1, data2);
         data = sortData(data, "upcoming");
