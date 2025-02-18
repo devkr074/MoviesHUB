@@ -22,8 +22,8 @@ window.addEventListener("load", async function () {
         console.log("Some Error Occured");
     }
     try {
-        data1 = await getData(`https://api.trakt.tv/movies/popular?countries=in&extended=full,images`);
-        data2 = await getData(`https://api.trakt.tv/shows/popular?countries=in&extended=full,images`);
+        data1 = await getData(`https://api.trakt.tv/movies/popular?extended=full,images`);
+        data2 = await getData(`https://api.trakt.tv/shows/popular?extended=full,images`);
         data = combineData(data1, data2);
         data = sortData(data, "popular");
         console.log(data);
