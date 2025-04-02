@@ -1,6 +1,10 @@
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 function App() {
   return (
-    <h1>MoviesHub</h1>
+    <Router>
+      <Routes>
+      </Routes>
+    </Router>
   );
 }
-export default App
+export default App;
