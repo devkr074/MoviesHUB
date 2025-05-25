@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-MoviesHubApplication<movieshub>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.movieshub.backend.MoviesHubApplication",
+            "projectName": "movieshub",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

@@ -1,13 +1,13 @@
-package com.example.movieshub;
+package com.movieshub.backend;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class MovieshubApplication {
+public class MoviesHubApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(MovieshubApplication.class, args);
+		SpringApplication.run(MoviesHubApplication.class, args);
 	}
 
 }
