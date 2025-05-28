@@ -14,6 +14,7 @@ async function getData(url) {
         return await response.json();
     } catch (error) {
         console.error('Error fetching data:', error);
+        throw error;
     }
 }
 export default getData;
