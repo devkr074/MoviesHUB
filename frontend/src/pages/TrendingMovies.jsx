@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import getData from "../utils/getData.js";
 import Navbar from "../components/Navbar.jsx";
-function Shows() {
+function TrendingMovies() {
     const [activeTab, setActiveTab] = useState("trending");
     const [trendingShows, setTrendingShows] = useState([]);
     useEffect(() => {
@@ -34,4 +34,4 @@ function Shows() {
         </>
     )
 }
-export default Shows;
+export default TrendingMovies;

@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import getData from "../utils/getData.js";
 import Navbar from "../components/Navbar.jsx";
 function Home() {
+    const [bannerImage, setBannerImage] = useState(null);
     const [trendingMovies, setTrendingMovies] = useState([]);
     const [trendingShows, setTrendingShows] = useState([]);
-    const [bannerImage, setBannerImage] = useState(null);
     useEffect(() => {
         document.title = "MoviesHUB - Home";
         getData("https://api.trakt.tv/shows/trending?limit=4&extended=full,images").then(data => {
