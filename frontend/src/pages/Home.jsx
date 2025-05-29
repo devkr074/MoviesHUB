@@ -4,6 +4,7 @@ import Navbar from "../components/Navbar.jsx";
 function Home() {
     const [trendingMovies, setTrendingMovies] = useState([]);
     const [trendingShows, setTrendingShows] = useState([]);
+    const [bannerImage, setBannerImage] = useState(null);
     useEffect(() => {
         document.title = "MoviesHUB - Home";
         getData("https://api.trakt.tv/shows/trending?limit=4").then(data => {
@@ -18,10 +19,26 @@ function Home() {
         }).catch(error => {
             console.error("Error fetching popular movies:", error);
         });
+        getData("https://api.trakt.tv/shows/trending?limit=10&extended=full,images").then(data => {
+            console.log(data);
+            if (data.length > 0) {
+                setBannerImage(`https://${data[Math.floor(Math.random()*10)].show.images.fanart}`);
+            }
+        }).catch(error => {
+            console.error("Error fetching trending shows:", error);
+        });
     }, []);
     return (
         <>
             <Navbar />
+            {bannerImage && (
+                <div className="banner" style={{ backgroundImage: `url(${bannerImage})`, height: '100vh',backgroundColor:'black', backgroundSize: 'cover', backgroundPosition: 'center' }}>
+                    <div className="banner-content text-white text-center" style={{ paddingTop: '150px' }}>
+                        <h1>Welcome to MoviesHUB</h1>
+                        <p>Your one-stop destination for trending movies and shows</p>
+                    </div>
+                </div>
+            )}
             <div className="container mt-5 pt-5">
                 <h1 className="text-center mb-4">Trending Movies</h1>
                 <div className="row">
