@@ -21,6 +21,12 @@ function Navbar() {
                         <li className="nav-item">
                             <a className="nav-link" href="/calendar">Calendar</a>
                         </li>
+                        <li className="nav-item">
+                            <a className="nav-link" href="/streaming">Streaming</a>
+                        </li>
+                        <li className="nav-item">
+                            <a className="nav-link" href="/boxoffice">Box Office</a>
+                        </li>
                     </ul>
                 </div>
             </div>

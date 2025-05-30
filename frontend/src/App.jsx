@@ -4,6 +4,9 @@ import Trending from "./pages/Trending.jsx";
 import Popular from "./pages/Popular.jsx";
 import Anticipated from "./pages/Anticipated.jsx";
 import Calendar from "./pages/Calendar.jsx";
+import Streaming from "./pages/Streaming.jsx";
+import BoxOffice from "./pages/BoxOffice.jsx";
+import Detail from "./pages/Detail.jsx";
 function App() {
   return (
     <BrowserRouter>
@@ -13,6 +16,9 @@ function App() {
         <Route path="/popular" element={<Popular />} />
         <Route path="/anticipated" element={<Anticipated />} />
         <Route path="/calendar" element={<Calendar />} />
+        <Route path="/streaming" element={<Streaming />} />
+        <Route path="/boxoffice" element={<BoxOffice />} />
+        <Route path="/:type/:slug" element={<Detail />} />
       </Routes>
     </BrowserRouter>
   );

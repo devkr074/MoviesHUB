@@ -22,8 +22,15 @@ function Trending() {
             <div>
                 {trendingData.map(data => {
                     const content = data.movie || data.show;
+                    const fanart = `https://${content.images.fanart}`;
+                    const link = `${tab}/${content.ids.slug}`;
                     return (
-                        <p key={content.ids.trakt}>{content.title}</p>
+                        <div key={content.ids.trakt}>
+                            <a href={link}>
+                                <img src={fanart} alt={content.title} width={300} />
+                            </a>
+                            <p>{content.title}</p>
+                        </div>
                     );
                 })}
             </div>

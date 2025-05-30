@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import getData from "../utils/getData.js";
 import Navbar from "../components/Navbar.jsx";
-function Calendar() {
+function Streaming() {
     const [tab, setTab] = useState("movies");
-    const [calendarData, setCalendarData] = useState([]);
+    const [streamingData, setStreamingData] = useState([]);
     useEffect(() => {
-        document.title = `Calendar ${tab[0].toLocaleUpperCase()}${tab.substring(1)} - MoviesHUB`;
-        getData(`https://api.trakt.tv/calendars/all/${tab}/2025-05-30/1`).then(data => {
-            setCalendarData(data);
+        document.title = `Streaming ${tab[0].toLocaleUpperCase()}${tab.substring(1)} - MoviesHUB`;
+        getData(`https://api.trakt.tv/${tab}/streaming?extended=full,images`).then(data => {
+            setStreamingData(data);
         }).catch(err => {
             console.error(err);
         });
@@ -20,16 +20,14 @@ function Calendar() {
                 <option value="shows">Shows</option>
             </select>
             <div>
-                {calendarData.map(data => {
-                    const content = data.movie || data.episode || data.show;
-                    const content2= data.movie || data.show;
-                    const key=`${content.ids.trakt}-${content.title}`;
+                {streamingData.map(data => {
+                    const content = data.movie || data.show;
                     return (
-                        <p key={key}>{content2.title}</p>
+                        <p key={content.ids.trakt}>{content.title}</p>
                     );
                 })}
             </div>
         </>
     );
 }
-export default Calendar;
+export default Streaming;
