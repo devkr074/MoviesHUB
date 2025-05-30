@@ -1,17 +1,30 @@
 import logo from '../assets/logo.png';
 function Navbar() {
     return (
-        <div className="navbar">
-            <div className="logo-container">
-                <img src={logo} alt="MoviesHUB Logo" height={50} />
-                <input type="text" className='search' />
-                <select className='select' name="" id="">
-                    <option value="">Shows</option>
-                    <option value="">Movies</option>
-                    <option value="">People</option>
-                </select>
+        <nav className="navbar navbar-expand-lg bg-body-tertiary sticky-top">
+            <div className="container-fluid">
+                <a className="navbar-brand" href="#"><img src={logo} alt="MoviesHUB Logo" title="MoviesHUB" height={50} /></a>
+                <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span className="navbar-toggler-icon"></span>
+                </button>
+                <div className="collapse navbar-collapse" id="navbarNav">
+                    <ul className="navbar-nav">
+                        <li className="nav-item">
+                            <a className="nav-link" href="/trending">Trending</a>
+                        </li>
+                        <li className="nav-item">
+                            <a className="nav-link" href="/popular">Popular</a>
+                        </li>
+                        <li className="nav-item">
+                            <a className="nav-link" href="/anticipated">Anticipated</a>
+                        </li>
+                        <li className="nav-item">
+                            <a className="nav-link" href="/calendar">Calendar</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
-        </div>
+        </nav>
     );
 }
 export default Navbar;
