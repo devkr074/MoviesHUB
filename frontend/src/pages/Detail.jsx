@@ -9,6 +9,7 @@ function Detail() {
     useEffect(() => {
         getData(`https://api.trakt.tv/${type}/${slug}?extended=full,images`).then(data => {
             setData(data);
+            setFanart(`https://${data.images.fanart}`);
             console.log(data);
         }).catch(err => {
             console.error(err);
@@ -20,8 +21,6 @@ function Detail() {
             <Navbar />
             <div>
                 <p>{data.title}</p>
-                <p>{data.overview}</p>
-                <p>Trailer: <a href={data.trailer}>Watch Trailer</a></p>
             </div>
         </>
     );

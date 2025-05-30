@@ -5,7 +5,7 @@ function Anticipated() {
     const [tab, setTab] = useState("movies");
     const [anticipatedData, setAnticipatedData] = useState([]);
     useEffect(() => {
-        document.title = `Anticipated ${tab[0].toLocaleUpperCase()}${tab.substring(1)} - MoviesHUB`;
+        document.title = `Anticipated ${tab[0].toUpperCase()}${tab.substring(1)} - MoviesHUB`;
         getData(`https://api.trakt.tv/${tab}/anticipated?extended=full,images`).then(data => {
             setAnticipatedData(data);
             console.log(data);
