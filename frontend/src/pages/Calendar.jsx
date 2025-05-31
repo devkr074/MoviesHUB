@@ -22,8 +22,8 @@ function Calendar() {
             <div>
                 {calendarData.map(data => {
                     const content = data.movie || data.episode || data.show;
-                    const content2= data.movie || data.show;
-                    const key=`${content.ids.trakt}-${content.title}`;
+                    const content2 = data.movie || data.show;
+                    const key = `${content.ids.trakt}-${content.title}`;
                     return (
                         <p key={key}>{content2.title}</p>
                     );
