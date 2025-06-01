@@ -5,9 +5,7 @@ function Home() {
         document.title = "Home - MoviesHUB";
     }, []);
     return (
-        <>
-            <Navbar />
-        </>
+        <Navbar />
     );
 }
 export default Home;
