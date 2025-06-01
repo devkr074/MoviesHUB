@@ -1,23 +1,17 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home.jsx";
-import Trending from "./pages/Trending.jsx";
-import Popular from "./pages/Popular.jsx";
-import Anticipated from "./pages/Anticipated.jsx";
+import Shows from "./pages/Shows.jsx";
+import Movies from "./pages/Movies.jsx";
 import Calendar from "./pages/Calendar.jsx";
-import Streaming from "./pages/Streaming.jsx";
-import BoxOffice from "./pages/BoxOffice.jsx";
 import Detail from "./pages/Detail.jsx";
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/trending" element={<Trending />} />
-        <Route path="/popular" element={<Popular />} />
-        <Route path="/anticipated" element={<Anticipated />} />
+        <Route path="/shows" element={<Shows />} />
+        <Route path="/movies" element={<Movies />} />
         <Route path="/calendar" element={<Calendar />} />
-        <Route path="/streaming" element={<Streaming />} />
-        <Route path="/boxoffice" element={<BoxOffice />} />
         <Route path="/:type/:slug" element={<Detail />} />
       </Routes>
     </BrowserRouter>

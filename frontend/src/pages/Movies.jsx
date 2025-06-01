@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import getData from "../utils/getData.js";
 import Navbar from "../components/Navbar.jsx";
-function Trending() {
-    const [tab, setTab] = useState("movies");
-    const [trendingData, setTrendingData] = useState([]);
+function Movies() {
+    const [tab, setTab] = useState("trending");
+    const [data, setData] = useState([]);
     useEffect(() => {
-        document.title = `Trending ${tab[0].toLocaleUpperCase()}${tab.substring(1)} - MoviesHUB`;
-        getData(`https://api.trakt.tv/${tab}/trending?extended=full,images`).then(data => {
-            setTrendingData(data);
+        document.title = `${tab[0].toUpperCase()}${tab.substring(1)} Movies - MoviesHUB`;
+        getData(`https://api.trakt.tv/movies/${tab}?extended=full,images`).then(data => {
+            setData(data);
         }).catch(err => {
             console.error(err);
         });
@@ -16,12 +16,15 @@ function Trending() {
         <>
             <Navbar />
             <select value={tab} onChange={(e) => setTab(e.target.value)}>
-                <option value="movies">Movies</option>
-                <option value="shows">Shows</option>
+                <option value="trending">Trending</option>
+                <option value="popular">Popular</option>
+                <option value="anticipated">Anticipated</option>
+                <option value="streaming">Streaming</option>
+                <option value="boxoffice">Box Office</option>
             </select>
             <div>
-                {trendingData.map(data => {
-                    const content = data.movie || data.show;
+                {data.map(d => {
+                    const content = d.movie || d;
                     const fanart = `https://${content.images.fanart}`;
                     const link = `${tab}/${content.ids.slug}`;
                     return (
@@ -37,4 +40,4 @@ function Trending() {
         </>
     );
 }
-export default Trending;
+export default Movies;

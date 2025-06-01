@@ -1,4 +1,3 @@
 .dropdown-toggle::after {
-    content: none; /* Removes the arrow character */
-    display: none; /* Ensures no space is taken by the pseudo-element */
+    display: none;
 }

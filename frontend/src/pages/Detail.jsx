@@ -14,7 +14,6 @@ function Detail() {
         }).catch(err => {
             console.error(err);
         });
-        document.title = `${data.title} - MoviesHUB`;
     }, []);
     return (
         <>

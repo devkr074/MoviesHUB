@@ -17,15 +17,12 @@ function Navbar() {
                         <li className="nav-item">
                             <a className="nav-link" href="/calendar">Calendar</a>
                         </li>
-                        <li className="nav-item">
-                            <a className="nav-link" href="/discover">Discover</a>
-                        </li>
                         <li className="nav-item dropdown">
-                            <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">User</a>
+                            <a className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">Guest</a>
                             <ul className="dropdown-menu dropdown-menu-end">
-                                <li><a className="dropdown-item" href="/login">Login</a></li>
+                                <li><a className="dropdown-item" href="#">Login</a></li>
                                 <li><hr className="dropdown-divider" /></li>
-                                <li><a className="dropdown-item" href="/signup">Sign Up</a></li>
+                                <li><a className="dropdown-item" href="#">Sign Up</a></li>
                             </ul>
                         </li>
                     </ul>
