@@ -4,7 +4,7 @@ async function getData(url) {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
-                "trakt-api-key": "719bb35af98c7c9a1eb126dd97ffc070cb99202fd060c7b58e2f1148e03e3d3d",
+                "trakt-api-key": import.meta.env.VITE_TRAKT_API_KEY,
                 "trakt-api-version": "2"
             }
         });
