@@ -2,6 +2,10 @@
     display: none;
 }
 
+.bg-black {
+    background-color: #000;
+}
+
 .bg-30 {
     background-size: 30%;
 }
@@ -16,4 +20,34 @@
 
 .bg-no-repeat {
     background-repeat: no-repeat;
+}
+
+.nav-link {
+    color: #fff;
+    transition: all 0.2s ease;
+}
+
+.nav-link:hover {
+    color: #9F42C6;
+}
+
+.nav-link.current {
+    color: #9F42C6;
+}
+
+.navbar{
+    background-color: #000000CC;
+    transition: all 0.2s ease;
+}
+
+.navbar.active{
+    background-color: transparent;
+}
+
+.navbar:hover{
+    background-color: #000000CC;
+}
+
+.search-container{
+    transition : all 0.2s ease;
 }

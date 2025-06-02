@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import getData from "../utils/getData.js";
 import Navbar from "../components/Navbar.jsx";
 import Card from "../components/Card.jsx";
+import logo from "../assets/logo.png";
+import background from "../assets/background.jpg";
 function Home() {
     const [bannerImage, setBannerImage] = useState("");
     const [topShows, setTopShows] = useState([]);
@@ -27,11 +29,12 @@ function Home() {
             <div className="row m-0">
                 <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 vh-100 d-flex flex-column align-items-center justify-content-center bg-dark bg-cover bg-center bg-no-repeat position-relative" style={{ backgroundImage: `url(${bannerImage})` }}>
                     <div className="position-absolute top-0 start-0 h-100 w-100" style={{ backgroundColor: "rgba(0, 0, 0, 0.65)" }}></div>
-                    <h1 className="text-light text-center position-relative">Welcome to MoviesHUB</h1>
-                    <p className="text-light text-center position-relative">Your one-stop destination for all things movies!</p>
+                    <h1 className="text-light text-center position-relative d-flex align-items-center justify-content-center"><img src={logo} alt="MoviesHUB Logo" height={100} /> MoviesHUB</h1>
+                    <h1 className="text-light text-center position-relative mt-4">Shows. Movies. Calendar.</h1>
+                    <p className="fs-5 mt-2 text-center text-light fw-semibold position-relative">Explore What's Trending, Popular, Anticipated, Upcoming</p>
                 </div>
             </div>
-            <div className="row m-0 pb-5">
+            <div className="row m-0 pb-5" style={{ backgroundImage: `url(${background})`, backgroundSize: "cover", backgroundPosition: "center" }}>
                 <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 d-flex align-items-center justify-content-between px-4 pt-3">
                     <h3 className="text-light">Top Shows</h3>
                     <a href="/shows">SEE MORE</a>
