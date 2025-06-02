@@ -28,9 +28,9 @@ function Home() {
             <Navbar />
             <div className="row m-0">
                 <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 vh-100 d-flex flex-column align-items-center justify-content-center bg-dark bg-cover bg-center bg-no-repeat position-relative" style={{ backgroundImage: `url(${bannerImage})` }}>
-                    <div className="position-absolute top-0 start-0 h-100 w-100" style={{ backgroundColor: "rgba(0, 0, 0, 0.65)" }}></div>
-                    <h1 className="text-light text-center position-relative d-flex align-items-center justify-content-center"><img src={logo} alt="MoviesHUB Logo" height={100} /> MoviesHUB</h1>
-                    <h1 className="text-light text-center position-relative mt-4">Shows. Movies. Calendar.</h1>
+                    <div className="position-absolute top-0 start-0 h-100 w-100" style={{ backgroundColor: "#000000AA" }}></div>
+                    <h1 className="text-light text-center position-relative d-flex align-items-center justify-content-center"><img src={logo} alt="MoviesHUB Logo" height={80} /> Movies<span className="text-purple">HUB</span></h1>
+                    <h1 className="text-light text-center position-relative mt-4">Shows <span className="text-purple">.</span> Movies <span className="text-purple">.</span> Calendar</h1>
                     <p className="fs-5 mt-2 text-center text-light fw-semibold position-relative">Explore What's Trending, Popular, Anticipated, Upcoming</p>
                 </div>
             </div>

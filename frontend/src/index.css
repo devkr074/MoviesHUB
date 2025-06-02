@@ -35,19 +35,27 @@
     color: #9F42C6;
 }
 
-.navbar{
+.bg-bl{
+    background-color: #000000CC;
+}
+
+.navbar {
     background-color: #000000CC;
     transition: all 0.2s ease;
 }
 
-.navbar.active{
+.navbar.active {
     background-color: transparent;
 }
 
-.navbar:hover{
+.navbar:hover {
     background-color: #000000CC;
 }
 
-.search-container{
-    transition : all 0.2s ease;
+.search-container {
+    transition: all 0.2s ease;
+}
+
+.text-purple {
+    color: #9F42C6
 }

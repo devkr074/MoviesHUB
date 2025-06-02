@@ -14,12 +14,26 @@ function Navbar() {
             setActivePath("");
         }
     }, []);
+    useEffect(() => {
+        const handleScroll = () => {
+            const navbar = document.querySelector("nav");
+            if (window.scrollY > 50) {
+                navbar.classList.add("bg-bl");
+            } else {
+                navbar.classList.remove("bg-bl");
+            }
+        };
+        window.addEventListener("scroll", handleScroll);
+        return () => {
+            window.removeEventListener("scroll", handleScroll);
+        };
+    }, []);
     function openSearch() {
         const searchContainer = document.querySelector(".search-container");
         searchContainer.classList.toggle("bottom-100");
         searchContainer.classList.toggle("bottom-0");
         const input = searchContainer.querySelector("input");
-        const body= document.querySelector("body");
+        const body = document.querySelector("body");
         body.classList.toggle("overflow-hidden");
         if (input) {
             input.focus();
@@ -34,9 +48,9 @@ function Navbar() {
     }
     return (
         <>
-            <div className="bg-primary vh-100 w-100 position-absolute bottom-100 z-2 search-container">
-                <input type="text" />
-                <button onClick={closeSearch}>Close</button>
+            <div className="bg-black vh-100 w-100 position-absolute bottom-100 z-2 search-container d-flex justify-content-center">
+                <div className="col-8 mt-5"><input type="text" className="form-control rounded-end shadow-none" /></div>
+                <button className="btn fs-3 position-absolute top-0 end-0 mt-1 me-2 text-light border-0" onClick={closeSearch}><i class="fa-solid fa-xmark"></i></button>
             </div>
             <nav className={`navbar navbar-expand-lg w-100 position-fixed top-0 z-1 ${activePath == "" && "active"}`}>
                 <div className="container-fluid">
