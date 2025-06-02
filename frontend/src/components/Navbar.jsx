@@ -75,9 +75,9 @@ function Navbar() {
                             <li className="nav-item dropdown">
                                 <a className="nav-link fw-semibold dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">Guest</a>
                                 <ul className="dropdown-menu dropdown-menu-end">
-                                    <li><a className="dropdown-item" href="#">Login</a></li>
+                                    <li><a className="dropdown-item" href="login">Login</a></li>
                                     <li><hr className="dropdown-divider" /></li>
-                                    <li><a className="dropdown-item" href="#">Sign Up</a></li>
+                                    <li><a className="dropdown-item" href="signup">Sign Up</a></li>
                                 </ul>
                             </li>
                         </ul>
