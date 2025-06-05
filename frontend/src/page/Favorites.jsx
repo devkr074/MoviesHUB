@@ -1,11 +1,7 @@
-// src/pages/Favorites.jsx
-import React, { useEffect, useState } from 'react';
-
-const Favorites = ({ user }) => {
+import { useEffect, useState } from "react";
+function Favorites({ user }) {
   const [favorites, setFavorites] = useState([]);
-
-  // Fetch favorites from backend
-  const fetchFavorites = async () => {
+  async function fetchFavorites() {
     if (user && user.id) {
       try {
         const response = await fetch(`http://localhost:8080/api/favorites/${user.id}`);
@@ -19,20 +15,14 @@ const Favorites = ({ user }) => {
         console.error("Error fetching favorites:", error);
       }
     }
-  };
-
+  }
   useEffect(() => {
     fetchFavorites();
   }, [user]);
-
-  if (!user) {
-    return <p>Please login to view your Favorites.</p>;
-  }
-
   return (
     <div>
       <h2>Your Favorite Movies/Shows</h2>
-      {favorites.length === 0 ? (
+      {favorites.length == 0 ? (
         <p>No favorite items added yet.</p>
       ) : (
         <ul>
@@ -45,6 +35,5 @@ const Favorites = ({ user }) => {
       )}
     </div>
   );
-};
-
+}
 export default Favorites;

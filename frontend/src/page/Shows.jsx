@@ -1,5 +1,5 @@
-import Card from '../component/Card';
-const Shows = ({ user }) => {
+import Card from "../component/Card.jsx";
+function Shows({ user }) {
   const showsList = ["Breaking Bad", "Game of Thrones", "Stranger Things", "The Witcher"];
   return (
     <div>
@@ -13,5 +13,5 @@ const Shows = ({ user }) => {
       </div>
     </div>
   );
-};
+}
 export default Shows;

@@ -1,4 +1,4 @@
-import Card from '../component/Card';
+import Card from "../component/Card.jsx";
 function Movies({ user }) {
   const movies = ["Movie 1", "Movie 2", "Movie 3", "Movie 4"];
   return (
@@ -10,5 +10,5 @@ function Movies({ user }) {
       ))}
     </div>
   );
-};
+}
 export default Movies;

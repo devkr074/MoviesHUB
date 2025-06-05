@@ -1,10 +1,7 @@
-// src/pages/Library.jsx
-import React, { useEffect, useState } from 'react';
-
-const Library = ({ user }) => {
+import { useEffect, useState } from "react";
+function Library({ user }) {
   const [libraryItems, setLibraryItems] = useState([]);
-
-  const fetchLibraryItems = async () => {
+  async function fetchLibraryItems() {
     if (user && user.id) {
       try {
         const response = await fetch(`http://localhost:8080/api/library/${user.id}`);
@@ -18,20 +15,14 @@ const Library = ({ user }) => {
         console.error("Error fetching library items:", error);
       }
     }
-  };
-
+  }
   useEffect(() => {
     fetchLibraryItems();
   }, [user]);
-
-  if (!user) {
-    return <p>Please login to view your Library.</p>;
-  }
-
   return (
     <div>
       <h2>Your Library</h2>
-      {libraryItems.length === 0 ? (
+      {libraryItems.length == 0 ? (
         <p>No items added in your Library yet.</p>
       ) : (
         <ul>
@@ -44,6 +35,5 @@ const Library = ({ user }) => {
       )}
     </div>
   );
-};
-
+}
 export default Library;

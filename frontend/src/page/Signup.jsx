@@ -1,28 +1,23 @@
-// src/pages/Signup.jsx
-import React, { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { checkPasswordStrength, checkPasswordMatch, validateUsername } from '../util/validation';
-
-const Signup = ({ setUser }) => {
+import { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { checkPasswordStrength, checkPasswordMatch, validateUsername } from "../util/validation.js";
+function Signup({ setUser }) {
   const [form, setForm] = useState({
-    username: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    otp: ''
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    otp: ""
   });
   const [otpSent, setOtpSent] = useState(false);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
-  // Capture the last visited page from redirect state (default to home)
-  const from = location.state?.from || '/';
-
-  const handleChange = (e) => {
+  const from = location.state?.from || "/";
+  function handleChange(e) {
     setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const handleGetOtp = async (e) => {
+  }
+  async function handleGetOtp(e) {
     e.preventDefault();
     if (!validateUsername(form.username)) {
       alert("Username invalid! It should be alphanumeric, 3-15 characters long and start with a letter.");
@@ -36,18 +31,15 @@ const Signup = ({ setUser }) => {
       alert("Passwords do not match");
       return;
     }
-
-    // Send only the three required fields to backend
     const payload = {
       username: form.username,
       email: form.email,
       password: form.password
     };
-
     try {
-      const response = await fetch('http://localhost:8080/api/users/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("http://localhost:8080/api/users/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
       });
       const data = await response.text();
@@ -59,33 +51,29 @@ const Signup = ({ setUser }) => {
       console.error("Error during OTP request", error);
       setMessage("Error during OTP request");
     }
-  };
-
-  const handleSubmit = async (e) => {
+  }
+  async function handleSubmit(e) {
     e.preventDefault();
     if (!otpSent) {
-      alert("Please click 'Get OTP' first.");
+      alert("Please click Get OTP first.");
       return;
     }
     try {
       const response = await fetch(`http://localhost:8080/api/users/verify-otp?email=${encodeURIComponent(form.email)}&otp=${encodeURIComponent(form.otp)}`, {
-        method: 'POST'
+        method: "POST"
       });
       const data = await response.text();
       setMessage(data);
       if (data.includes("verified successfully")) {
-        // For simplicity, we're setting user without backend id; in real scenarios, include the user id from response.
         setUser({ username: form.username, email: form.email });
         alert("Signup and Verification successful.");
-        // Redirect to the last visited page
         navigate(from);
       }
     } catch (error) {
       console.error("Error during OTP verification", error);
       setMessage("Error during OTP verification");
     }
-  };
-
+  }
   return (
     <div className="d-flex justify-content-center">
       <form style={{ width: "300px" }} onSubmit={handleSubmit}>
@@ -118,6 +106,5 @@ const Signup = ({ setUser }) => {
       </form>
     </div>
   );
-};
-
+}
 export default Signup;

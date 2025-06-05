@@ -5,5 +5,5 @@ function Home() {
       <p>Welcome to MoviesHUB! Explore your favorite movies and shows.</p>
     </div>
   );
-};
+}
 export default Home;
