@@ -1,17 +1,13 @@
-// src/components/RequireAuth.jsx
-import React from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
-
-const RequireAuth = ({ user, children }) => {
+import { Navigate, useLocation } from "react-router-dom";
+function RequireAuth({ user, children }) {
   const location = useLocation();
-
   if (!user) {
-    // Agar user null hai, toh current location state ke sath login page par redirect karo.
-    return <Navigate to="/login" state={{ from: location.pathname }} replace />;
+    return (
+      <Navigate to="/login" />
+    );
   }
-
-  // Agar user hai, toh bachche components render honge.
-  return children;
-};
-
+  return (
+    children
+  );
+}
 export default RequireAuth;

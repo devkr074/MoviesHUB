@@ -11,7 +11,7 @@ function Card({ title, type, user }) {
       userId: user.id,
       title: title,
       type: type
-    };
+    }
     const url = actionType == "Library" ? "http://localhost:8080/api/library/add" : "http://localhost:8080/api/favorites/add";
     try {
       const response = await fetch(url, {
@@ -31,7 +31,7 @@ function Card({ title, type, user }) {
       console.error("Error adding item:", error);
       alert(`Error adding ${title} to ${actionType}`);
     }
-  };
+  }
   return (
     <div className="card">
       <div className="card-body">
@@ -41,5 +41,5 @@ function Card({ title, type, user }) {
       </div>
     </div>
   );
-};
+}
 export default Card;

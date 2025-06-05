@@ -1,9 +1,9 @@
-const Navbar = ({ user, setUser }) => {
+function Navbar({ user, setUser }) {
   function handleLogout() {
     setUser(null);
     localStorage.removeItem("user");
     window.location.href = "/";
-  };
+  }
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <div className="container">
@@ -60,5 +60,5 @@ const Navbar = ({ user, setUser }) => {
       </div>
     </nav>
   );
-};
+}
 export default Navbar;

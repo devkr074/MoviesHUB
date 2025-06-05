@@ -10,6 +10,7 @@ import Profile from "./page/Profile.jsx";
 import Library from "./page/Library.jsx";
 import Favorites from "./page/Favorites.jsx";
 import RequireAuth from "./component/RequireAuth.jsx";
+import PageNotFound from "./page/PageNotFound.jsx";
 function App() {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")) || null);
   useEffect(() => {
@@ -31,8 +32,9 @@ function App() {
         <Route path="/favorites" element={<RequireAuth user={user}><Favorites user={user} /></RequireAuth>} />
         <Route path="/library" element={<RequireAuth user={user}><Library user={user} /></RequireAuth>} />
         <Route path="/profile" element={<RequireAuth user={user}><Profile user={user} setUser={setUser} /></RequireAuth>} />
+        <Route path="*" element={<PageNotFound />} />
       </Routes>
     </Router>
   );
-};
+}
 export default App;
