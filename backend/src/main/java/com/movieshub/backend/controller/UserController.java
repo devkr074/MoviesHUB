@@ -1,4 +1,5 @@
 package com.movieshub.backend.controller;
+import com.movieshub.backend.model.TempUser;
 import com.movieshub.backend.model.User;
 import com.movieshub.backend.repository.UserRepository;
 import com.movieshub.backend.service.UserService;
@@ -18,10 +19,17 @@ public class UserController {
     private UserService userService;
     private UserRepository userRepository;
     private JwtUtil jwtUtil;
+    
     @PostMapping("/signup")
-    public String signup(@RequestBody User user) {
-        return userService.signup(user);
+    public String signup(@RequestBody TempUser tempUser) {
+        return userService.signup(tempUser);
     }
+
+    @PostMapping("/verify-otp")
+    public String verifyOtp(@RequestParam String email, @RequestParam String otp) {
+        return userService.verifyOtp(email, otp);
+    }
+
     @PutMapping("/profile")
     public ResponseEntity<?> updateProfile(@RequestBody User updatedUser) {
         Optional<User> optionalUser = userRepository.findById(updatedUser.getId());
@@ -34,10 +42,6 @@ public class UserController {
             return ResponseEntity.ok(user);
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
-    }
-    @PostMapping("/verify-otp")
-    public String verifyOtp(@RequestParam String email, @RequestParam String otp) {
-        return userService.verifyOtp(email, otp);
     }
 
     // Endpoint for user login

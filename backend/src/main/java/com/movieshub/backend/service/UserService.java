@@ -1,6 +1,8 @@
 package com.movieshub.backend.service;
 
+import com.movieshub.backend.model.TempUser;
 import com.movieshub.backend.model.User;
+import com.movieshub.backend.repository.TempUserRepository;
 import com.movieshub.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -11,7 +13,9 @@ import java.util.Random;
 @Service
 public class UserService {
     @Autowired
+    private User user;
     private UserRepository userRepository;
+    private TempUserRepository tempUserRepository;
     private EmailService emailService;
     private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -21,19 +25,18 @@ public class UserService {
         return String.valueOf(otpValue);
     }
 
-    public String signup(User user) {
-        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+    public String signup(TempUser tempUser) {
+        if (userRepository.findByEmail(tempUser.getEmail()).isPresent()) {
             return "User with this email already exists.";
         }
-        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
+        if (userRepository.findByUsername(tempUser.getUsername()).isPresent()) {
             return "Username already taken.";
         }
         String otp = generateOtp();
-        user.setOtp(otp);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setVerified(false);
-        userRepository.save(user);
-        boolean emailSent = emailService.sendOtpEmail(user.getEmail(), otp);
+        tempUser.setOtp(otp);
+        tempUser.setPassword(passwordEncoder.encode(tempUser.getPassword()));
+        tempUserRepository.save(tempUser);
+        boolean emailSent = emailService.sendOtpEmail(tempUser.getEmail(), otp);
         if (emailSent) {
             return "OTP sent to email.";
         } else {
@@ -42,14 +45,16 @@ public class UserService {
     }
 
     public String verifyOtp(String email, String otpInput) {
-        Optional<User> optionalUser = userRepository.findByEmail(email);
+        Optional<TempUser> optionalUser = tempUserRepository.findByEmail(email);
         if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
-            if (user.getOtp() != null && user.getOtp().equals(otpInput)) {
-                user.setVerified(true);
-                user.setOtp(null);
+            TempUser tempUser = optionalUser.get();
+            if (tempUser.getOtp() != null && tempUser.getOtp().equals(otpInput)) {
+                user.setUsername(tempUser.getUsername());
+                user.setPassword(tempUser.getPassword());
+                user.setEmail(tempUser.getEmail());
                 userRepository.save(user);
-                return "User verified successfully.";
+                tempUserRepository.delete(tempUser);
+                return "User Sign Up successfully.";
             } else {
                 return "Incorrect OTP.";
             }
@@ -64,7 +69,7 @@ public class UserService {
         }
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
-            if (user.getVerified() && passwordEncoder.matches(password, user.getPassword())) {
+            if (passwordEncoder.matches(password, user.getPassword())) {
                 return user;
             }
         }

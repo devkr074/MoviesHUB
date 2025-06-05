@@ -2,7 +2,7 @@ const Navbar = ({ user, setUser }) => {
   function handleLogout() {
     setUser(null);
     localStorage.removeItem("user");
-    window.location.href="/";
+    window.location.href = "/";
   };
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">

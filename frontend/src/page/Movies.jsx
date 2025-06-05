@@ -1,14 +1,6 @@
-// src/pages/Movies.jsx
-import React from 'react';
 import Card from '../component/Card';
-
-const Movies = ({ user }) => {
-  const movies = [
-    "Movie 1", "Movie 2", "Movie 3", "Movie 4",
-    "Movie 5", "Movie 6", "Movie 7", "Movie 8",
-    "Movie 9", "Movie 10"
-  ];
-
+function Movies({ user }) {
+  const movies = ["Movie 1", "Movie 2", "Movie 3", "Movie 4"];
   return (
     <div className="row">
       {movies.map((movie, index) => (
@@ -19,5 +11,4 @@ const Movies = ({ user }) => {
     </div>
   );
 };
-
 export default Movies;

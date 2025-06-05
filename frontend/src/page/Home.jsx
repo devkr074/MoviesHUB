@@ -1,7 +1,4 @@
-// src/pages/Home.jsx
-import React from 'react';
-
-const Home = () => {
+function Home() {
   return (
     <div className="text-center">
       <h1>MoviesHUB</h1>
@@ -9,5 +6,4 @@ const Home = () => {
     </div>
   );
 };
-
 export default Home;
