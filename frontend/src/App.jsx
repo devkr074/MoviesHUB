@@ -1,16 +1,16 @@
 // src/App.jsx
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import Home from './pages/Home';
-import Movies from './pages/Movies';
-import Shows from './pages/Shows';
-import Login from './pages/Login';
-import Signup from './pages/Signup';
-import Favorites from './pages/Favorites';
-import Library from './pages/Library';
-import Profile from './pages/Profile';
-import RequireAuth from './components/RequireAuth';
+import Navbar from './component/Navbar';
+import Home from './page/Home';
+import Movies from './page/Movies';
+import Shows from './page/Shows';
+import Login from './page/Login';
+import Signup from './page/Signup';
+import Favorites from './page/Favorites';
+import Library from './page/Library';
+import Profile from './page/Profile';
+import RequireAuth from './component/RequireAuth';
 
 const App = () => {
   // Initialize user state from localStorage (if available)

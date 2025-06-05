@@ -1,6 +1,6 @@
 // src/pages/Shows.jsx
 import React, { useState } from 'react';
-import Card from '../components/Card';
+import Card from '../component/Card';
 
 const Shows = ({ user }) => {
   // Dummy list of shows

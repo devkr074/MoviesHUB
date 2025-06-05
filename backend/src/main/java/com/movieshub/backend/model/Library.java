@@ -1,4 +1,5 @@
 package com.movieshub.backend.model;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -7,13 +8,9 @@ public class Library {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private Long userId; // ID of the user
-    private String title; // Movie or Show title
-    private String type;  // "movie" or "show"
-
-    // Constructors
-    public Library() {}
+    private Long userId;
+    private String title;
+    private String type;
 
     public Library(Long userId, String title, String type) {
         this.userId = userId;
@@ -21,7 +18,6 @@ public class Library {
         this.type = type;
     }
 
-    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -42,7 +38,7 @@ public class Library {
         this.title = title;
     }
 
-    public String getType() { 
+    public String getType() {
         return type;
     }
 

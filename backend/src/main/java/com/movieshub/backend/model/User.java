@@ -1,4 +1,5 @@
 package com.movieshub.backend.model;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -7,19 +8,11 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
     private String username;
     private String email;
     private String password;
-    
-    // To indicate if the user's email is verified
     private Boolean verified;
-    
-    // Stores the OTP sent to the user's email (temporary)
     private String otp;
-
-    // Constructors
-    public User() {}
 
     public User(String username, String email, String password, Boolean verified) {
         this.username = username;
@@ -28,7 +21,6 @@ public class User {
         this.verified = verified;
     }
 
-    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -73,4 +65,3 @@ public class User {
         this.otp = otp;
     }
 }
-

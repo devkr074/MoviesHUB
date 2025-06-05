@@ -8,13 +8,9 @@ public class Favorites {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private Long userId; // ID of the user
-    private String title; // Movie or Show title
-    private String type;  // "movie" or "show"
-
-    // Constructors
-    public Favorites() {}
+    private Long userId;
+    private String title;
+    private String type;
 
     public Favorites(Long userId, String title, String type) {
         this.userId = userId;
@@ -22,7 +18,6 @@ public class Favorites {
         this.type = type;
     }
 
-    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -35,7 +30,7 @@ public class Favorites {
         this.userId = userId;
     }
 
-    public String getTitle() { 
+    public String getTitle() {
         return title;
     }
 
@@ -43,7 +38,7 @@ public class Favorites {
         this.title = title;
     }
 
-    public String getType() { 
+    public String getType() {
         return type;
     }
 

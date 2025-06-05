@@ -1,7 +1,7 @@
 // src/pages/Signup.jsx
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { checkPasswordStrength, checkPasswordMatch, validateUsername } from '../utils/validation';
+import { checkPasswordStrength, checkPasswordMatch, validateUsername } from '../util/validation';
 
 const Signup = ({ setUser }) => {
   const [form, setForm] = useState({

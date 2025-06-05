@@ -1,6 +1,6 @@
 // src/pages/Movies.jsx
 import React from 'react';
-import Card from '../components/Card';
+import Card from '../component/Card';
 
 const Movies = ({ user }) => {
   const movies = [
