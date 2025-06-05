@@ -1,4 +1,5 @@
 package com.movieshub.backend.service;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -17,7 +18,7 @@ public class EmailService {
             message.setText("Your OTP code is: " + otp);
             mailSender.send(message);
             return true;
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
             return false;
         }

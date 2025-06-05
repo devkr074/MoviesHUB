@@ -1,4 +1,5 @@
 package com.movieshub.backend.service;
+
 import com.movieshub.backend.model.Favorites;
 import com.movieshub.backend.repository.FavoritesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +8,6 @@ import java.util.List;
 
 @Service
 public class FavoritesService {
-
     @Autowired
     private FavoritesRepository favoriteItemRepository;
 

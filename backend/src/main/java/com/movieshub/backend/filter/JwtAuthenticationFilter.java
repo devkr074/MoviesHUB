@@ -15,26 +15,20 @@ import java.io.IOException;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-
     @Autowired
     private JwtUtil jwtUtil;
 
-    // For simplicity, using a dummy user detail retrieval; in real-case, use a custom UserDetailsService.
     @Override
     protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response, FilterChain filterChain)
-                                    throws ServletException, IOException {
+            HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
         String token = getJWTFromRequest(request);
-
         if (StringUtils.hasText(token) && jwtUtil.validateToken(token)) {
-            // Extract username from token
             String username = jwtUtil.getUsernameFromJWT(token);
-            // Create an authentication object - in production, fetch UserDetails including authorities.
-            UsernamePasswordAuthenticationToken authentication =
-                new UsernamePasswordAuthenticationToken(username, null, null);
+            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(username, null,
+                    null);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
-
         filterChain.doFilter(request, response);
     }
 

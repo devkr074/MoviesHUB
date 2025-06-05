@@ -1,4 +1,5 @@
 package com.movieshub.backend.model;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -10,6 +11,7 @@ public class User {
     private String username;
     private String email;
     private String password;
+
     public User(String username, String email, String password) {
         this.username = username;
         this.email = email;
