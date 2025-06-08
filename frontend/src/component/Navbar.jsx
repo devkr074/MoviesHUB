@@ -1,4 +1,13 @@
+import { useEffect } from "react";
+
 function Navbar({ user, setUser }) {
+  function openSearch(){
+    document.getElementById("search-container")
+  }
+  function addClass(){
+    document.getElementById("nav-toggle-btn").classList.toggle("active");
+    document.getElementById("navbar").classList.toggle("active");
+  }
   return (
     <>
       <header className="header" data-header>
@@ -6,7 +15,7 @@ function Navbar({ user, setUser }) {
           <h1>
             <a href="/" className="logo">Movies<span className="span">HUB</span></a>
           </h1>
-          <nav className="navbar" data-navbar>
+          <nav id="navbar" className="navbar" data-navbar>
             <ul className="navbar-list">
               <li className="nav-item">
                 <a href="/shows" className="navbar-link" data-nav-link>Shows</a>
@@ -17,10 +26,10 @@ function Navbar({ user, setUser }) {
             </ul>
           </nav>
           <div className="header-btn-group">
-            <button className="search-btn" aria-label="Search" data-search-btn>
+            <button onClick={openSearch} className="search-btn" aria-label="Search" data-search-btn>
               <i class="fa-solid fa-magnifying-glass"></i>
             </button>
-            <button className="nav-toggle-btn" aria-label="Toggle Menu" data-menu-toggle-btn>
+            <button id="nav-toggle-btn" onClick={addClass} className="nav-toggle-btn" aria-label="Toggle Menu" data-menu-toggle-btn>
               <span className="line top"></span>
               <span className="line middle"></span>
               <span className="line bottom"></span>
