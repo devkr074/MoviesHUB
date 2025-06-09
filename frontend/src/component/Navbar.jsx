@@ -15,7 +15,7 @@ function Navbar({ user, setUser }) {
   }, []);
   return (
     <>
-      <nav class="navbar navbar-expand-lg bg-transparent position-fixed w-100 z-1">
+      <nav class="navbar navbar-expand-lg bg-body position-fixed w-100 z-1">
         <div class="container-fluid">
           <div className="header-btn-group d-flex align-items-center gap-4">
             <button className="search-btn" aria-label="Search" data-search-btn>
