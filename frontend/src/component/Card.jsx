@@ -69,7 +69,7 @@ function Card({ title, type, user }) {
     }
   }
   return (
-    <div className="card">
+    <div className="card ratio ratio-16x9">
       <div className="card-body">
         <h5 className="card-title">{title}</h5>
         {isInLibrary ? (
