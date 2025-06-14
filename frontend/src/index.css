@@ -1,0 +1,28 @@
+.bg-black {
+    background-color: #000000;
+}
+
+.bg-shade {
+    background-color: radial-gradient(center, circle cover, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.4) 100%);
+}
+
+.text-purple {
+    color: #9F42C6;
+}
+
+.navbar {
+    background: transparent;
+    transition: all 0.3s ease-in-out;
+}
+
+.navbar:hover {
+    background-color: purple;
+}
+
+.navbar.active {
+    background-color: purple;
+}
+
+.navbar:focus {
+    background-color: purple;
+}
