@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import Card from "../components/Card";
-import fetchData from "../utils/fetchData";
 function Movies() {
     const [shows, setShows] = useState([]);
     const [visibleCount, setVisibleCount] = useState(20);
