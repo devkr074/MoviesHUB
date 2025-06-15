@@ -1,8 +1,8 @@
-const API_BASE_URL = "https://api.trakt.tv/shows/";
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 const API_HEADERS = {
     "Content-Type": "application/json",
     "trakt-api-version": "2",
-    "trakt-api-key": "53cafdd76e909db5ce700375b904ec38ae6ddd7f6431f1930f3ac88f7e480f75",
+    "trakt-api-key": import.meta.env.VITE_API_KEY,
 };
 export default async function fetchShows(category) {
     try {
