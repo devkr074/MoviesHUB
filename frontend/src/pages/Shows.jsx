@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Card from "../components/Card";
-const API_BASE_URL = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_API_URL;
 const API_HEADERS = {
     "Content-Type": "application/json",
     "trakt-api-version": "2",
@@ -11,19 +11,18 @@ function Shows() {
     const [visibleCount, setVisibleCount] = useState(20);
     const [loading, setLoading] = useState(false);
     const [category, setCategory] = useState("trending");
-    useEffect(() => {
+    async function fetchShows() {
         setLoading(true);
-        async function fetchShows() {
-            try {
-                const response = await fetch(`${API_BASE_URL}${category}?limit=100&extended=full,images`, { headers: API_HEADERS });
-                const data = await response.json();
-                return data;
-            } catch (error) {
-                console.error("Error fetching shows:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
+        try {
+            const response = await fetch(`${API_URL}/shows/${category}?limit=100&extended=full,images`, { headers: API_HEADERS });
+            const data = await response.json();
+            setShows(data);
+        } catch (error) {
+            console.error("Error fetching shows:", error);
+        }
+        setLoading(false);
+    };
+    useEffect(() => {
         fetchShows();
     }, [category]);
     function handleCategoryChange(newCategory) {

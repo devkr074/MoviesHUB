@@ -24,7 +24,7 @@ function Header() {
                             <a className="nav-link fw-bold text-purple" aria-current="page" href="/shows">Shows</a>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link fw-semibold text-light" href="#">Movies</a>
+                            <a className="nav-link fw-semibold text-light" href="/movies">Movies</a>
                         </li>
                     </ul>
                 </div>
