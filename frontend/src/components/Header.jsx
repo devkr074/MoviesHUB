@@ -29,6 +29,9 @@ function Header() {
                         <li className="nav-item">
                             <a className="nav-link fw-semibold text-light" href="/login">Login</a>
                         </li>
+                        <li className="nav-item">
+                            <a className="nav-link fw-semibold text-light" href="/signup">Sign Up</a>
+                        </li>
                     </ul>
                 </div>
             </div>
