@@ -3,7 +3,7 @@
 }
 
 .bg-shade {
-    background-color: radial-gradient(center, circle cover, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.4) 100%);
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 .text-purple {

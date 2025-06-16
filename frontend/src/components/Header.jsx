@@ -26,6 +26,9 @@ function Header() {
                         <li className="nav-item">
                             <a className="nav-link fw-semibold text-light" href="/movies">Movies</a>
                         </li>
+                        <li className="nav-item">
+                            <a className="nav-link fw-semibold text-light" href="/login">Login</a>
+                        </li>
                     </ul>
                 </div>
             </div>
