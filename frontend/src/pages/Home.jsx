@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import Header from "../components/Header.jsx";
 import Card from "../components/Card.jsx";
 import logo from "../assets/logo.png"
+import Footer from "../components/Footer.jsx";
+import homeBackground from "../assets/homeBackground.jpg"
 const API_URL = import.meta.env.VITE_API_URL;
 const API_HEADERS = {
     "Content-Type": "application/json",
@@ -88,7 +90,7 @@ function Home() {
                     ))}
                 </div>
             ) : (
-                <div className="row m-0">
+                <div className="row m-0" style={{backgroundImage:`url(${homeBackground})`,backgroundPosition:"center",backgroundSize:"cover",backgroundRepeat:"no-repeat"}}>
                     {movies.map((m, index) => (
                         <div key={index} className="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-3 mb-3">
                             <Card title={m.movie.title} image={m.movie.images?.fanart || null} />
@@ -96,6 +98,7 @@ function Home() {
                     ))}
                 </div>
             )}
+            <Footer/>
         </>
     );
 }
