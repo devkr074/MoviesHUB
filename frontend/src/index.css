@@ -1,28 +1,123 @@
-.bg-black {
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
     background-color: #000000;
+    overflow: hidden;
 }
 
-.bg-shade {
-    background-color: rgba(0, 0, 0, 0.5);
+#root {
+    height: 100vh;
+    overflow: hidden;
 }
 
-.text-purple {
+#root.active{
+    overflow: auto;
+}
+
+.search-container{
+    height: 100vh;
+    width: 100%;
+    background-color: #000000cc;
+    backdrop-filter: blur(4px);
+    transition: all 0.2s ease;
+    position: fixed;
+    top: 0;
+    transform: translateY(-100vh);
+    z-index: 1000;
+}
+
+.search-container.active{
+    transform: translateY(0);
+}
+
+.nav {
+    background-color: #000000cc;
+    backdrop-filter: blur(4px);
+    z-index: 4000;
+}
+
+.nav-link {
+    color: #ffffff;
+}
+
+.nav-link:hover {
     color: #9F42C6;
 }
 
-.navbar {
-    background: transparent;
-    transition: all 0.3s ease-in-out;
+.nav-dropdown {
+    display: none;
 }
 
-.navbar:hover {
-    background-color: purple;
+.dropdown button {
+    background-color: transparent;
 }
 
-.navbar.active {
-    background-color: purple;
+.dropdown:hover button {
+    background-color: #fff;
 }
 
-.navbar:focus {
-    background-color: purple;
+.dropdown button i {
+    color: #ffffff;
+}
+
+.dropdown:hover button i {
+    color: #000;
+    text-shadow: 0 0 20px black;
+}
+
+.dropdown ul {
+    width: 150px;
+    display: none;
+    border-top: 1px solid #9f42c6;
+}
+
+.dropdown:hover ul {
+    display: block;
+}
+
+.dropdown ul li:hover {
+    background-color: #9f42c6;
+    color: #fff;
+}
+
+.category-bar{
+    position: sticky;
+    top: 66px;
+    z-index: 2000;
+    background-color: #000000cc;
+    backdrop-filter: blur(4px);
+    max-width: 100%;
+    display: flex;
+    overflow: auto;
+    scrollbar-width: none;
+}
+
+.category-bar button{
+    background-color: #ffffff;
+    padding: 8px 10px;
+    margin-left: 10px;
+    border-radius: 8px;
+    border: none;
+    font-size: 16px;
+    font-weight: bold;
+    color: #000000;
+}
+
+.category-bar button.active{
+    background-color: #9F42C6;
+    color: #ffffff;
+}
+
+@media (min-width: 0px) and (max-width: 769px) {
+    .nav-link {
+        display: none;
+    }
+
+    .nav-dropdown {
+        display: block;
+    }
 }

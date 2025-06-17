@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import Card from "../components/Card";
+import Header from "../components/Header";
 const API_URL = import.meta.env.VITE_API_URL;
 const API_HEADERS = {
     "Content-Type": "application/json",
@@ -8,7 +9,7 @@ const API_HEADERS = {
 };
 function Shows() {
     const [shows, setShows] = useState([]);
-    const [visibleCount, setVisibleCount] = useState(20);
+    const [visibleCount, setVisibleCount] = useState(18);
     const [loading, setLoading] = useState(false);
     const [category, setCategory] = useState("trending");
     async function fetchShows() {
@@ -30,21 +31,21 @@ function Shows() {
         window.scrollTo({ top: 0, behavior: "smooth" });
     };
     return (
-        <div className="container-fluid mt-4 bg-dark min-vh-100">
-            <div className="w-100 sticky-top bg-white py-2 shadow-sm overflow-auto d-flex gap-2">
+        <>
+            <Header />
+            <div className="px-2 py-3 category-bar">
                 {["trending", "popular", "anticipated", "streaming"].map((c, index) => (
-                    <button key={index} className={`btn ${category == c ? "btn-dark" : "btn-outline-dark"}`} onClick={() => handleCategoryChange(c)}>{c.charAt(0).toUpperCase() + c.slice(1)}</button>
+                    <button key={index} className={`${category == c && "active"}`} onClick={() => handleCategoryChange(c)}>{c.charAt(0).toUpperCase() + c.slice(1)}</button>
                 ))}
             </div>
-            <h2 className="mb-3 text-center">{category.charAt(0).toUpperCase() + category.slice(1)} Shows</h2>
             {loading ? (
                 <div className="text-center mt-4 min-vh-100 d-flex justify-content-center align-items-center">
                     <div className="spinner-border text-primary"></div>
                 </div>
             ) : (
-                <div className="row m-0">
+                <div className="row m-0 py-2">
                     {shows.slice(0, visibleCount).map((s, index) => (
-                        <div key={index} className="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-3 mb-3">
+                        <div key={index} className="m-0 p-0 col-sm-12 col-md-6 col-lg-4 col-xl-4 col-xxl-3">
                             <Card title={s.title || s.show.title} image={s.images?.fanart || s.show.images?.fanart || null} />
                         </div>
                     ))}
@@ -55,7 +56,7 @@ function Shows() {
                     <button className="btn btn-primary" onClick={() => setVisibleCount(visibleCount + 20)}>Load More</button>
                 </div>
             )}
-        </div>
+        </>
     );
 }
 export default Shows;

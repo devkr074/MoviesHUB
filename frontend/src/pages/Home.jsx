@@ -41,9 +41,8 @@ function Home() {
         <>
             <Header />
             <div className="row m-0">
-                <div style={{height:"110vh"}} className="col-12 d-flex flex-column align-items-center justify-content-center bg-black position-relative">
-                    <img style={{ height:"100%",width:"100%", opacity: 0, transition: "opacity 0.5s ease-in-out", transitionDelay: "0.2s" }} onLoad={(e) => (e.target.style.opacity = 1)} src={`https://${backgroundImage}`} alt="" />
-                    <div style={{height:"110vh"}} className="col-12 bg-shade position-absolute z-1"></div>
+                <div style={{ backgroundImage: `url(https://${backgroundImage})`, backgroundPosition: "center", backgroundSize: "cover", backgroundRepeat: "no-repeat" }} className="vh-100 col-12 d-flex flex-column align-items-center justify-content-center bg-black position-relative">
+                    <div style={{ background: "-webkit-radial-gradient(center, circle cover, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.4) 100%)" }} className="col-12 position-absolute z-1 vh-100"></div>
                     <h1 className="text-light text-center position-absolute z-2">MoviesHUB</h1>
                     <p className="col-sm-12 col-md-8 col-lg-6 col-xl-6 col-xxl-6 fs-5 text-light text-center position-absolute z-2 mt-3">Explore. Discover. Track.</p>
                 </div>

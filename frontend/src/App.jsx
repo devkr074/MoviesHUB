@@ -12,11 +12,11 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/shows" element={<Shows />} />
-        <Route path="/movies" element={<Movies />} />
+        {/* <Route path="/movies" element={<Movies />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/otp-auth" element={<OtpAuth />} />
-        <Route path="*" element={<PageNotFound />} />
+        <Route path="*" element={<PageNotFound />} /> */}
       </Routes>
     </Router>
   );
