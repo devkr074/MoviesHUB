@@ -37,7 +37,6 @@ body {
 .nav {
     background-color: #000000cc;
     backdrop-filter: blur(4px);
-    z-index: 4000;
 }
 
 .nav-link {
@@ -87,7 +86,6 @@ body {
 .category-bar{
     position: sticky;
     top: 66px;
-    z-index: 2000;
     background-color: #000000cc;
     backdrop-filter: blur(4px);
     max-width: 100%;

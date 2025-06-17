@@ -42,9 +42,10 @@ function Home() {
             <Header />
             <div className="row m-0">
                 <div style={{ backgroundImage: `url(https://${backgroundImage})`, backgroundPosition: "center", backgroundSize: "cover", backgroundRepeat: "no-repeat" }} className="vh-100 col-12 d-flex flex-column align-items-center justify-content-center bg-black position-relative">
-                    <div style={{ background: "-webkit-radial-gradient(center, circle cover, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.4) 100%)" }} className="col-12 position-absolute z-1 vh-100"></div>
-                    <h1 className="text-light text-center position-absolute z-2">MoviesHUB</h1>
-                    <p className="col-sm-12 col-md-8 col-lg-6 col-xl-6 col-xxl-6 fs-5 text-light text-center position-absolute z-2 mt-3">Explore. Discover. Track.</p>
+                    <div style={{ background: "-webkit-radial-gradient(center, circle cover, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.4) 100%)" }} className="col-12 position-absolute z-1 vh-100">
+                        <h1 className="text-light text-center position-absolute z-2">MoviesHUB</h1>
+                        <p className="col-sm-12 col-md-8 col-lg-6 col-xl-6 col-xxl-6 fs-5 text-light text-center mt-3">Explore. Discover. Track.</p>
+                    </div>
                 </div>
             </div>
             <div className="row m-0">

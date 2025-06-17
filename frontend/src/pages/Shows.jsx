@@ -33,7 +33,7 @@ function Shows() {
     return (
         <>
             <Header />
-            <div className="px-2 py-3 category-bar">
+            <div className="px-2 py-3 category-bar z-1">
                 {["trending", "popular", "anticipated", "streaming"].map((c, index) => (
                     <button key={index} className={`${category == c && "active"}`} onClick={() => handleCategoryChange(c)}>{c.charAt(0).toUpperCase() + c.slice(1)}</button>
                 ))}

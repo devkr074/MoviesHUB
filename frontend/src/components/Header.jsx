@@ -6,13 +6,20 @@ function Header() {
     }
     return (
         <>
-            <div className="search-container p-5">
-                <input className="form-control" placeholder="Search Show, People, Movies..." type="text" />
-                <h1>Search Result for </h1>
-                <div className="search-result"></div>
-                <button onClick={toggleSearchContainer}><i className="fa-solid fa-close"></i></button>
+            <div className="search-container m-0 z-3">
+                <button className="position-absolute top-0 start-0 m-3 bg-transparent border-0" onClick={toggleSearchContainer}><i className="fa-solid fa-close fs-3 text-light"></i></button>
+                <div class="input-group shadow-0">
+                    <input type="text" class="form-control shadow-none" placeholder="Username" aria-label="Username" aria-describedby="visible-addon" />
+                    <span class="input-group-text p-0" id="visible-addon">
+                        <select class="form-select border-0" aria-label="Default select example">
+                            <option selected>Shows</option>
+                            <option value="1">Movies</option>
+                            <option value="2">People</option>
+                        </select>
+                    </span>
+                </div>
             </div>
-            <div className="d-flex align-items-center m-0 w-100 p-2 sticky-top nav">
+            <div className="d-flex align-items-center m-0 w-100 p-2 sticky-top z-2 nav">
                 <div className="w-50 d-flex align-items-center gap-1">
                     <a href="/"><img src={logo} className="text-decoration-none text-reset" alt="MoviesHUB Logo" height={50} /></a>
                     <button className="bg-transparent border-0 d-flex align-items-center justify-content-center" onClick={toggleSearchContainer}><i class="fa-solid fa-magnifying-glass text-light fs-5"></i></button>
