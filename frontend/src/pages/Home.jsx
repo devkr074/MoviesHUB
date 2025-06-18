@@ -5,7 +5,7 @@ function Home() {
     return (
         <>
             <Header />
-            <div style={{backgroundImage:`url(${loginBackground})`,minHeight:"110vh",backgroundPosition:"center",backgroundSize:"cover"}}></div>
+            <div className="mt-8 border border-4 border-indigo-400 h-screen"></div>
         </>
     );
 }

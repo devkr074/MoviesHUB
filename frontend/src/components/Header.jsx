@@ -11,7 +11,7 @@ export default function Header() {
         setPath(path);
     },[]);
     return (
-        <Disclosure as="nav" className="sticky top-0 z-40 bg-black backdrop-blur-sm">
+        <Disclosure as="nav" className="fixed w-full top-0 z-40 bg-black backdrop-blur-sm">
             <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
                 <div className="relative flex h-16 items-center justify-between">
                     <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
@@ -58,7 +58,7 @@ export default function Header() {
 
                         <Menu as="div" className="relative ml-3">
                             <div>
-                                <MenuButton className="relative flex rounded-full border-2 border-purple p-0.5 bg-black text-sm focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden">
+                                <MenuButton className="relative flex rounded-full border-2 border-gray-700 p-0.5 bg-black text-sm focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden">
                                     <span className="absolute -inset-1.5" />
                                     <span className="sr-only">Open user menu</span>
                                     <img
