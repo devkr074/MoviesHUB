@@ -1,5 +1,5 @@
-function Login(){
-    return(
+function Login() {
+    return (
         <></>
     );
 }

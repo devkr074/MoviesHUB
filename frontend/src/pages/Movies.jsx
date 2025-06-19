@@ -1,5 +1,4 @@
-import Header from "../components/Header";
-
+import Header from "../components/Header.jsx";
 function Movies() {
     return (
         <Header />
