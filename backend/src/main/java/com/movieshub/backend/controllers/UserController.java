@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.*;
 import com.movieshub.backend.models.User;
 import com.movieshub.backend.services.UserService;
 
-@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/user")
 public class UserController {

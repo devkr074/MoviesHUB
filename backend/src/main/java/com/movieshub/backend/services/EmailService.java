@@ -20,7 +20,6 @@ public class EmailService {
             helper.setTo(to);
             helper.setSubject("Your OTP Code");
             helper.setText("Your OTP code is: " + otp + ". It expires in 5 minutes.");
-
             mailSender.send(message);
         } catch (Exception e) {
             throw new RuntimeException("Error sending email: " + e.getMessage());

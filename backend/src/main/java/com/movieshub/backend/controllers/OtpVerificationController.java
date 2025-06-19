@@ -30,5 +30,4 @@ public class OtpVerificationController {
         String result = otpVerificationService.resendOtp(email);
         return ResponseEntity.ok(result);
     }
-
 }
