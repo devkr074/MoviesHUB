@@ -7,32 +7,32 @@ function Header() {
         setPath(window.location.pathname);
     }, []);
     return (
-        <div className="w-full border flex justify-between">
-            <a href="/"><img src={logo} alt="" className="h-13 w-auto" /></a>
-            <div className="flex border p-2 gap-4 justify-end">
-                <ul className="gap-5 hidden lg:flex">
-                    <li><a href="/shows">Shows</a></li>
-                    <li><a href="/movies">Movies</a></li>
+        <div className="w-full border flex justify-between px-2 items-center fixed bg-[#000000CC] backdrop-blur-xs">
+            <a href="/"><img src={logo} alt="" className="h-12" /></a>
+            <div className="flex p-2 gap-2 justify-end">
+                <ul className="flex items-center gap-5 text-white font-bold hidden lg:flex">
+                    <li><a className="hover:text-[#9F42C6]" href="/shows">Shows</a></li>
+                    <li><a className="hover:text-[#9F42C6]" href="/movies">Movies</a></li>
                 </ul>
-                <div className="relative border lg:hidden">
-                    <button className="p-2 bg-black text-white rounded-full">
-                        <Bars3Icon className="h-6" />
+                <div className="relative block lg:hidden group">
+                    <button className="rounded-t-lg p-2 text-white peer group-hover:bg-white group-hover:text-black">
+                        <Bars3Icon className="h-6 font-bold" />
                     </button>
-                    <div className="absolute end-0 border">
+                    <div className="w-[120px] border-t border-[#9F42C6] rounded-b-lg rounded-tl-lg py-2 absolute bg-white end-0 hidden peer-hover:block hover:block">
                         <ul>
-                            <li><a href="/shows">Shows</a></li>
-                            <li><a href="/movies">Movies</a></li>
+                            <li><a className="w-full block px-2 py-1 font-semibold hover:bg-[#9F42C6] hover:text-white" href="/shows">Login</a></li>
+                            <li><a className="w-full block px-2 py-1 font-semibold hover:bg-[#9F42C6] hover:text-white" href="/shows">Signup</a></li>
                         </ul>
                     </div>
                 </div>
-                <div className="relative border group">
-                    <button className="p-2 bg-black text-white rounded-full peer group-hover:bg-white">
-                        <UserIcon className="h-6" />
+                <div className="relative group">
+                    <button className="rounded-t-lg p-2 text-white peer group-hover:bg-white focus:bg-white group-active:bg-white group-hover:text-black">
+                        <UserIcon className="h-6 font-bold" />
                     </button>
-                    <div className="absolute end-0 border hidden peer-hover:block hover:block">
+                    <div className="w-[120px] border-t border-[#9F42C6] rounded-b-lg rounded-tl-lg py-2 absolute bg-white end-0 hidden peer-hover:block peer-focus:block hover:block">
                         <ul>
-                            <li><a href="/shows">Login</a></li>
-                            <li><a href="/movies">Signup</a></li>
+                            <li><a className="w-full block px-2 py-1 font-semibold hover:bg-[#9F42C6] hover:text-white active:bg-[#9F42C6] active:text-white" href="/shows">Login</a></li>
+                            <li><a className="w-full block px-2 py-1 font-semibold hover:bg-[#9F42C6] hover:text-white" href="/shows">Signup</a></li>
                         </ul>
                     </div>
                 </div>

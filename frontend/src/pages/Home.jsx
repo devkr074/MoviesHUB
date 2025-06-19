@@ -3,7 +3,7 @@ function Home() {
     return (
         <>
             <Header />
-            <div className="border border-4 border-indigo-400 h-screen">
+            <div className="bg-black h-screen">
                 <div>
                     <h1>MoviesHUB</h1>
                     <h2>Shows. Movies. Calendar.</h2>
