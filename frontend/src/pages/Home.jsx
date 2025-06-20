@@ -35,15 +35,14 @@ function Home() {
         setLoading(false);
     };
     useEffect(() => {
+        document.title="Home - MoviesHUB";
         fetchShows();
         fetchMovies();
     }, []);
     return (
         <>
             <Header />
-            <div
-                className={`bg-black h-screen bg-cover bg-center`} style={{backgroundImage:`url(https://${backgroundImage})`}}
-            >
+            <div className={`bg-black h-screen bg-cover bg-center`} style={{backgroundImage:`url(https://${backgroundImage})`}}>
                 <div className="h-full w-full bg-[#00000077] flex items-center justify-center flex-col">
                     <img src={logo} className="size-16" alt="" />
                     <h1 className="text-4xl text-white font-bold">MoviesHUB</h1>

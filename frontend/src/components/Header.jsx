@@ -7,32 +7,32 @@ function Header() {
         setPath(window.location.pathname);
     }, []);
     return (
-        <div className="w-full border flex justify-between px-2 items-center fixed bg-[#000000CC] backdrop-blur-xs">
-            <a href="/"><img src={logo} alt="" className="h-12" /></a>
-            <div className="flex p-2 gap-2 justify-end">
-                <ul className="flex items-center gap-5 text-white font-bold hidden lg:flex">
-                    <li><a className="hover:text-[#9F42C6]" href="/shows">Shows</a></li>
-                    <li><a className="hover:text-[#9F42C6]" href="/movies">Movies</a></li>
+        <div className="w-full flex items-center justify-between bg-[#000000CC] backdrop-blur-xs sticky top-0 p-2">
+            <a href="/"><img src={logo} alt="MoviesHUB Logo" className="h-12" /></a>
+            <div className="flex gap-1">
+                <ul className="hidden items-center gap-5 px-2 lg:flex">
+                    <li><a href="/shows" className={`font-semibold hover:text-[#9F42C6] ${path == "/shows" ? "text-[#9F42C6]" : "text-white"}`}>Shows</a></li>
+                    <li><a href="/movies" className={`font-semibold hover:text-[#9F42C6] ${path == "/movies" ? "text-[#9F42C6]" : "text-white"}`}>Movies</a></li>
                 </ul>
-                <div className="relative block lg:hidden group">
-                    <button className="rounded-t-lg p-2 text-white peer group-hover:bg-white group-hover:text-black">
-                        <Bars3Icon className="h-6 font-bold" />
+                <div className="group block relative lg:hidden">
+                    <button className="peer rounded-t-lg text-white p-2 group-hover:bg-white group-hover:text-black focus:bg-white focus:text-black group-focus:bg-white group-focus:text-black">
+                        <Bars3Icon className="h-6" />
                     </button>
-                    <div className="w-[120px] border-t border-[#9F42C6] rounded-b-lg rounded-tl-lg py-2 absolute bg-white end-0 hidden peer-hover:block hover:block">
+                    <div className="w-[120px] hidden bg-white border-t border-[#9F42C6] rounded-tl-lg rounded-b-lg absolute end-0 py-2 hover:block peer-hover:block focus:block peer-focus:block">
                         <ul>
-                            <li><a className="w-full block px-2 py-1 font-semibold hover:bg-[#9F42C6] hover:text-white" href="/shows">Login</a></li>
-                            <li><a className="w-full block px-2 py-1 font-semibold hover:bg-[#9F42C6] hover:text-white" href="/shows">Signup</a></li>
+                            <li><a href="/shows" className="block font-semibold px-2 py-1 hover:bg-[#9F42C6] hover:text-white active:bg-[#9F42C6] active:text-white">Shows</a></li>
+                            <li><a href="/movies" className="block font-semibold px-2 py-1 hover:bg-[#9F42C6] hover:text-white active:bg-[#9F42C6] active:text-white">Movies</a></li>
                         </ul>
                     </div>
                 </div>
-                <div className="relative group">
-                    <button className="rounded-t-lg p-2 text-white peer group-hover:bg-white focus:bg-white group-active:bg-white group-hover:text-black">
-                        <UserIcon className="h-6 font-bold" />
+                <div className="group relative">
+                    <button className="peer rounded-t-lg text-white p-2 group-hover:bg-white group-hover:text-black focus:bg-white focus:text-black group-focus:bg-white group-focus:text-black">
+                        <UserIcon className="h-6" />
                     </button>
-                    <div className="w-[120px] border-t border-[#9F42C6] rounded-b-lg rounded-tl-lg py-2 absolute bg-white end-0 hidden peer-hover:block peer-focus:block hover:block">
+                    <div className="w-[120px] hidden bg-white border-t border-[#9F42C6] rounded-tl-lg rounded-b-lg absolute end-0 py-2 hover:block peer-hover:block focus:block peer-focus:block">
                         <ul>
-                            <li><a className="w-full block px-2 py-1 font-semibold hover:bg-[#9F42C6] hover:text-white active:bg-[#9F42C6] active:text-white" href="/shows">Login</a></li>
-                            <li><a className="w-full block px-2 py-1 font-semibold hover:bg-[#9F42C6] hover:text-white" href="/shows">Signup</a></li>
+                            <li><a href="/login" className="block font-semibold px-2 py-1 hover:bg-[#9F42C6] hover:text-white active:bg-[#9F42C6] active:text-white">Login</a></li>
+                            <li><a href="/signup" className="block font-semibold px-2 py-1 hover:bg-[#9F42C6] hover:text-white active:bg-[#9F42C6] active:text-white">Signup</a></li>
                         </ul>
                     </div>
                 </div>
