@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
+import logo from "../assets/logo.png";
 import Header from "../components/Header.jsx";
-import logo from "../assets/logo.png"
 const API_URL = "https://api.trakt.tv";
 const API_HEADERS = {
     "Content-Type": "application/json",

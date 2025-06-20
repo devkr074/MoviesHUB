@@ -10,7 +10,7 @@ function Header() {
         <div className="w-full flex items-center justify-between bg-[#000000CC] backdrop-blur-xs sticky top-0 p-2">
             <a href="/"><img src={logo} alt="MoviesHUB Logo" className="h-12" /></a>
             <div className="flex gap-1">
-                <ul className="hidden items-center gap-5 px-2 lg:flex">
+                <ul className="hidden items-center gap-5 px-4 lg:flex">
                     <li><a href="/shows" className={`font-semibold hover:text-[#9F42C6] ${path == "/shows" ? "text-[#9F42C6]" : "text-white"}`}>Shows</a></li>
                     <li><a href="/movies" className={`font-semibold hover:text-[#9F42C6] ${path == "/movies" ? "text-[#9F42C6]" : "text-white"}`}>Movies</a></li>
                 </ul>
