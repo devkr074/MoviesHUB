@@ -43,13 +43,12 @@ function Home() {
     return (
         <>
             <Header />
-            <div className={`bg-black h-screen bg-cover bg-center`} style={{ backgroundImage: `url(https://${backgroundImage})` }}>
-                <div className="h-full w-full bg-[#00000077] flex items-center justify-center flex-col">
-                    <div className="-mt-30 flex flex-col items-center justify-center gap-4">
-                        <img src={logo} className="size-16" alt="" />
-                        <h1 className="text-3xl text-white font-bold">MoviesHUB</h1>
-                        <h2 className="text-2xl text-white font-bold">Shows. Movies. Calendar.</h2>
-                        <p className="text-center text-white text-lg"> <span className="font-semibold">Lorem</span> ipsum dolor sit amet consectetur adipisicing elit. Soluta vel quibusdam mollitia. Reprehenderit labore dolores qui? Labore sint repellat dolorem facere, perferendis, praesentium cupiditate, placeat temporibus numquam illum animi nulla.</p>
+            <div className={`h-screen bg-black bg-cover bg-center`} style={{ backgroundImage: `url(https://${backgroundImage})` }}>
+                <div className="h-full w-full flex flex-col items-center justify-center bg-[#00000077]">
+                    <div className="flex flex-col items-center justify-center gap-4 -mt-30">
+                        <p className="flex items-center text-3xl text-white font-bold -ms-2"><img src={logo} alt="MoviesHUB Logo" className="h-16" /><span className="tracking-tighter -ms-2 mt-2">MoviesHUB</span></p>
+                        <p className="text-2xl text-white font-bold">Discover. Track. Share</p>
+                        <p className="w-full text-white text-center px-1 md:w-3/4 lg:w-1/2"><span className="font-semibold">Discover</span> what's hot and where to stream it. <span className="font-semibold">Track</span> shows and movies you watch. <span className="font-semibold">Share</span> comments, recommendations, and ratings.</p>
                     </div>
                 </div>
             </div>
