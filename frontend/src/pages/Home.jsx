@@ -4,6 +4,7 @@ import logo from "../assets/logo.png";
 import homeBackground from "../assets/homeBackground.jpg"
 import Header from "../components/Header.jsx";
 import Card from "../components/Card.jsx";
+import Footer from "../components/Footer.jsx";
 const API_URL = "https://api.trakt.tv";
 const API_HEADERS = {
     "Content-Type": "application/json",
@@ -75,6 +76,7 @@ function Home() {
                         ))}
                 </div>
             </div>
+            <Footer />
         </>
     );
 }
