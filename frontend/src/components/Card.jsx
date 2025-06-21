@@ -2,10 +2,10 @@ import { BookmarkIcon, StarIcon, HeartIcon } from "@heroicons/react/24/solid";
 import placeholder from "../assets/placeholder.webp";
 function Card(props) {
   return (
-    <div className="w-full aspect-16/9 p-3 md:w-1/2 lg:w-1/4">
-      <div className="h-full rounded rounded-xl overflow-hidden relative" style={{ backgroundImage: `url(${placeholder})`, overflow: "hidden", backgroundSize: "cover", backgroundRepeat: "no-repeat", backgroundPosition: "center" }}>
-        <img src={props.image} alt={props.title} style={{ opacity: 0, transition: "opacity 0.5s ease-in-out", transitionDelay: "0.5s" }} onLoad={(e) => (e.target.style.opacity = 1)} />
-        <p className="text-white absolute w-full py-3 font-semibold text-lg bg-linear-to-b from-[#00000000] to-[#00000066] px-3 bottom-0">{props.title} <span className="font-normal text-sm text-[#AAAAAA]">{props.year}</span> </p>
+    <div className="w-full aspect-16/9 px-3 my-3 md:w-1/2 lg:w-1/4">
+      <div className="h-full bg-cover bg-center bg-no-repeat rounded rounded-xl relative overflow-hidden" style={{ backgroundImage: `url(${placeholder})` }}>
+        <img src={props.image} alt={props.title} className="h-full" style={{ opacity: 0, transition: "opacity 0.5s ease-in-out", transitionDelay: "0.5s" }} onLoad={(e) => (e.target.style.opacity = 1)} />
+        <p className="w-full text-lg text-white font-semibold leading-none absolute bottom-0 px-3 py-2" style={{ backgroundImage: "linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0) 100%)" }}>{props.title} <span className="text-sm text-[#CCCCCC] font-normal">{props.year}</span></p>
       </div>
     </div>
   );
