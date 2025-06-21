@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Bars3Icon, UserIcon } from "@heroicons/react/24/outline";
+import { Bars3Icon, UserIcon } from "@heroicons/react/24/solid";
 import logo from "../assets/logo.png"
 function Header() {
     const [path, setPath] = useState("");

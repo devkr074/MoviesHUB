@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import logo from "../assets/logo.png";
 import homeBackground from "../assets/homeBackground.jpg"
 import Header from "../components/Header.jsx";
+import { BookmarkIcon, StarIcon, HeartIcon } from "@heroicons/react/24/solid";
 const API_URL = "https://api.trakt.tv";
 const API_HEADERS = {
     "Content-Type": "application/json",
@@ -19,6 +20,7 @@ function Home() {
             const response = await fetch(`${API_URL}/shows/trending?limit=4&extended=full,images`, { headers: API_HEADERS });
             const data = await response.json();
             setShows(data);
+            console.log(data);
         } catch (error) {
             console.error("Error fetching shows:", error);
         }
@@ -54,15 +56,32 @@ function Home() {
             </div>
             <div className="bg-cover bg-center" style={{ backgroundImage: `url(${homeBackground})` }}>
                 <p className="text-2xl flex items-center justify-between font-bold text-white px-3 py-2">Trending Shows <a href="" className="text-xs font-normal hover:text-[blue]">More</a></p>
-                <div className="flex flex-wrap">
-                    <div className="w-full aspect-16/9 p-2 md:w-1/2 lg:w-1/4">
-                        <div className="relative overflow-hidden rounded-xl h-full w-full">
-                            <img className="h-full w-full" src={`https://${shows[0]?.show?.images?.fanart}`} alt="" />
-                            <p className="text-white absolute w-full py-3 font-semibold text-lg bg-[linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.4) 100%)] px-3 bottom-0">{shows[0]?.show?.title}</p>
+                <div className="flex gap-4 p-4 border border-white flex-wrap">
+                    <div className="w-full border border-white aspect-16/9 md:w-1/2 lg:w-1/4">
+                        <div className="h-full rounded rounded-xl overflow-hidden relative">
+                            <img src={`https://${shows[0]?.show?.images?.fanart}`} alt="" />
+                            <p className="text-white absolute w-full py-3 font-semibold text-lg bg-linear-to-b from-[#00000000] to-[#00000066] px-3 bottom-0">{shows[0]?.show?.title} <span className="font-normal text-sm text-[#AAAAAA]">{shows[0]?.show?.year}</span> </p>
+                        </div>
+                        <div className="bg-[#1d1d1d] h-10 flex justify-between">
+
+                            <div>
+                                <button title="Add to Library" className="h-full transition duration-150 ease-in-out cursor-pointer w-10 p-2 text-[#16a085] hover:bg-[#16a085] hover:text-white">
+                                    <BookmarkIcon />
+                                </button>
+                                <button className="h-full transition duration-150 ease-in-out cursor-pointer w-10 p-2 text-[#ff5f06] hover:bg-[#ff5f06] hover:text-white">
+                                    <StarIcon />
+                                </button>
+                            </div>
+                            <p className="w-1/2 gap-1 flex items-center justify-end p-2 text-[#9e2424]">
+                                <span>
+                                    <HeartIcon className="h-6" />
+                                </span>
+                                <span className="text-white font-bold">{Math.floor(shows[0]?.show?.rating * 10)}%</span>
+                            </p>
+
                         </div>
                     </div>
-                    <div className="w-full aspect-16/9 p-2 md:w-1/2 lg:w-1/4">
-                        <div className="border h-full w-full"></div>
+                    <div className="w-full border border-white aspect-16/9 p-2 md:w-1/2 lg:w-1/4">
                     </div>
                     <div className="w-full aspect-16/9 p-2 md:w-1/2 lg:w-1/4">
                         <div className="border h-full w-full"></div>
