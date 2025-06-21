@@ -1,19 +1,33 @@
+import { BookmarkIcon, StarIcon, HeartIcon } from "@heroicons/react/24/solid";
 import placeholder from "../assets/placeholder.webp";
 function Card(props) {
   return (
-    <>
-      <div style={{ borderBottom: "1px solid #2d2d2d",borderRight:"1px solid #2d2d2d" }}>
-        <div className="ratio ratio-16x9" style={{ backgroundImage: `url(${placeholder})`, overflow: "hidden", backgroundSize: "cover", backgroundRepeat: "no-repeat", backgroundPosition: "center" }}>
-          <img src={`https://${props.image}`} alt={props.title} className="lazy-load" style={{ opacity: 0, transition: "opacity 0.5s ease-in-out", transitionDelay: "0.2s" }} onLoad={(e) => (e.target.style.opacity = 1)} />
-          <div className="card-body">
-            <p className="card-title position-absolute bottom-0 start-0 m-2 text-white fw-bold">{props.title}</p>
-          </div>
-        </div>
-        <div className="text-light px-2 py-1 fs-5" style={{backgroundColor:"#1d1d1d"}}>
-          <button><i class="fa-solid fa-check"></i></button>
-        </div>
+    <div className="w-full aspect-16/9 p-3 md:w-1/2 lg:w-1/4">
+      <div className="h-full rounded rounded-xl overflow-hidden relative" style={{ backgroundImage: `url(${placeholder})`, overflow: "hidden", backgroundSize: "cover", backgroundRepeat: "no-repeat", backgroundPosition: "center" }}>
+        <img src={props.image} alt={props.title} style={{ opacity: 0, transition: "opacity 0.5s ease-in-out", transitionDelay: "0.5s" }} onLoad={(e) => (e.target.style.opacity = 1)} />
+        <p className="text-white absolute w-full py-3 font-semibold text-lg bg-linear-to-b from-[#00000000] to-[#00000066] px-3 bottom-0">{props.title} <span className="font-normal text-sm text-[#AAAAAA]">{props.year}</span> </p>
       </div>
-    </>
+    </div>
   );
 };
 export default Card;
+
+
+{/* <div className="bg-[#1d1d1d] h-10 flex justify-between">
+
+                            <div>
+                                <button title="Add to Library" className="h-full transition duration-150 ease-in-out cursor-pointer w-10 p-2 text-[#16a085] hover:bg-[#16a085] hover:text-white">
+                                    <BookmarkIcon />
+                                </button>
+                                <button className="h-full transition duration-150 ease-in-out cursor-pointer w-10 p-2 text-[#ff5f06] hover:bg-[#ff5f06] hover:text-white">
+                                    <StarIcon />
+                                </button>
+                            </div>
+                            <p className="w-1/2 gap-1 flex items-center justify-end p-2 text-[#9e2424]">
+                                <span>
+                                    <HeartIcon className="h-6" />
+                                </span>
+                                <span className="text-white font-bold">{Math.floor(trendingShows[0]?.show?.rating * 10)}%</span>
+                            </p>
+
+                        </div> */}
