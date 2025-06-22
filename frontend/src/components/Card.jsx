@@ -3,16 +3,6 @@ import placeholder from "../assets/placeholder.webp";
 import justWatchLogo from "../assets/justWatchLogo.svg";
 import { useEffect } from "react";
 function Card(props) {
-  useEffect(() => {
-    const dateString = props.release;
-    const dateObject = new Date(dateString);
-
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    const formattedDate = dateObject.toLocaleDateString('en-US', options);
-
-    console.log(formattedDate);
-
-  }, [])
   return (
     <div className={`w-full aspect-16/9 ${props.category != "Home" && "border border-r-[#2D2D2D] border-b-[#2D2D2D]"} ${props.category == "Home" && "px-3 my-3"} md:w-1/2 ${props.category == "Home" ? "lg:w-1/4" : "lg:w-1/3"}`}>
       <a href={`/${props.type}/${props.slug}`}>
