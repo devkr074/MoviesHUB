@@ -59,20 +59,20 @@ function Home() {
                 <div className="flex flex-wrap py-2">
                     {loading ?
                         Array.from({ length: 4 }).map((_, index) => (
-                            <Card key={index} />
+                            <Card key={index} category="Home" />
                         )) :
                         trendingShows.slice(0, 4).map((s, index) => (
-                            <Card key={index} image={`https://${s.show.images.fanart}`} title={s.show.title} year={s.show.year} />
+                            <Card key={index} type="shows" slug={s.show.ids.slug} category="Home" image={`https://${s.show.images.fanart}`} title={s.show.title} year={s.show.year} rating={s.show.rating} />
                         ))}
                 </div>
                 <p className="flex items-center justify-between text-2xl text-white font-bold px-3 py-5">Trending Movies<a href="/movies" className="flex items-center gap-1 text-xs font-normal hover:text-[#9F42C6] active:text-[#9F42C6]">More<ArrowRightCircleIcon className="h-4" /></a></p>
                 <div className="flex flex-wrap py-2">
                     {loading ?
                         Array.from({ length: 4 }).map((_, index) => (
-                            <Card key={index} />
+                            <Card key={index} category="Home" />
                         )) :
                         trendingMovies.slice(0, 4).map((m, index) => (
-                            <Card key={index} image={`https://${m.movie.images.fanart}`} title={m.movie.title} year={m.movie.year} />
+                            <Card key={index} type="movies" slug={m.movie.ids.slug} category="Home" image={`https://${m.movie.images.fanart}`} title={m.movie.title} year={m.movie.year} rating={m.movie.rating} />
                         ))}
                 </div>
             </div>

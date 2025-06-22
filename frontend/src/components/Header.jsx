@@ -7,7 +7,7 @@ function Header() {
         setPath(window.location.pathname);
     }, []);
     return (
-        <div className="w-full flex items-center justify-between bg-[#000000CC] backdrop-blur-xs sticky top-0 z-1 p-2">
+        <div className="w-full flex items-center justify-between bg-[#000000CC] backdrop-blur-xs sticky top-0 z-20 p-2">
             <a href="/"><img src={logo} alt="MoviesHUB Logo" className="h-12" /></a>
             <div className="flex gap-1">
                 <ul className="hidden items-center gap-5 px-4 lg:flex">
