@@ -47,7 +47,7 @@ function Shows() {
                         <img src={logo} alt="MoviesHUB Logo" className="h-24 animate-pulse mt-5" />
                     </div> :
                     shows.map((s, index) => (
-                        <Card key={index} type="shows" slug={s.show.ids.slug} category={category} image={`https://${s.show.images.fanart}` || null} title={s.show.title} year={s.show.year} rating={s.show.rating} watchers={s.watchers} />
+                        <Card key={index} type="shows" slug={s.show.ids.slug} category={category} image={`https://${s.show.images.fanart}` || null} title={s.show.title} year={s.show.year} rating={s.show.rating} watchers={s.watchers} waiting={s.list_count} rank={s.rank} delta={s.delta} />
                     ))}
             </div>
             <Footer />
