@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'; // Removed useRef
+import React, { useState, useEffect, useRef } from 'react';
 
 // Importing icons from lucide-react (assuming it's available in the environment)
 // Fallback to inline SVG if lucide-react is not directly supported in the environment
@@ -10,47 +10,107 @@ const EyeOff = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="
 const Hash = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-hash"><line x1="4" x2="20" y1="9" y2="9"/><line x1="4" x2="20" y1="15" y2="15"/><line x1="10" x2="10" y1="3" y2="21"/><line x1="14" x2="14" y1="3" y2="21"/></svg>;
 
 
+// Popover Component for displaying messages
+const Popover = ({ message, type, onClose }) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const timerRef = useRef(null);
+
+  useEffect(() => {
+    // Show popover with a slight delay for animation
+    const showTimeout = setTimeout(() => setIsVisible(true), 50);
+
+    // Hide popover after 5 seconds
+    timerRef.current = setTimeout(() => {
+      setIsVisible(false);
+      // Remove from DOM after transition
+      setTimeout(onClose, 500); // 500ms matches transition duration
+    }, 5000);
+
+    return () => {
+      clearTimeout(showTimeout);
+      clearTimeout(timerRef.current);
+    };
+  }, [message, type, onClose]);
+
+  const bgColor = type === 'success' ? 'bg-green-500' : 'bg-red-500';
+  const borderColor = type === 'success' ? 'border-green-700' : 'border-red-700';
+
+  return (
+    <div
+      className={`fixed top-4 left-1/2 -translate-x-1/2 p-4 rounded-lg shadow-lg text-white font-semibold
+                  ${bgColor} border ${borderColor} transition-all duration-500 ease-in-out z-50
+                  ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-full'}`}
+    >
+      {message}
+    </div>
+  );
+};
+
+
 // Main Signup functional component
 const Signup = () => {
-  // State to hold form data
   const [formData, setFormData] = useState({
-    username: '', // Added username
+    name: '',       // New field
+    gender: '',     // New field
+    username: '',
     email: '',
     password: '',
     confirmPassword: '',
     otp: ''
   });
 
-  // State to hold validation errors for each field
   const [errors, setErrors] = useState({});
-
-  // State to manage OTP sending status and message
   const [otpSent, setOtpSent] = useState(false);
   const [isSendingOtp, setIsSendingOtp] = useState(false);
-
-  // State to manage overall form submission success
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  // State to toggle password visibility
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
+  // OTP Timer State
+  const [timeLeft, setTimeLeft] = useState(0); // Seconds left for resend
+  const timerIntervalRef = useRef(null);
+
+  // Popover message state
+  const [popover, setPopover] = useState(null); // { message: '', type: 'success' | 'error' }
 
   /**
-   * Handles changes to input fields.
-   * Updates formData and clears errors for the changed field.
-   * @param {Object} e - The event object.
+   * Displays a popover message.
+   * @param {string} message - The message to display.
+   * @param {'success' | 'error'} type - The type of message.
    */
+  const showPopover = (message, type) => {
+    setPopover({ message, type });
+  };
+
+  /**
+   * Clears the popover message.
+   */
+  const clearPopover = () => {
+    setPopover(null);
+  };
+
+  // OTP Timer useEffect
+  useEffect(() => {
+    if (timeLeft > 0) {
+      timerIntervalRef.current = setInterval(() => {
+        setTimeLeft((prevTime) => prevTime - 1);
+      }, 1000);
+    } else {
+      clearInterval(timerIntervalRef.current);
+      timerIntervalRef.current = null;
+    }
+    return () => clearInterval(timerIntervalRef.current);
+  }, [timeLeft]);
+
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prevData => ({ ...prevData, [name]: value }));
 
-    // Clear the error for this field immediately on change
     if (errors[name]) {
       setErrors(prevErrors => ({ ...prevErrors, [name]: '' }));
     }
-    // Specific handling for confirmPassword: re-validate password if confirmPassword changes
     if (name === 'confirmPassword' && formData.password && value !== formData.password) {
       setErrors(prevErrors => ({ ...prevErrors, confirmPassword: 'Passwords do not match.' }));
     } else if (name === 'confirmPassword' && formData.password && value === formData.password) {
@@ -58,35 +118,20 @@ const Signup = () => {
     }
   };
 
-  /**
-   * Handles focus event on input fields.
-   * Clears the error message for the focused field.
-   * @param {Object} e - The event object.
-   */
   const handleFocus = (e) => {
     const { name } = e.target;
-    // Clear the error for this field when focused
     if (errors[name]) {
       setErrors(prevErrors => ({ ...prevErrors, [name]: '' }));
     }
   };
 
-  /**
-   * Handles blur event on input fields.
-   * Re-validates the field on blur to display errors as the user moves away.
-   * Also, hides error if the field is unfocused and empty.
-   * @param {Object} e - The event object.
-   */
   const handleBlur = (e) => {
     const { name, value } = e.target;
     if (value.trim() === '') {
-      // If unfocused and empty, clear the error for this field
       setErrors(prevErrors => ({ ...prevErrors, [name]: '' }));
     } else {
-      // Otherwise, validate the field normally
       validateField(name, value);
     }
-    // Special case for password and confirmPassword to ensure consistency
     if (name === 'password' || name === 'confirmPassword') {
       if (formData.password !== formData.confirmPassword && formData.confirmPassword !== '') {
         setErrors(prevErrors => ({ ...prevErrors, confirmPassword: 'Passwords do not match.' }));
@@ -96,20 +141,22 @@ const Signup = () => {
     }
   };
 
-  /**
-   * Validates a single form field.
-   * @param {string} name - The name of the field.
-   * @param {string} value - The current value of the field.
-   */
   const validateField = async (name, value) => {
     let error = '';
-    // Regex for username: alphanumeric, 3-20 characters, no leading/trailing spaces
     const usernameRegex = /^[a-zA-Z0-9]{3,20}$/;
-    // Regex for password: at least 6 characters, at least one uppercase, one lowercase, one number, one special character
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{6,}$/;
 
-
     switch (name) {
+      case 'name':
+        if (!value.trim()) {
+          error = 'Name is required.';
+        }
+        break;
+      case 'gender':
+        if (!value.trim()) {
+          error = 'Gender is required.';
+        }
+        break;
       case 'username':
         if (!value.trim()) {
           error = 'Username is required.';
@@ -139,10 +186,9 @@ const Signup = () => {
         }
         break;
       case 'otp':
-        // OTP field is required always for form submission
         if (!value.trim()) {
           error = 'Please enter the verification code.';
-        } else if (value.trim().length !== 6 || !/^\d+$/.test(value)) { // Assuming 6 digit numeric OTP
+        } else if (value.trim().length !== 6 || !/^\d+$/.test(value)) {
           error = 'OTP must be a 6-digit number.';
         }
         break;
@@ -150,16 +196,12 @@ const Signup = () => {
         break;
     }
     setErrors(prevErrors => ({ ...prevErrors, [name]: error }));
-    return error; // Return the error so it can be awaited by validateForm
+    return error;
   };
 
-  /**
-   * Validates all form fields.
-   * @returns {Object} - An object containing validation errors.
-   */
   const validateForm = async () => {
     const newErrors = {};
-    const fieldsToValidate = ['username', 'email', 'password', 'confirmPassword', 'otp']; // OTP is now always validated on submit
+    const fieldsToValidate = ['name', 'gender', 'username', 'email', 'password', 'confirmPassword', 'otp'];
 
     for (const field of fieldsToValidate) {
       const error = await validateField(field, formData[field]);
@@ -169,95 +211,142 @@ const Signup = () => {
     }
 
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0; // Return true if no errors
+    return Object.keys(newErrors).length === 0;
   };
 
-  /**
-   * Handles the "Send code" button click.
-   * Validates email and simulates OTP sending.
-   */
   const handleGetOtp = async () => {
     setIsSendingOtp(true);
-    // Validate email first
-    const emailError = await validateField('email', formData.email);
+    // Only validate email, username, password, name, gender before sending OTP
+    const fieldsToValidateBeforeOtp = ['name', 'gender', 'username', 'email', 'password', 'confirmPassword'];
+    let hasError = false;
+    const currentErrors = {};
 
-    if (emailError) {
-      // The email input field's own error message will handle the display
+    for (const field of fieldsToValidateBeforeOtp) {
+      const error = await validateField(field, formData[field]);
+      if (error) {
+        currentErrors[field] = error;
+        hasError = true;
+      }
+    }
+    setErrors(prevErrors => ({ ...prevErrors, ...currentErrors }));
+
+    if (hasError) {
       setIsSendingOtp(false);
+      showPopover('Please correct the highlighted errors before sending OTP.', 'error');
       return;
     }
 
     try {
-      // Simulate API call for sending OTP
-      await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate network delay
+      const response = await fetch('http://localhost:8080/api/auth/send-otp', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          gender: formData.gender,
+          username: formData.username,
+          email: formData.email,
+          password: formData.password // Password is sent to backend for OTP stage, but not stored unless verified
+        }),
+      });
 
-      // Simulate success or failure
-      const success = Math.random() > 0.2; // 80% chance of success
-      if (success) {
-        setOtpSent(true); // Indicate OTP has been "sent"
-        console.log('OTP sent successfully!');
+      const data = await response.json();
+
+      if (response.ok) {
+        setOtpSent(true);
+        setTimeLeft(59); // Start 59-second timer
+        showPopover(data.message, 'success');
       } else {
-        console.error('Failed to send OTP. Please try again.');
+        showPopover(data.message || 'Failed to send OTP. Please try again.', 'error');
       }
     } catch (error) {
-      console.error('An error occurred while sending OTP:', error);
+      showPopover('Network error: Could not connect to the server.', 'error');
+      console.error('OTP sending error:', error);
     } finally {
       setIsSendingOtp(false);
     }
   };
 
-  /**
-   * Handles the form submission (Sign Up button click).
-   * Validates all fields and simulates signup process.
-   * @param {Object} e - The event object.
-   */
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setSubmitSuccess(false); // Reset success message
+    setSubmitSuccess(false);
 
     const isValid = await validateForm();
 
     if (isValid) {
       try {
-        // Simulate API call for signup
-        await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate network delay
-
-        console.log('Signup successful:', formData);
-        setSubmitSuccess(true);
-        setFormData({
-          username: '',
-          email: '',
-          password: '',
-          confirmPassword: '',
-          otp: ''
+        const response = await fetch('http://localhost:8080/api/auth/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name: formData.name,
+            gender: formData.gender,
+            username: formData.username,
+            email: formData.email,
+            password: formData.password,
+            otpCode: formData.otp
+          }),
         });
-        setOtpSent(false); // Reset OTP state after successful signup
-        setErrors({}); // Clear all errors
+
+        const data = await response.json();
+
+        if (response.ok) {
+          showPopover(data.message, 'success');
+          setSubmitSuccess(true);
+          setFormData({
+            name: '',
+            gender: '',
+            username: '',
+            email: '',
+            password: '',
+            confirmPassword: '',
+            otp: ''
+          });
+          setOtpSent(false);
+          setErrors({});
+        } else {
+          showPopover(data.message || 'Registration failed. Please try again.', 'error');
+        }
       } catch (error) {
-        setErrors(prevErrors => ({ ...prevErrors, general: 'Signup failed. Please try again.' }));
+        showPopover('Network error: Could not connect to the server.', 'error');
         console.error('Signup error:', error);
       } finally {
         setIsSubmitting(false);
       }
     } else {
       setIsSubmitting(false);
+      showPopover('Please correct the highlighted errors.', 'error');
       console.log('Form validation failed:', errors);
     }
   };
 
-  // Helper function to get input classes based on error state
   const getInputClasses = (fieldName) => {
-    return `w-full p-3 pl-10 pr-10 border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 ease-in-out
+    // Determine if the input needs right padding for the eye icon
+    const hasEyeIcon = fieldName === 'password' || fieldName === 'confirmPassword';
+    const paddingClass = hasEyeIcon ? 'pr-10' : '';
+
+    return `w-full p-3 pl-10 ${paddingClass} border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 ease-in-out
             ${errors[fieldName] ? 'border-red-500 bg-red-50' : 'border-gray-300'}`;
   };
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4 sm:p-6 lg:p-8 font-inter">
+      {popover && (
+        <Popover
+          message={popover.message}
+          type={popover.type}
+          onClose={clearPopover}
+        />
+      )}
+
       <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md border border-gray-200">
         {/* DeepSeek Logo and Description */}
         <div className="text-center mb-8">
-          {/* Using a simple SVG for "deepseek" logo */}
           <svg className="w-32 h-auto mx-auto text-blue-600" viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M60 20C60 8.9543 51.0457 0 40 0C28.9543 0 20 8.9543 20 20C20 31.0457 28.9543 40 40 40C51.0457 40 60 31.0457 60 20Z" fill="currentColor"/>
             <path d="M100 20C100 8.9543 91.0457 0 80 0C68.9543 0 60 8.9543 60 20C60 31.0457 68.9543 40 80 40C91.0457 40 100 31.0457 100 20Z" fill="currentColor"/>
@@ -278,6 +367,55 @@ const Signup = () => {
         )}
 
         <form onSubmit={handleSubmit} noValidate>
+          {/* Name Field */}
+          <div className="mb-5">
+            <div className="relative">
+              <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                <User className="w-5 h-5" />
+              </span>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                onFocus={handleFocus}
+                onBlur={handleBlur}
+                className={getInputClasses('name').replace('pr-10', '')} // No eye icon for name
+                placeholder="Name"
+              />
+            </div>
+            <p className={`text-sm text-red-500 mt-1 min-h-[1.25rem] transition-opacity duration-300 ${errors.name ? 'opacity-100' : 'opacity-0'}`}>
+              {errors.name || ' '}
+            </p>
+          </div>
+
+          {/* Gender Field */}
+          <div className="mb-5">
+            <div className="relative">
+              <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                <User className="w-5 h-5" /> {/* Using User icon for gender as well */}
+              </span>
+              <select
+                id="gender"
+                name="gender"
+                value={formData.gender}
+                onChange={handleChange}
+                onFocus={handleFocus}
+                onBlur={handleBlur}
+                className={getInputClasses('gender').replace('pr-10', '')} // No eye icon for gender
+              >
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <p className={`text-sm text-red-500 mt-1 min-h-[1.25rem] transition-opacity duration-300 ${errors.gender ? 'opacity-100' : 'opacity-0'}`}>
+              {errors.gender || ' '}
+            </p>
+          </div>
+
           {/* Username Field */}
           <div className="mb-5">
             <div className="relative">
@@ -292,11 +430,10 @@ const Signup = () => {
                 onChange={handleChange}
                 onFocus={handleFocus}
                 onBlur={handleBlur}
-                className={getInputClasses('username')}
+                className={getInputClasses('username').replace('pr-10', '')} // No eye icon for username
                 placeholder="Username"
               />
             </div>
-            {/* Added min-h-[1.25rem] to explicitly reserve space for the error message */}
             <p className={`text-sm text-red-500 mt-1 min-h-[1.25rem] transition-opacity duration-300 ${errors.username ? 'opacity-100' : 'opacity-0'}`}>
               {errors.username || ' '}
             </p>
@@ -316,11 +453,10 @@ const Signup = () => {
                 onChange={handleChange}
                 onFocus={handleFocus}
                 onBlur={handleBlur}
-                className={getInputClasses('email')}
+                className={getInputClasses('email').replace('pr-10', '')} // No eye icon for email
                 placeholder="Email address"
               />
             </div>
-            {/* Added min-h-[1.25rem] to explicitly reserve space for the error message */}
             <p className={`text-sm text-red-500 mt-1 min-h-[1.25rem] transition-opacity duration-300 ${errors.email ? 'opacity-100' : 'opacity-0'}`}>
               {errors.email || ' '}
             </p>
@@ -350,7 +486,6 @@ const Signup = () => {
                 {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
               </span>
             </div>
-            {/* Added min-h-[1.25rem] to explicitly reserve space for the error message */}
             <p className={`text-sm text-red-500 mt-1 min-h-[1.25rem] transition-opacity duration-300 ${errors.password ? 'opacity-100' : 'opacity-0'}`}>
               {errors.password || ' '}
             </p>
@@ -380,7 +515,6 @@ const Signup = () => {
                 {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
               </span>
             </div>
-            {/* Added min-h-[1.25rem] to explicitly reserve space for the error message */}
             <p className={`text-sm text-red-500 mt-1 min-h-[1.25rem] transition-opacity duration-300 ${errors.confirmPassword ? 'opacity-100' : 'opacity-0'}`}>
               {errors.confirmPassword || ' '}
             </p>
@@ -403,7 +537,6 @@ const Signup = () => {
                 className={getInputClasses('otp').replace('pr-10', '')} // OTP field doesn't need right padding for eye icon
                 placeholder="Code"
               />
-              {/* Added min-h-[1.25rem] to explicitly reserve space for the error message */}
               <p className={`text-sm text-red-500 mt-1 min-h-[1.25rem] transition-opacity duration-300 ${errors.otp ? 'opacity-100' : 'opacity-0'}`}>
                 {errors.otp || ' '}
               </p>
@@ -411,10 +544,14 @@ const Signup = () => {
             <button
               type="button"
               onClick={handleGetOtp}
-              disabled={isSendingOtp}
+              disabled={isSendingOtp || timeLeft > 0}
               className="mt-0.5 self-start px-4 py-2 bg-gray-200 text-gray-800 font-medium rounded-lg shadow-sm hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 transition duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isSendingOtp ? 'Sending...' : 'Send code'}
+              {isSendingOtp
+                ? 'Sending...'
+                : timeLeft > 0
+                ? `Resend code in ${timeLeft}s`
+                : 'Send code'}
             </button>
           </div>
 
