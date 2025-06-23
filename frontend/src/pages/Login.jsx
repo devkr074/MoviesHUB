@@ -79,7 +79,7 @@ function Login() {
                 Login
             </button>
             <p className="text-gray-300 text-center text-sm">
-                Don't have an account? <span className="text-blue-400 cursor-pointer" onClick={() => navigate('/')}>Sign Up</span>
+                Don't have an account? <span className="text-blue-400 cursor-pointer" onClick={() => navigate('/signup')}>Sign Up</span>
             </p>
         </form>
     );
