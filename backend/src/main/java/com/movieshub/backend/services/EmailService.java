@@ -1,28 +1,34 @@
 package com.movieshub.backend.services;
 
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-import jakarta.mail.internet.MimeMessage;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailException;
+import org.springframework.mail.SimpleMailMessage;
 
 @Service
 public class EmailService {
-    private final JavaMailSender mailSender;
 
-    public EmailService(JavaMailSender mailSender) {
-        this.mailSender = mailSender;
-    }
+    @Autowired
+    private JavaMailSender mailSender;
 
-    public void sendOtpEmail(String to, String otp) {
+    public void sendOtpEmail(String toEmail, String otp) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("devkr074@gmail.com"); // Must match spring.mail.username
+        message.setTo(toEmail);
+        message.setSubject("Your OTP for Signup Verification");
+        message.setText("Dear User,\n\nYour One-Time Password (OTP) for signup verification is: " + otp +
+                        "\n\nThis OTP is valid for 5 minutes. Do not share this with anyone.\n\n" +
+                        "Thanks,\nYour Application Team");
+
         try {
-            MimeMessage message = mailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(message, true);
-            helper.setTo(to);
-            helper.setSubject("Your OTP Code");
-            helper.setText("Your OTP code is: " + otp + ". It expires in 5 minutes.");
             mailSender.send(message);
-        } catch (Exception e) {
-            throw new RuntimeException("Error sending email: " + e.getMessage());
+            System.out.println("OTP email sent successfully to: " + toEmail);
+        } catch (MailException e) {
+            System.err.println("Error sending OTP email to " + toEmail + ": " + e.getMessage());
+            // Log the exception properly in a real application
+            throw new RuntimeException("Failed to send OTP email: " + e.getMessage());
         }
     }
 }
