@@ -50,15 +50,14 @@ const Popover = ({ message, type, onClose }) => {
 // Main Signup functional component
 const Signup = () => {
   const [formData, setFormData] = useState({
-    name: '',       // New field
-    gender: '',     // New field
+    name: '',
+    gender: '',
     username: '',
     email: '',
     password: '',
     confirmPassword: '',
     otp: ''
   });
-
   const [errors, setErrors] = useState({});
   const [otpSent, setOtpSent] = useState(false);
   const [isSendingOtp, setIsSendingOtp] = useState(false);
@@ -66,31 +65,15 @@ const Signup = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
-  // OTP Timer State
-  const [timeLeft, setTimeLeft] = useState(0); // Seconds left for resend
+  const [timeLeft, setTimeLeft] = useState(0);
   const timerIntervalRef = useRef(null);
-
-  // Popover message state
-  const [popover, setPopover] = useState(null); // { message: '', type: 'success' | 'error' }
-
-  /**
-   * Displays a popover message.
-   * @param {string} message - The message to display.
-   * @param {'success' | 'error'} type - The type of message.
-   */
+  const [popover, setPopover] = useState(null);
   const showPopover = (message, type) => {
     setPopover({ message, type });
   };
-
-  /**
-   * Clears the popover message.
-   */
   const clearPopover = () => {
     setPopover(null);
   };
-
-  // OTP Timer useEffect
   useEffect(() => {
     if (timeLeft > 0) {
       timerIntervalRef.current = setInterval(() => {
@@ -102,12 +85,9 @@ const Signup = () => {
     }
     return () => clearInterval(timerIntervalRef.current);
   }, [timeLeft]);
-
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prevData => ({ ...prevData, [name]: value }));
-
     if (errors[name]) {
       setErrors(prevErrors => ({ ...prevErrors, [name]: '' }));
     }
@@ -117,14 +97,12 @@ const Signup = () => {
       setErrors(prevErrors => ({ ...prevErrors, confirmPassword: '' }));
     }
   };
-
   const handleFocus = (e) => {
     const { name } = e.target;
     if (errors[name]) {
       setErrors(prevErrors => ({ ...prevErrors, [name]: '' }));
     }
   };
-
   const handleBlur = (e) => {
     const { name, value } = e.target;
     if (value.trim() === '') {
@@ -140,12 +118,10 @@ const Signup = () => {
       }
     }
   };
-
   const validateField = async (name, value) => {
     let error = '';
     const usernameRegex = /^[a-zA-Z0-9]{3,20}$/;
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{6,}$/;
-
     switch (name) {
       case 'name':
         if (!value.trim()) {
@@ -198,29 +174,23 @@ const Signup = () => {
     setErrors(prevErrors => ({ ...prevErrors, [name]: error }));
     return error;
   };
-
   const validateForm = async () => {
     const newErrors = {};
     const fieldsToValidate = ['name', 'gender', 'username', 'email', 'password', 'confirmPassword', 'otp'];
-
     for (const field of fieldsToValidate) {
       const error = await validateField(field, formData[field]);
       if (error) {
         newErrors[field] = error;
       }
     }
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-
   const handleGetOtp = async () => {
     setIsSendingOtp(true);
-    // Only validate email, username, password, name, gender before sending OTP
-    const fieldsToValidateBeforeOtp = ['name', 'gender', 'username', 'email', 'password', 'confirmPassword'];
+    const fieldsToValidateBeforeOtp = ['email'];
     let hasError = false;
     const currentErrors = {};
-
     for (const field of fieldsToValidateBeforeOtp) {
       const error = await validateField(field, formData[field]);
       if (error) {
@@ -329,252 +299,95 @@ const Signup = () => {
     // Determine if the input needs right padding for the eye icon
     const hasEyeIcon = fieldName === 'password' || fieldName === 'confirmPassword';
     const paddingClass = hasEyeIcon ? 'pr-10' : '';
-
     return `w-full p-3 pl-10 ${paddingClass} border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 ease-in-out
             ${errors[fieldName] ? 'border-red-500 bg-red-50' : 'border-gray-300'}`;
   };
-
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4 sm:p-6 lg:p-8 font-inter">
       {popover && (
-        <Popover
-          message={popover.message}
-          type={popover.type}
-          onClose={clearPopover}
-        />
+        <Popover message={popover.message} type={popover.type} onClose={clearPopover}/>
       )}
-
       <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md border border-gray-200">
-        {/* DeepSeek Logo and Description */}
-        <div className="text-center mb-8">
-          <svg className="w-32 h-auto mx-auto text-blue-600" viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M60 20C60 8.9543 51.0457 0 40 0C28.9543 0 20 8.9543 20 20C20 31.0457 28.9543 40 40 40C51.0457 40 60 31.0457 60 20Z" fill="currentColor"/>
-            <path d="M100 20C100 8.9543 91.0457 0 80 0C68.9543 0 60 8.9543 60 20C60 31.0457 68.9543 40 80 40C91.0457 40 100 31.0457 100 20Z" fill="currentColor"/>
-            <path d="M140 20C140 8.9543 131.0457 0 120 0C108.9543 0 100 8.9543 100 20C100 31.0457 108.9543 40 120 40C131.0457 40 140 31.0457 140 20Z" fill="currentColor"/>
-            <path d="M180 20C180 8.9543 171.0457 0 160 0C148.9543 0 140 8.9543 140 20C140 31.0457 148.9543 40 160 40C171.0457 40 180 31.0457 180 20Z" fill="currentColor"/>
-            {/* Simple 'deepseek' text */}
-            <text x="30" y="55" fontFamily="Arial, sans-serif" fontSize="20" fontWeight="bold" fill="#3B82F6">deepseek</text>
-          </svg>
-          <p className="text-gray-500 text-sm mt-4">
-            Only email registration is supported in your region. One DeepSeek account is all you need to access to all DeepSeek services.
-          </p>
-        </div>
-
         {submitSuccess && (
-          <div className="mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded-lg text-center">
-            Signup successful! Welcome aboard.
-          </div>
+          <div className="mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded-lg text-center">Signup successful! Welcome aboard.</div>
         )}
-
         <form onSubmit={handleSubmit} noValidate>
-          {/* Name Field */}
           <div className="mb-5">
             <div className="relative">
               <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
                 <User className="w-5 h-5" />
               </span>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                onFocus={handleFocus}
-                onBlur={handleBlur}
-                className={getInputClasses('name').replace('pr-10', '')} // No eye icon for name
-                placeholder="Name"
-              />
+              <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} onFocus={handleFocus} onBlur={handleBlur} className={getInputClasses('name').replace('pr-10', '')} placeholder="Name" />
             </div>
-            <p className={`text-sm text-red-500 mt-1 min-h-[1.25rem] transition-opacity duration-300 ${errors.name ? 'opacity-100' : 'opacity-0'}`}>
-              {errors.name || ' '}
-            </p>
+            <p className={`text-sm text-red-500 mt-1 min-h-[1.25rem] transition-opacity duration-300 ${errors.name ? 'opacity-100' : 'opacity-0'}`}>{errors.name || ' '}</p>
           </div>
-
-          {/* Gender Field */}
           <div className="mb-5">
             <div className="relative">
               <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
-                <User className="w-5 h-5" /> {/* Using User icon for gender as well */}
+                <User className="w-5 h-5" />
               </span>
-              <select
-                id="gender"
-                name="gender"
-                value={formData.gender}
-                onChange={handleChange}
-                onFocus={handleFocus}
-                onBlur={handleBlur}
-                className={getInputClasses('gender').replace('pr-10', '')} // No eye icon for gender
-              >
+              <select id="gender" name="gender" value={formData.gender} onChange={handleChange} onFocus={handleFocus} onBlur={handleBlur} className={getInputClasses('gender').replace('pr-10', '')}>
                 <option value="">Select Gender</option>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
                 <option value="Other">Other</option>
               </select>
             </div>
-            <p className={`text-sm text-red-500 mt-1 min-h-[1.25rem] transition-opacity duration-300 ${errors.gender ? 'opacity-100' : 'opacity-0'}`}>
-              {errors.gender || ' '}
-            </p>
+            <p className={`text-sm text-red-500 mt-1 min-h-[1.25rem] transition-opacity duration-300 ${errors.gender ? 'opacity-100' : 'opacity-0'}`}>{errors.gender || ' '}</p>
           </div>
-
-          {/* Username Field */}
           <div className="mb-5">
             <div className="relative">
               <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
                 <User className="w-5 h-5" />
               </span>
-              <input
-                type="text"
-                id="username"
-                name="username"
-                value={formData.username}
-                onChange={handleChange}
-                onFocus={handleFocus}
-                onBlur={handleBlur}
-                className={getInputClasses('username').replace('pr-10', '')} // No eye icon for username
-                placeholder="Username"
-              />
+              <input type="text" id="username" name="username" value={formData.username} onChange={handleChange} onFocus={handleFocus} onBlur={handleBlur} className={getInputClasses('username').replace('pr-10', '')} placeholder="Username" />
             </div>
-            <p className={`text-sm text-red-500 mt-1 min-h-[1.25rem] transition-opacity duration-300 ${errors.username ? 'opacity-100' : 'opacity-0'}`}>
-              {errors.username || ' '}
-            </p>
+            <p className={`text-sm text-red-500 mt-1 min-h-[1.25rem] transition-opacity duration-300 ${errors.username ? 'opacity-100' : 'opacity-0'}`}>{errors.username || ' '}</p>
           </div>
-
-          {/* Email Field */}
           <div className="mb-5">
             <div className="relative">
               <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
                 <Mail className="w-5 h-5" />
               </span>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                onFocus={handleFocus}
-                onBlur={handleBlur}
-                className={getInputClasses('email').replace('pr-10', '')} // No eye icon for email
-                placeholder="Email address"
-              />
+              <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} onFocus={handleFocus} onBlur={handleBlur} className={getInputClasses('email').replace('pr-10', '')} placeholder="Email address" />
             </div>
-            <p className={`text-sm text-red-500 mt-1 min-h-[1.25rem] transition-opacity duration-300 ${errors.email ? 'opacity-100' : 'opacity-0'}`}>
-              {errors.email || ' '}
-            </p>
+            <p className={`text-sm text-red-500 mt-1 min-h-[1.25rem] transition-opacity duration-300 ${errors.email ? 'opacity-100' : 'opacity-0'}`}>{errors.email || ' '}</p>
           </div>
-
-          {/* Password Field */}
           <div className="mb-5">
             <div className="relative">
               <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
                 <Lock className="w-5 h-5" />
               </span>
-              <input
-                type={showPassword ? 'text' : 'password'}
-                id="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                onFocus={handleFocus}
-                onBlur={handleBlur}
-                className={getInputClasses('password')}
-                placeholder="Password"
-              />
-              <span
-                className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer text-gray-400"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-              </span>
+              <input type={showPassword ? 'text' : 'password'} id="password" name="password" value={formData.password} onChange={handleChange} onFocus={handleFocus} onBlur={handleBlur} className={getInputClasses('password')} placeholder="Password"/>
+              <span className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer text-gray-400" onClick={() => setShowPassword(!showPassword)}>{showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}</span>
             </div>
-            <p className={`text-sm text-red-500 mt-1 min-h-[1.25rem] transition-opacity duration-300 ${errors.password ? 'opacity-100' : 'opacity-0'}`}>
-              {errors.password || ' '}
-            </p>
+            <p className={`text-sm text-red-500 mt-1 min-h-[1.25rem] transition-opacity duration-300 ${errors.password ? 'opacity-100' : 'opacity-0'}`}>{errors.password || ' '}</p>
           </div>
-
-          {/* Confirm Password Field */}
           <div className="mb-5">
             <div className="relative">
               <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
                 <Lock className="w-5 h-5" />
               </span>
-              <input
-                type={showConfirmPassword ? 'text' : 'password'}
-                id="confirmPassword"
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                onFocus={handleFocus}
-                onBlur={handleBlur}
-                className={getInputClasses('confirmPassword')}
-                placeholder="Confirm password"
-              />
-              <span
-                className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer text-gray-400"
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              >
-                {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-              </span>
+              <input type={showConfirmPassword ? 'text' : 'password'} id="confirmPassword" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} onFocus={handleFocus} onBlur={handleBlur} className={getInputClasses('confirmPassword')} placeholder="Confirm password"/>
+              <span className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer text-gray-400" onClick={() => setShowConfirmPassword(!showConfirmPassword)}>{showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}</span>
             </div>
-            <p className={`text-sm text-red-500 mt-1 min-h-[1.25rem] transition-opacity duration-300 ${errors.confirmPassword ? 'opacity-100' : 'opacity-0'}`}>
-              {errors.confirmPassword || ' '}
-            </p>
+            <p className={`text-sm text-red-500 mt-1 min-h-[1.25rem] transition-opacity duration-300 ${errors.confirmPassword ? 'opacity-100' : 'opacity-0'}`}>{errors.confirmPassword || ' '}</p>
           </div>
-
-          {/* OTP/Code Field and Send code Button */}
           <div className="mb-6 flex items-start gap-3">
             <div className="flex-grow relative">
               <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
                 <Hash className="w-5 h-5" />
               </span>
-              <input
-                type="text"
-                id="otp"
-                name="otp"
-                value={formData.otp}
-                onChange={handleChange}
-                onFocus={handleFocus}
-                onBlur={handleBlur}
-                className={getInputClasses('otp').replace('pr-10', '')} // OTP field doesn't need right padding for eye icon
-                placeholder="Code"
-              />
-              <p className={`text-sm text-red-500 mt-1 min-h-[1.25rem] transition-opacity duration-300 ${errors.otp ? 'opacity-100' : 'opacity-0'}`}>
-                {errors.otp || ' '}
-              </p>
+              <input type="text" id="otp" name="otp" value={formData.otp} onChange={handleChange} onFocus={handleFocus} onBlur={handleBlur} className={getInputClasses('otp').replace('pr-10', '')} placeholder="Code" />
+              <p className={`text-sm text-red-500 mt-1 min-h-[1.25rem] transition-opacity duration-300 ${errors.otp ? 'opacity-100' : 'opacity-0'}`}>{errors.otp || ' '}</p>
             </div>
-            <button
-              type="button"
-              onClick={handleGetOtp}
-              disabled={isSendingOtp || timeLeft > 0}
-              className="mt-0.5 self-start px-4 py-2 bg-gray-200 text-gray-800 font-medium rounded-lg shadow-sm hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 transition duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {isSendingOtp
-                ? 'Sending...'
-                : timeLeft > 0
-                ? `Resend code in ${timeLeft}s`
-                : 'Send code'}
+            <button type="button" onClick={handleGetOtp} disabled={isSendingOtp || timeLeft > 0} className="mt-0.5 self-start px-4 py-2 bg-gray-200 text-gray-800 font-medium rounded-lg shadow-sm hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 transition duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">{isSendingOtp ? 'Sending...' : timeLeft > 0 ? `Resend code in ${timeLeft}s` : 'Send code'}
             </button>
           </div>
-
-
-          {/* Terms and Privacy Policy */}
-          <p className="text-gray-500 text-xs text-center mb-6">
-            By signing up, you consent to DeepSeek's{' '}
-            <a href="#" className="text-blue-600 hover:underline">Terms of Use</a> and{' '}
-            <a href="#" className="text-blue-600 hover:underline">Privacy Policy</a>.
-          </p>
-
-          {/* Sign up Button */}
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="w-full py-3 bg-blue-600 text-white font-bold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {isSubmitting ? 'Signing up...' : 'Sign up'}
-          </button>
+          <button type="submit" disabled={isSubmitting} className="w-full py-3 bg-blue-600 text-white font-bold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">{isSubmitting ? 'Signing up...' : 'Sign up'}</button>
         </form>
       </div>
     </div>
   );
 };
-
 export default Signup;
