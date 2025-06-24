@@ -1,16 +1,16 @@
 package com.movieshub.backend.models;
 
+import lombok.Data;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.persistence.Id;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.Column;
-import jakarta.persistence.Table;
-import lombok.Data;
 
+@Data
 @Entity
 @Table(name = "users")
-@Data
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
