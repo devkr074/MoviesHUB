@@ -1,81 +1,79 @@
 package com.movieshub.backend.config;
+// SecurityConfig.java // Adjust package name as per your project structure
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import com.movieshub.backend.repositories.UserRepository;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.authentication.ProviderManager;
-import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
-import java.util.Collections;
-import java.util.Arrays;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
-@Configuration
-@EnableWebSecurity
+/**
+ * Spring Security configuration for the application.
+ * This class configures security settings, including password encoding and request authorization.
+ */
+@Configuration // Marks this class as a source of bean definitions
+@EnableWebSecurity // Enables Spring Security's web security features
 public class SecurityConfig {
-    private final UserRepository userRepository;
 
-    public SecurityConfig(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
+    /**
+     * Defines the password encoder to be used for hashing passwords.
+     * BCryptPasswordEncoder is a strong hashing function recommended for passwords.
+     * @return An instance of BCryptPasswordEncoder.
+     */
     @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    public UserDetailsService userDetailsService() {
-        return identifier -> {
-            return userRepository.findByEmail(identifier)
-                    .map(user -> org.springframework.security.core.userdetails.User.withUsername(user.getEmail())
-                            .password(user.getPassword()).roles("USER").build())
-                    .or(() -> userRepository.findByUsername(identifier)
-                            .map(user -> org.springframework.security.core.userdetails.User
-                                    .withUsername(user.getUsername()).password(user.getPassword()).roles("USER")
-                                    .build()))
-                    .orElseThrow(() -> new UsernameNotFoundException("User not found with identifier: " + identifier));
-        };
-    }
-
-    @Bean
-    public AuthenticationManager authenticationManager(UserDetailsService userDetailsService,
-            BCryptPasswordEncoder passwordEncoder) {
-        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-        authenticationProvider.setUserDetailsService(userDetailsService);
-        authenticationProvider.setPasswordEncoder(passwordEncoder);
-        return new ProviderManager(authenticationProvider);
-    }
-
+    /**
+     * Configures the security filter chain for HTTP requests.
+     * - Disables CSRF protection (for API-only applications; consider enabling and using tokens for production).
+     * - Authorizes specific requests:
+     * - POST /api/users/send-otp and /api/users/signup are permitted without authentication.
+     * - All other requests require authentication.
+     * @param http The HttpSecurity object to configure.
+     * @return The configured SecurityFilterChain.
+     * @throws Exception if an error occurs during configuration.
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable().authorizeHttpRequests().requestMatchers("/api/**").permitAll();
-        http.csrf(
-                csrf -> csrf.disable()).cors(
-                        cors -> cors.configurationSource(corsConfigurationSource()))
-                .authorizeHttpRequests(
-                        authorize -> authorize.requestMatchers("/api/auth/register", "/api/auth/send-otp",
-                                "/api/auth/verify-otp", "/api/auth/login").permitAll().anyRequest().authenticated());
+        http
+            .csrf(csrf -> csrf.disable()) // Disable CSRF for stateless APIs, assuming token-based auth
+            .authorizeHttpRequests(authorize -> authorize
+                .requestMatchers("/api/users/send-otp", "/api/users/signup").permitAll() // Allow these endpoints without authentication
+                .anyRequest().authenticated() // All other requests require authentication
+            );
+        // If you were using sessions, you might add .formLogin() or .httpBasic() here.
+        // For a typical React/Spring Boot setup, you'd likely integrate JWT or similar.
+
         return http.build();
     }
 
+    /**
+     * Configures the CORS filter to allow cross-origin requests from your frontend.
+     * It allows requests from "http://localhost:5173" (your React dev server)
+     * with POST method and specific headers.
+     *
+     * @return An instance of CorsFilter.
+     */
     @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Collections.singletonList("http://localhost:5173"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("*"));
-        configuration.setAllowCredentials(true);
+    public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true); // Allow sending of cookies/authorization headers
+        config.addAllowedOrigin("http://localhost:5173"); // Allow your React frontend origin
+        config.addAllowedHeader("*"); // Allow all headers
+        config.addAllowedMethod("POST"); // Allow POST method for send-otp and signup
+        // You might want to add other methods like GET, PUT, DELETE for other endpoints
+        config.addAllowedMethod("GET");
+        config.addAllowedMethod("PUT");
+        config.addAllowedMethod("DELETE");
+        source.registerCorsConfiguration("/**", config); // Apply this CORS config to all paths
+        return new CorsFilter(source);
     }
 }

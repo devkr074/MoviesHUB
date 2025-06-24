@@ -1,29 +1,22 @@
 package com.movieshub.backend.models;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Column;
+import jakarta.persistence.Table;
 import lombok.Data;
-import jakarta.persistence.*;
 
-@Data
 @Entity
 @Table(name = "users")
+@Data
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
-    private String gender;
-    private String username;
+    @Column(nullable = false, unique = true)
     private String email;
+    @Column(nullable = false)
     private String password;
-
-    public User() {
-    }
-
-    public User(String name, String gender, String username, String email, String password) {
-        this.name = name;
-        this.gender = gender;
-        this.username = username;
-        this.email = email;
-        this.password = password;
-    }
 }
