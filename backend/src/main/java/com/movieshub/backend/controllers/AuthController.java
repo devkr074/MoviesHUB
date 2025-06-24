@@ -10,6 +10,7 @@ import com.movieshub.backend.services.UserService;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -33,6 +34,11 @@ public class AuthController {
         public String username;
         public String email;
         public String password; // Will be encoded by backend
+    }
+
+ static class LoginRequest {
+        public String identifier; // Can be username or email
+        public String password;
     }
 
     // Request DTO for OTP verification
@@ -221,6 +227,28 @@ public class AuthController {
             System.err.println("Error during user registration: " + e.getMessage());
             response.put("message", "Registration failed due to an internal server error. Please try again.");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<Map<String, String>> loginUser(@RequestBody LoginRequest request) {
+        Map<String, String> response = new HashMap<>();
+
+        if (request.identifier == null || request.identifier.trim().isEmpty() ||
+            request.password == null || request.password.trim().isEmpty()) {
+            response.put("message", "Username/Email and password are required.");
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        Optional<User> authenticatedUser = userService.authenticateUser(request.identifier, request.password);
+
+        if (authenticatedUser.isPresent()) {
+            response.put("message", "Login successful!");
+            response.put("email", authenticatedUser.get().getEmail()); // Return email for local storage
+            return ResponseEntity.ok(response);
+        } else {
+            response.put("message", "Invalid username/email or password.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
     }
 }

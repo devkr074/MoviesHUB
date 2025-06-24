@@ -1,13 +1,12 @@
 package com.movieshub.backend.services;
-
-import java.util.Optional;
-
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.movieshub.backend.models.User;
 import com.movieshub.backend.repositories.UserRepository;
+
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -58,5 +57,30 @@ public class UserService {
      */
     public Optional<User> findUserByEmail(String email) {
         return userRepository.findByEmail(email);
+    }
+
+    /**
+     * Authenticates a user by username or email and password.
+     * @param identifier The username or email of the user.
+     * @param rawPassword The raw password provided by the user.
+     * @return An Optional containing the authenticated User if credentials are valid, or empty otherwise.
+     */
+    public Optional<User> authenticateUser(String identifier, String rawPassword) {
+        // Try to find by username first
+        Optional<User> userOptional = userRepository.findByUsername(identifier);
+
+        // If not found by username, try by email
+        if (userOptional.isEmpty()) {
+            userOptional = userRepository.findByEmail(identifier);
+        }
+
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            // Compare the raw password with the encoded password using PasswordEncoder
+            if (passwordEncoder.matches(rawPassword, user.getPassword())) {
+                return Optional.of(user); // Authentication successful
+            }
+        }
+        return Optional.empty(); // Authentication failed
     }
 }
