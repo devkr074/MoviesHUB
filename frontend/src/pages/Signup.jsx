@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import signupBackground from "../assets/signupBackground.webp";
 function Signup() {
   const [email, setEmail] = useState('');
@@ -10,8 +11,10 @@ function Signup() {
   const [confirmPasswordError, setConfirmPasswordError] = useState('Confirm password is required.');
   const [codeError, setCodeError] = useState('Code is required.');
   const [emailErrorStatus, setEmailErrorStatus] = useState(false);
-
-
+  const [otpLoading, setOTPLoading] = useState(false);
+  const [otpMessage, setOTPMessage] = useState('');
+  const [otpMessageStatus, setOTPMessageStatus] = useState(false);
+  const [otpError, setOTPError] = useState(false);
 
 
   const [isSignupForm, setIsSignupForm] = useState(true);
@@ -36,7 +39,7 @@ function Signup() {
   const [loginPasswordError, setLoginPasswordError] = useState('');
   const [loginSuccessMessage, setLoginSuccessMessage] = useState('');
   const [loginErrorMessage, setLoginErrorMessage] = useState('');
-  // const API_BASE_URL = 'http://localhost:8080/api/users';
+  const API_BASE_URL = 'http://localhost:8080/api/users';
   const validateEmail = (emailToValidate, setEmailErrorFunc) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailToValidate) {
@@ -293,7 +296,7 @@ function Signup() {
   }
   function handlePasswordChange(e) {
     setPassword(e.target.value);
-    
+
   }
   function handleConfirmPasswordChange(e) {
     setConfirmPassword(e.target.value);
@@ -301,10 +304,46 @@ function Signup() {
   function handleCodeChange(e) {
     setCode(e.target.value);
   }
-  function handleGetCode() {
+  async function handleGetCode() {
     if (emailError != 'Correct Email') {
       setEmailErrorStatus(true);
+      return;
     }
+    try {
+      setOTPLoading(true);
+      const response = await fetch(`${API_BASE_URL}/send-otp`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email }),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        setOTPMessage(`Code sent to ${email}`);
+        setOTPMessageStatus(true);
+        setOTPError(false);
+        setTimeout(() => {
+          setOTPMessageStatus(false);
+        }, 5000);
+        setOTPLoading(false);
+      } else {
+        setOTPMessage(`Email already registered.`);
+        setOTPMessageStatus(true);
+        setOTPError(true);
+        setTimeout(() => {
+          setOTPMessageStatus(false);
+        }, 5000);
+        setOTPLoading(false);
+      }
+    } catch (error) {
+      setOTPMessage(`Network error or Server unavilable.`);
+      setOTPMessageStatus(true);
+      setOTPError(true);
+      setTimeout(() => {
+        setOTPMessageStatus(false);
+      }, 5000);
+      setOTPLoading(false);
+    }
+
   }
   function handleEmailFocus() {
     setEmailErrorStatus(false);
@@ -312,6 +351,7 @@ function Signup() {
 
   return (
     <div className='flex flex-col min-h-screen bg-center bg-cover items-center bg-fixed' style={{ backgroundImage: `url(${signupBackground})` }}>
+      <span className={`text-white ${otpError ? "bg-red-500" : "bg-[#9F42C6]"} p-2 rounded rounded-lg transition ease-in-out duration-200 font-semibold absolute ${otpMessageStatus ? "translate-y-2" : "-translate-y-10"}`}>{otpMessage}</span>
       <p className="text-white p-8 text-center text-3xl font-bold">MoviesHUB</p>
       <form action="" className='border px-5 py-8 m-5 rounded rounded-lg bg-white border-white w-full lg:w-1/3'>
         <input value={email} onChange={handleEmailChange} type="text" placeholder='Email address' onFocus={handleEmailFocus} className={`border p-2 rounded rounded-md text-sm outline-none border border-2 border-black w-full focus:border-[#9F42C6] transition ease-in-out duration-200 ${emailErrorStatus ? "border-red-500" : "border-gray-300"}`} />
@@ -322,10 +362,15 @@ function Signup() {
         <p className='text-red-500 px-2 font-semibold text-sm pb-1 opacity-0'>{confirmPasswordError}</p>
         <div className='flex'>
           <input value={code} onChange={handleCodeChange} type="password" placeholder='Code' className='flex-grow me-2 border p-2 rounded rounded-md text-sm outline-none border border-2 border-gray-300 border-black focus:border-[#9F42C6] transition ease-in-out duration-100' />
-          <button onClick={handleGetCode} type='button' className='px-2 font-semibold rounded rounded-md bg-[#9F42C6] cursor-pointer text-white transition ease-in-out duration-100 hover:opacity-75'>Send code</button>
+          <button onClick={handleGetCode} type='button' className='flex justify-center items-center font-semibold w-1/4 rounded rounded-md bg-[#9F42C6] cursor-pointer text-white transition ease-in-out duration-200 hover:opacity-90'>
+            {
+              otpLoading ?
+                <ArrowPathIcon className='h-6 animate-spin' /> : "Send Code"
+            }
+          </button>
         </div>
         <p className='text-red-500 px-2 font-semibold text-sm pb-1 opacity-0'>{codeError}</p>
-        <button className='bg-[#9F42C6] p-2 rounded rounded-md w-full text-white font-semibold hover:opacity-75 cursor-pointer'>Sign up</button>
+        <button className='bg-[#9F42C6] p-2 rounded rounded-md w-full text-white font-semibold hover:opacity-90 cursor-pointer transition ease-in-out duration-200'>Sign up</button>
       </form>
     </div>
   );
