@@ -64,7 +64,7 @@ public class UserService {
 
     public int sendOtp(String email) {
         if (userRepository.findByEmail(email).isPresent()) {
-            System.out.println("User with email " + email + " already exists. Not sending OTP.");
+            System.out.println(email + " already registered.");
             return 2;
         }
         OtpDetails existingOtp = otpStore.get(email);
