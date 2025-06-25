@@ -1,5 +1,19 @@
 import { useState, useEffect, useRef } from 'react';
+import signupBackground from "../assets/signupBackground.webp";
 function Signup() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [code, setCode] = useState('');
+  const [emailError, setEmailError] = useState('Email is required.');
+  const [passwordError, setPasswordError] = useState('Password is required');
+  const [confirmPasswordError, setConfirmPasswordError] = useState('Confirm password is required.');
+  const [codeError, setCodeError] = useState('Code is required.');
+  const [emailErrorStatus, setEmailErrorStatus] = useState(false);
+
+
+
+
   const [isSignupForm, setIsSignupForm] = useState(true);
   const [signupEmail, setSignupEmail] = useState('');
   const [signupPassword, setSignupPassword] = useState('');
@@ -22,7 +36,7 @@ function Signup() {
   const [loginPasswordError, setLoginPasswordError] = useState('');
   const [loginSuccessMessage, setLoginSuccessMessage] = useState('');
   const [loginErrorMessage, setLoginErrorMessage] = useState('');
-  const API_BASE_URL = 'http://localhost:8080/api/users';
+  // const API_BASE_URL = 'http://localhost:8080/api/users';
   const validateEmail = (emailToValidate, setEmailErrorFunc) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailToValidate) {
@@ -35,81 +49,81 @@ function Signup() {
     setEmailErrorFunc('');
     return true;
   };
-  const handleGetCode = async () => {
-    setSignupSuccessMessage('');
-    setSignupErrorMessage('');
-    setSignupEmailError('');
-    if (!validateEmail(signupEmail, setSignupEmailError)) {
-      return;
-    }
-    if (resendTimer > 0) {
-      setSignupErrorMessage(`Please wait ${resendTimer} seconds before requesting another OTP.`);
-      return;
-    }
-    try {
-      const response = await fetch(`${API_BASE_URL}/send-otp`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: signupEmail }),
-      });
+  // const handleGetCode = async () => {
+  //   setSignupSuccessMessage('');
+  //   setSignupErrorMessage('');
+  //   setSignupEmailError('');
+  //   if (!validateEmail(signupEmail, setSignupEmailError)) {
+  //     return;
+  //   }
+  //   if (resendTimer > 0) {
+  //     setSignupErrorMessage(`Please wait ${resendTimer} seconds before requesting another OTP.`);
+  //     return;
+  //   }
+  //   try {
+  //     const response = await fetch(`${API_BASE_URL}/send-otp`, {
+  //       method: 'POST',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify({ email: signupEmail }),
+  //     });
 
-      const data = await response.json();
+  //     const data = await response.json();
 
-      if (response.ok) {
-        setSignupSuccessMessage(data.message || 'Verification code sent to your email.');
-        setOtpSent(true);
-        setResendTimer(60); // 1 minute cooldown for resend
-        setOtpExpiryTimer(120); // 2 minute OTP validity
+  //     if (response.ok) {
+  //       setSignupSuccessMessage(data.message || 'Verification code sent to your email.');
+  //       setOtpSent(true);
+  //       setResendTimer(60); // 1 minute cooldown for resend
+  //       setOtpExpiryTimer(120); // 2 minute OTP validity
 
-        // Clear any existing intervals before starting new ones
-        if (resendIntervalRef.current) clearInterval(resendIntervalRef.current);
-        if (otpExpiryIntervalRef.current) clearInterval(otpExpiryIntervalRef.current);
+  //       // Clear any existing intervals before starting new ones
+  //       if (resendIntervalRef.current) clearInterval(resendIntervalRef.current);
+  //       if (otpExpiryIntervalRef.current) clearInterval(otpExpiryIntervalRef.current);
 
-        // Start countdown intervals
-        resendIntervalRef.current = setInterval(() => {
-          setResendTimer((prev) => {
-            if (prev <= 1) {
-              clearInterval(resendIntervalRef.current);
-              return 0;
-            }
-            return prev - 1;
-          });
-        }, 1000);
+  //       // Start countdown intervals
+  //       resendIntervalRef.current = setInterval(() => {
+  //         setResendTimer((prev) => {
+  //           if (prev <= 1) {
+  //             clearInterval(resendIntervalRef.current);
+  //             return 0;
+  //           }
+  //           return prev - 1;
+  //         });
+  //       }, 1000);
 
-        otpExpiryIntervalRef.current = setInterval(() => {
-          setOtpExpiryTimer((prev) => {
-            if (prev <= 1) {
-              clearInterval(otpExpiryIntervalRef.current);
-              setSignupSuccessMessage(''); // Clear success message if OTP expires
-              setSignupErrorMessage('Your OTP has expired. Please request a new one.');
-              // setOtpSent(false); // Do not reset otpSent here to allow resend
-              return 0;
-            }
-            return prev - 1;
-          });
-        }, 1000);
+  //       otpExpiryIntervalRef.current = setInterval(() => {
+  //         setOtpExpiryTimer((prev) => {
+  //           if (prev <= 1) {
+  //             clearInterval(otpExpiryIntervalRef.current);
+  //             setSignupSuccessMessage(''); // Clear success message if OTP expires
+  //             setSignupErrorMessage('Your OTP has expired. Please request a new one.');
+  //             // setOtpSent(false); // Do not reset otpSent here to allow resend
+  //             return 0;
+  //           }
+  //           return prev - 1;
+  //         });
+  //       }, 1000);
 
-      } else {
-        setSignupErrorMessage(data.message || 'Failed to send verification code.');
-        // If sending failed, ensure timers and button state are reset if they were started
-        if (!response.ok) {
-          clearInterval(resendIntervalRef.current);
-          clearInterval(otpExpiryIntervalRef.current);
-          setOtpSent(false); // Reset otpSent if the request failed
-          setResendTimer(0);
-          setOtpExpiryTimer(120); // Reset for next attempt
-        }
-      }
-    } catch (error) {
-      console.error('Error sending OTP:', error);
-      setSignupErrorMessage('Network error or server unavailable. Please try again.');
-      clearInterval(resendIntervalRef.current);
-      clearInterval(otpExpiryIntervalRef.current);
-      setOtpSent(false);
-      setResendTimer(0);
-      setOtpExpiryTimer(120); // Reset for next attempt
-    }
-  };
+  //     } else {
+  //       setSignupErrorMessage(data.message || 'Failed to send verification code.');
+  //       // If sending failed, ensure timers and button state are reset if they were started
+  //       if (!response.ok) {
+  //         clearInterval(resendIntervalRef.current);
+  //         clearInterval(otpExpiryIntervalRef.current);
+  //         setOtpSent(false); // Reset otpSent if the request failed
+  //         setResendTimer(0);
+  //         setOtpExpiryTimer(120); // Reset for next attempt
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.error('Error sending OTP:', error);
+  //     setSignupErrorMessage('Network error or server unavailable. Please try again.');
+  //     clearInterval(resendIntervalRef.current);
+  //     clearInterval(otpExpiryIntervalRef.current);
+  //     setOtpSent(false);
+  //     setResendTimer(0);
+  //     setOtpExpiryTimer(120); // Reset for next attempt
+  //   }
+  // };
 
   // Cleanup intervals on component unmount
   useEffect(() => {
@@ -160,50 +174,50 @@ function Signup() {
     return isValid;
   };
 
-  const handleSignUp = async (e) => {
-    e.preventDefault();
-    setSignupSuccessMessage('');
-    setSignupErrorMessage('');
+  // const handleSignUp = async (e) => {
+  //   e.preventDefault();
+  //   setSignupSuccessMessage('');
+  //   setSignupErrorMessage('');
 
-    if (!validateSignupForm()) {
-      setSignupErrorMessage('Please correct the errors in the form.');
-      return;
-    }
+  //   if (!validateSignupForm()) {
+  //     setSignupErrorMessage('Please correct the errors in the form.');
+  //     return;
+  //   }
 
-    if (!otpSent || otpExpiryTimer <= 0) {
-      setSignupErrorMessage('Please request and verify an OTP first, or your OTP might have expired.');
-      return;
-    }
+  //   if (!otpSent || otpExpiryTimer <= 0) {
+  //     setSignupErrorMessage('Please request and verify an OTP first, or your OTP might have expired.');
+  //     return;
+  //   }
 
-    try {
-      const response = await fetch(`${API_BASE_URL}/signup`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: signupEmail, password: signupPassword, otp: signupCode }),
-      });
+  //   try {
+  //     const response = await fetch(`${API_BASE_URL}/signup`, {
+  //       method: 'POST',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify({ email: signupEmail, password: signupPassword, otp: signupCode }),
+  //     });
 
-      const data = await response.json();
+  //     const data = await response.json();
 
-      if (response.ok) {
-        setSignupSuccessMessage(data.message || 'Account created successfully!');
-        // Clear all fields and reset state on successful signup
-        setSignupEmail('');
-        setSignupPassword('');
-        setSignupConfirmPassword('');
-        setSignupCode('');
-        setOtpSent(false);
-        setResendTimer(0);
-        setOtpExpiryTimer(120);
-        clearInterval(resendIntervalRef.current);
-        clearInterval(otpExpiryIntervalRef.current);
-      } else {
-        setSignupErrorMessage(data.message || 'Registration failed. Please try again.');
-      }
-    } catch (error) {
-      console.error('Error during signup:', error);
-      setSignupErrorMessage('Network error or server unavailable. Please try again.');
-    }
-  };
+  //     if (response.ok) {
+  //       setSignupSuccessMessage(data.message || 'Account created successfully!');
+  //       // Clear all fields and reset state on successful signup
+  //       setSignupEmail('');
+  //       setSignupPassword('');
+  //       setSignupConfirmPassword('');
+  //       setSignupCode('');
+  //       setOtpSent(false);
+  //       setResendTimer(0);
+  //       setOtpExpiryTimer(120);
+  //       clearInterval(resendIntervalRef.current);
+  //       clearInterval(otpExpiryIntervalRef.current);
+  //     } else {
+  //       setSignupErrorMessage(data.message || 'Registration failed. Please try again.');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error during signup:', error);
+  //     setSignupErrorMessage('Network error or server unavailable. Please try again.');
+  //   }
+  // };
 
   const getCodeButtonText = () => {
     if (resendTimer > 0) {
@@ -263,109 +277,56 @@ function Signup() {
   };
 
 
+
+  function handleEmailChange(e) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    setEmail(e.target.value);
+    if (email == '') {
+      setEmailError('Email is required');
+    }
+    else if (!emailRegex.test(email)) {
+      setEmailError('Enter a valid Email');
+    }
+    else {
+      setEmailError('Correct Email');
+    }
+  }
+  function handlePasswordChange(e) {
+    setPassword(e.target.value);
+    
+  }
+  function handleConfirmPasswordChange(e) {
+    setConfirmPassword(e.target.value);
+  }
+  function handleCodeChange(e) {
+    setCode(e.target.value);
+  }
+  function handleGetCode() {
+    if (emailError != 'Correct Email') {
+      setEmailErrorStatus(true);
+    }
+  }
+  function handleEmailFocus() {
+    setEmailErrorStatus(false);
+  }
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4 font-inter">
-      <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">Sign Up</h2>
-        <form onSubmit={handleSignUp} noValidate>
-          <div className="mb-5">
-            <input type="email" id="email" className={`w-full p-2 border border-2 transition ease-in-out duration-100 outline-none ${signupEmailError ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:border-[#9F42C6]`} placeholder="Email address" value={signupEmail} onChange={(e) => setSignupEmail(e.target.value)} onFocus={() => setSignupEmailError('')}/>
-            <p className={`text-red-500 text-xs mt-1 transition-all duration-300 ease-in-out ${signupEmailError ? 'opacity-100 h-auto' : 'opacity-0 h-0 overflow-hidden'}`}>
-              {signupEmailError}
-            </p>
-          </div>
-
-          {/* Password Input (Signup) */}
-          <div className="mb-5">
-            <input
-              type="password"
-              id="signupPassword"
-              className={`w-full p-2 border border-2 transition ease-in-out duration-100 outline-none ${signupPasswordError ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:border-[#9F42C6]`}
-              placeholder="Password"
-              value={signupPassword}
-              onChange={(e) => setSignupPassword(e.target.value)}
-              onFocus={() => setSignupPasswordError('')}
-            />
-            <p className={`text-red-500 text-xs mt-1 transition-all duration-300 ease-in-out ${signupPasswordError ? 'opacity-100 h-auto' : 'opacity-0 h-0 overflow-hidden'}`}>
-              {signupPasswordError}
-            </p>
-          </div>
-
-          {/* Confirm Password Input (Signup) */}
-          <div className="mb-5">
-            <input
-              type="password"
-              id="signupConfirmPassword"
-              className={`w-full p-2 border border-2 transition ease-in-out duration-100 outline-none ${signupConfirmPasswordError ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:border-[#9F42C6]`}
-              
-              placeholder="Confirm your password"
-              value={signupConfirmPassword}
-              onChange={(e) => setSignupConfirmPassword(e.target.value)}
-              
-              onFocus={() => setSignupConfirmPasswordError('')}
-            />
-            <p className={`text-red-500 text-xs mt-1 transition-all duration-300 ease-in-out ${signupConfirmPasswordError ? 'opacity-100 h-auto' : 'opacity-0 h-0 overflow-hidden'}`}>
-              {signupConfirmPasswordError}
-            </p>
-          </div>
-
-          {/* Code Input with Get Code Button (Signup) */}
-          <div className="mb-6">
-            <div className="flex space-x-3">
-              <input
-                type="text"
-                id="signupCode"
-                className={`flex-grow p-2 border border-2 transition ease-in-out duration-100 outline-none ${signupEmailError ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:border-[#9F42C6]`}
-              
-                placeholder="Code"
-                value={signupCode}
-                onChange={(e) => setSignupCode(e.target.value)}
-                
-                onFocus={() => setSignupCodeError('')}
-              />
-              <button
-                type="button"
-                onClick={handleGetCode}
-                className={`px-6 py-2 font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 transition duration-200 ease-in-out
-                      ${resendTimer > 0
-                    ? 'bg-gray-400 text-gray-700 cursor-not-allowed'
-                    : 'bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500'
-                  }`}
-                disabled={resendTimer > 0}
-              >
-                {getCodeButtonText()}
-              </button>
-            </div>
-            <p className={`text-red-500 text-xs mt-1 transition-all duration-300 ease-in-out ${signupCodeError ? 'opacity-100 h-auto' : 'opacity-0 h-0 overflow-hidden'}`}>
-              {signupCodeError}
-            </p>
-            {otpSent && otpExpiryTimer > 0 && (
-              <p className="text-gray-600 text-xs mt-1 transition-all duration-300 ease-in-out opacity-100">
-                OTP valid for {Math.floor(otpExpiryTimer / 60)}m {otpExpiryTimer % 60}s
-              </p>
-            )}
-          </div>
-
-          {signupErrorMessage && (
-            <p className="text-red-600 bg-red-100 p-3 rounded-lg text-sm text-center mb-4 border border-red-200 transition-all duration-300 ease-in-out opacity-100">
-              {signupErrorMessage}
-            </p>
-          )}
-          {signupSuccessMessage && (
-            <p className="text-green-600 bg-green-100 p-3 rounded-lg text-sm text-center mb-4 border border-green-200 transition-all duration-300 ease-in-out opacity-100">
-              {signupSuccessMessage}
-            </p>
-          )}
-
-          {/* Sign Up Button */}
-          <button
-            type="submit"
-            className="w-full bg-green-600 text-white font-bold py-3 rounded-lg shadow-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition duration-200 ease-in-out"
-          >
-            Sign Up
-          </button>
-        </form>
-      </div>
+    <div className='flex flex-col min-h-screen bg-center bg-cover items-center bg-fixed' style={{ backgroundImage: `url(${signupBackground})` }}>
+      <p className="text-white p-8 text-center text-3xl font-bold">MoviesHUB</p>
+      <form action="" className='border px-5 py-8 m-5 rounded rounded-lg bg-white border-white w-full lg:w-1/3'>
+        <input value={email} onChange={handleEmailChange} type="text" placeholder='Email address' onFocus={handleEmailFocus} className={`border p-2 rounded rounded-md text-sm outline-none border border-2 border-black w-full focus:border-[#9F42C6] transition ease-in-out duration-200 ${emailErrorStatus ? "border-red-500" : "border-gray-300"}`} />
+        <p className={`text-red-500 px-1 font-semibold text-sm pb-1 transition ease-in-out duration-200 ${emailErrorStatus ? "opacity-100" : "opacity-0"}`}>{emailError}</p>
+        <input value={password} onChange={handlePasswordChange} type="password" placeholder='Password' className='border p-2 rounded rounded-md text-sm outline-none border border-2 border-gray-300 border-black w-full focus:border-[#9F42C6] transition ease-in-out duration-100' />
+        <p className='text-red-500 px-2 font-semibold text-sm pb-1 opacity-0'>{passwordError}</p>
+        <input value={confirmPassword} onChange={handleConfirmPasswordChange} type="password" placeholder='Confirm password' className='border p-2 rounded rounded-md text-sm outline-none border border-2 border-gray-300 border-black w-full focus:border-[#9F42C6] transition ease-in-out duration-100' />
+        <p className='text-red-500 px-2 font-semibold text-sm pb-1 opacity-0'>{confirmPasswordError}</p>
+        <div className='flex'>
+          <input value={code} onChange={handleCodeChange} type="password" placeholder='Code' className='flex-grow me-2 border p-2 rounded rounded-md text-sm outline-none border border-2 border-gray-300 border-black focus:border-[#9F42C6] transition ease-in-out duration-100' />
+          <button onClick={handleGetCode} type='button' className='px-2 font-semibold rounded rounded-md bg-[#9F42C6] cursor-pointer text-white transition ease-in-out duration-100 hover:opacity-75'>Send code</button>
+        </div>
+        <p className='text-red-500 px-2 font-semibold text-sm pb-1 opacity-0'>{codeError}</p>
+        <button className='bg-[#9F42C6] p-2 rounded rounded-md w-full text-white font-semibold hover:opacity-75 cursor-pointer'>Sign up</button>
+      </form>
     </div>
   );
 };
