@@ -22,27 +22,16 @@ public class UserController {
     }
 
     @PostMapping("/send-otp")
-    public ResponseEntity<Map<String, String>> sendOtp(@RequestBody Map<String, String> request) {
-        String email = request.get("email");
-        Map<String, String> response = new HashMap<>();
-        if (email == null || email.trim().isEmpty()) {
-            response.put("message", "Email is required.");
-            return ResponseEntity.badRequest().body(response);
-        }
+    public ResponseEntity<String> sendOtp(@RequestBody String email) {
         int result = userService.sendOtp(email);
         if (result == 0) {
-            response.put("message", "Verification code sent to your email.");
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok("Verification code sent to your " + email);
         } else if (result == 1) {
-            response.put("message", "Please wait before requesting another OTP.");
-            return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(response);
-        } else if (result == 2) {
-            response.put("message",
-                    "A user with this email already exists. Please try logging in or using a different email.");
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("A user with this email already exists. Please try logging in or using a different email.");
         } else {
-            response.put("message", "Unable to send OTP. Please try again later.");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Unable to send OTP. Please try again later.");
         }
     }
 
