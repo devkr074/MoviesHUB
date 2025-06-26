@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from 'react';
-import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import signupBackground from "../assets/signupBackground.webp";
 import loader from "../assets/loader.gif";
 
