@@ -25,7 +25,7 @@ public class UserController {
     public ResponseEntity<String> sendOtp(@RequestBody String email) {
         int result = userService.sendOtp(email);
         if (result == 0) {
-            return ResponseEntity.ok("Verification code sent to your " + email);
+            return ResponseEntity.ok("Verification code sent to " + email);
         } else if (result == 1) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body("A user with this email already exists.");
