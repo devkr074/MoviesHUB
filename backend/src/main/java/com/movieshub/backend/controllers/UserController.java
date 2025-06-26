@@ -28,7 +28,7 @@ public class UserController {
             return ResponseEntity.ok("Verification code sent to your " + email);
         } else if (result == 1) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body("A user with this email already exists. Please try logging in or using a different email.");
+                    .body("A user with this email already exists.");
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Unable to send OTP. Please try again later.");
