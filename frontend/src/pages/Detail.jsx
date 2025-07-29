@@ -16,7 +16,11 @@ function Detail() {
     async function getDetail() {
         setLoading(true);
         try {
+<<<<<<< HEAD
             const response = await fetch(`${API_URL}/${type}/${slug}/people?extended=full,images`, { headers: API_HEADERS });
+=======
+            const response = await fetch(`${API_URL}/${type}/${slug}/related?extended=full,images`, { headers: API_HEADERS });
+>>>>>>> aa2c37e3446e9e53df7d635eea23166886cb847f
             const data = await response.json();
             setDetails(data);
             console.log(data);

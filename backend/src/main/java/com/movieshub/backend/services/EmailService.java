@@ -22,4 +22,8 @@ public class EmailService {
             System.err.println("Failed to send email to " + toEmail + ": " + e.getMessage());
         }
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> aa2c37e3446e9e53df7d635eea23166886cb847f
